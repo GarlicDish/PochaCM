@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 마이바티스 3 Configuration DOCTYPE -->
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+
+<!-- 마이바티스 3 설정 항목을 넣는 태그 (최상위 부모 태그) -->  
+<configuration>
+
+	<!-- 마이바티스의 동작 방식을 설정한다 -->
+	<settings>
+		<!-- 조회 컬럼의 Snake Case ( _ )를 DTO의 Camel Case로 바꿔준다 -->
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	
+		<!-- JDBC타입이 명시되지않은 null값에 대한 처리 설정 -->
+		<!-- 	value의 속성값으로 NULL을 쓸 때는 대문자로 작성해야 한다 -->
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	
+	</settings>
+
+</configuration>
