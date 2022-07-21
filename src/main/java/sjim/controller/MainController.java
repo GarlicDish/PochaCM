@@ -21,5 +21,10 @@ public class MainController {
 		return "main";
 	
 	}
+	
+	@RequestMapping(value ="/index", method = RequestMethod.GET)
+public String index() {
+	return "index";
+}
 
 }
