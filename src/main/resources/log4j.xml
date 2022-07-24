@@ -9,12 +9,7 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
-	
-	<!-- Application Loggers -->
-	<logger name="com.sjim.www">
-		<level value="info" />
-	</logger>
-	
+
 	<logger name="sjim">
 		<level value="info" />
 	</logger>
