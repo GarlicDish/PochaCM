@@ -1,5 +1,7 @@
 package pochacm.util;
 
+import java.sql.Date;
+
 public class Paging {
 
 	private int curPage; // 현재 페이지 번호
@@ -14,6 +16,10 @@ public class Paging {
 
 	private int startNo; // 화면에 보이는 게시글의 시작 번호
 	private int endNo; // 화면에 보이는 게시글의 끝 번호
+	
+	private String search; //search word
+	private String sort; //sorting category
+	private String viewMethod; //daily, weekly, monthly
 
 	// 디폴트 생성자 - 페이징로직이 완성되지 않는다
 	public Paging() {
@@ -168,5 +174,14 @@ public class Paging {
 	public void setEndNo(int endNo) {
 		this.endNo = endNo;
 	}
+
+	public String getSearch() {
+		return search;
+	}
+
+	public void setSearch(String search) {
+		this.search = search;
+	}
+
 
 }

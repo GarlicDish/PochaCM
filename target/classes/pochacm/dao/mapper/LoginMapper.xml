@@ -16,4 +16,9 @@
 		WHERE user_email = #{userEmail}
 	</select>
 	
+	<select id="selectPositionByEmail" resultType="int" parameterType="pochacm.dto.User">
+		SELECT position_num FROM user_info
+		WHERE user_email = #{userEmail}
+	</select>
+	
 </mapper>

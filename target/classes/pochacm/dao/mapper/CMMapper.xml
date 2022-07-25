@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="pochacm.dao.face.CMDao">
+
+	<select id="selectCntAllInvoice" parameterType="string" resultType="int">
+	<choose>
+		<when test='search == null or search.equals("")'>
+			SELECT count(*) FROM invoice
+			ORDER BY invoice_date DESC
+		</when>
+		
+		<when test='search != null'>
+			SELECT count(*) FROM invoice i, brand b
+			ORDER BY invoice_date DESC
+			AND b.brand_name LIKE '%' || #{search} || '%'
+		</when>		
+	</choose>
+	</select>
+	
+	
+	<select id="selectAllInvoice" resultType="hashmap" parameterType="com.skip.www.util.Paging">
+	<choose>
+		<when test='(search == null or search.equals("")) and (sort == null or sort.equals(""))'>
+		SELECT * FROM (
+			SELECT rownum rnum, p.* FROM (
+				SELECT 
+					iv.invoice_num, iv.invoice_date, u.user_name, 
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt
+				FROM invoice iv, user_info u, brand b, supplier sup, item it
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+				ORDER BY invoice_date DESC
+			) p
+    	) invc
+		WHERE rnum BETWEEN #{startNo}
+		AND #{endNo}
+		</when>
+		
+		<when test='search != null'>
+		SELECT * FROM (
+			SELECT rownum rnum, p.* FROM (
+				SELECT 
+					iv.invoice_num, iv.invoice_date, u.user_name, 
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt
+				FROM invoice iv, user_info u, brand b, supplier sup, item it
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+				AND brand_name LIKE '%' || #{search} || '%'
+				ORDER BY invoice_date DESC
+			) p
+    	) invc
+		WHERE rnum BETWEEN #{startNo}
+		AND #{endNo}	
+		</when>	
+		
+		<when test='sort != null and sort.equals("brand")'>
+			SELECT * FROM (
+			SELECT rownum rnum, p.* FROM (
+				SELECT 
+					iv.invoice_num, iv.invoice_date, u.user_name, 
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt
+					FROM invoice iv, user_info u, brand b, supplier sup, item it
+					WHERE iv.user_num = u.user_num (+)
+						and iv.item_num = it.item_num (+)
+						and it.brand_num = b.brand_num (+)
+						and it.supplier_num = sup.supplier_num (+)
+					ORDER BY brand_name DESC
+				) p
+	    	) invc
+			WHERE rnum BETWEEN #{startNo}
+			AND #{endNo}
+		</when>
+		
+		<when test='sort != null and sort.equals("qty")'>
+			SELECT * FROM (
+			SELECT rownum rnum, p.* FROM (
+				SELECT 
+					iv.invoice_num, iv.invoice_date, u.user_name, 
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt
+					FROM invoice iv, user_info u, brand b, supplier sup, item it
+					WHERE iv.user_num = u.user_num (+)
+						and iv.item_num = it.item_num (+)
+						and it.brand_num = b.brand_num (+)
+						and it.supplier_num = sup.supplier_num (+)
+					ORDER BY cnt DESC
+				) p
+	    	) invc
+			WHERE rnum BETWEEN #{startNo}
+			AND #{endNo}
+		</when>
+		
+		<when test='sort != null and sort.equals("supplier")'>
+			SELECT * FROM (
+			SELECT rownum rnum, p.* FROM (
+				SELECT 
+					iv.invoice_num, iv.invoice_date, u.user_name, 
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt
+					FROM invoice iv, user_info u, brand b, supplier sup, item it
+					WHERE iv.user_num = u.user_num (+)
+						and iv.item_num = it.item_num (+)
+						and it.brand_num = b.brand_num (+)
+						and it.supplier_num = sup.supplier_num (+)
+					ORDER BY supplier_name DESC
+				) p
+	    	) invc
+			WHERE rnum BETWEEN #{startNo}
+			AND #{endNo}
+		</when>	
+	</choose>
+	</select>
+</mapper>

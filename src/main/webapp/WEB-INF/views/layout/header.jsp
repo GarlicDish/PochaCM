@@ -65,10 +65,10 @@
         <div class="border-end bg-white" id="sidebar-wrapper">
 			<div class="sidebar-heading border-bottom bg-light">Menu</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Summary</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Invoice</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Sales</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">My Profile</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/summary">Summary</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/invoice?curPage=0">Invoice</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/sales">Sales</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/myProfile">My Profile</a>
                 <c:if test="${ empty userNum ||  empty userEmail}">
                 	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/login">LogIn</a>
                 	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/join">Join</a>

@@ -18,4 +18,6 @@ public interface LoginDao {
 	 */
 	int getUserNoByEmail(User user);
 
+	int selectPositionByEmail(User user);
+
 }

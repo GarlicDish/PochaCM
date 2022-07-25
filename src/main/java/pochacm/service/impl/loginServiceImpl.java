@@ -36,10 +36,19 @@ public class loginServiceImpl implements LoginService{
 	@Override
 	public int getUserNoByEmail(User user) {
 		int idx = 0;
+		
 		logger.info("#{}. Entering loginService - getUserNoByEmail", idx++);
 		
 		return loginDao.getUserNoByEmail(user);
 	}
 
+	@Override
+	public int getUserPositionByEmail(User user) {
+		int idx = 0;
+		
+		logger.info("#{}. Entering loginService - getUserPositionByEmail", idx++);
+		
+		return loginDao.selectPositionByEmail(user);
+	}
 	
 }

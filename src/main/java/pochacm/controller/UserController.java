@@ -32,7 +32,6 @@ public class UserController {
 
 		//logger index
 		int idx = 0;
-
 		logger.info("#{}. Entering login page [GET]", idx++);
 
 		//URL path check
@@ -66,11 +65,13 @@ public class UserController {
 			session.setAttribute("login", loginResult);
 			session.setAttribute("userNum", loginService.getUserNoByEmail(user));
 			session.setAttribute("userEmail", user.getUserEmail());
+			session.setAttribute("positionNum", loginService.getUserPositionByEmail(user));
 
 			logger.info("#{}. session login = {}", idx++, session.getAttribute("login"));
 			logger.info("#{}. session userNum = {}", idx++, session.getAttribute("userNum"));
 			logger.info("#{}. session userEmail = {}", idx++, session.getAttribute("userEmail"));
-
+			logger.info("#{}. session positionNum = {}", idx++, session.getAttribute("positionNum"));
+			
 			// referer check
 			logger.info("#{}. session referer: " + session.getAttribute("redirectURL"));
 			String ss = (String) session.getAttribute("redirectURL");

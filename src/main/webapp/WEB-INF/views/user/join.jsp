@@ -7,6 +7,10 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	$("#formSubmit").click(function() {
+		$("#formSubmit").submit();
+	})
+	
 	// Email validation and duplication test
 	var userEmailValidation = false; //set as false before checking
 	

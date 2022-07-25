@@ -14,10 +14,17 @@ public interface LoginService {
 
 	/**
 	 * Return the user number based on the user ID which entered.
-	 * @param user - 
+	 * @param user - with ID & password
 	 * @return
 	 */
 	int getUserNoByEmail(User user);
+
+	/**
+	 * get user position based on email
+	 * @param user - with ID & password
+	 * @return user dto with position number
+	 */
+	int getUserPositionByEmail(User user);
 
 
 }
