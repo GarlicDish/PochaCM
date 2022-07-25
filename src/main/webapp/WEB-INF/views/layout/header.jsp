@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="ko">
 <head>
 	<!-- jQuery 2.2.4 -->
@@ -13,7 +14,7 @@
     <meta name="description" content="" />
     <meta name="author" content="" />
     
-    <title>Sushi Jiro Inventory Management</title>
+    <title>Pocha Pocha Inventory Management</title>
     
     <!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../resources/assets/favicon.ico" />
@@ -29,8 +30,8 @@
 		
 		.logo {
 			position: relative;
-			width: 368px;
-			height: 70px;
+			width: 142px;
+			height: 80px;
 		}
 		
 		.logo img {
@@ -42,29 +43,10 @@
 			object-fit : cover;
 		}
 		
-		.main a {
-		 	display: block; 
-		}
-		
 		.footer{
 			height: 240px;
 			position : relative;
 			transform : translateY(-100%);
-		}
-		
-		.sidemenu {
-			height:100%;
-			width:150px;
-			margin:0;
-			padding:0;
-			position: fixed;
-			background-color:#B9E2FA;
-		}
-		
-		.sidemnu div {
-			position : relative;
-			margin:0;
-			padding:0;
 		}
 	</style>
 </head>
@@ -72,18 +54,24 @@
 <body>
 	<div class="head">
 		<div class="logo">
-			<a href="<%= request.getContextPath() %>/main"><img src="../../resources/images/SJ_logo.png"/></a>
+			<a href="<%= request.getContextPath() %>/main"><img src="../../resources/images/Pocha-logo.png"/></a>
 		</div>
 	</div>
-	
     <div class="d-flex" id="wrapper">
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper">
+			<div class="sidebar-heading border-bottom bg-light">Menu</div>
             <div class="list-group list-group-flush">
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Inventory</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">History</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Statistics</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Summary</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Invoice</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Sales</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">My Profile</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="">Log Out</a>
+                <c:if test="${ empty userNum ||  empty userEmail}">
+                	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/login">LogIn</a>
+                	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/join">Join</a>
+                </c:if>
+                <c:if test="${userNum ne null && userEmail ne null}">
+                	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/logout">LogOut</a>
+                </c:if>
             </div>
         </div>

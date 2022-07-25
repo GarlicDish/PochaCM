@@ -9,7 +9,12 @@
 <div id="page-content-wrapper">
 	<!-- Page content-->
 	<div class="container-fluid">
-    	<h1 class="mt-4">Main Page</h1>
+		<h1 class="mt-4">페이지 제목</h1>
+	
+	
+			<!-- 내용 -->
+
+
 
 	</div>
 </div>

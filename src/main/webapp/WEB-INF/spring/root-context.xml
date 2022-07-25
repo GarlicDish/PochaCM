@@ -34,14 +34,14 @@
 		<!-- Mapper xml 파일들의 위치를 설정한다 -->
 		<property name="mapperLocations">
 			<array>
-				<value>classpath:/sjim/dao/**/*Mapper.xml</value>
+				<value>classpath:/pochacm/dao/**/*Mapper.xml</value>
 			</array>
 		</property>
 	</bean>
 	
 	<!-- 마이바티스 인터페이스의 위치설정 (DAO 패키지) -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="sjim.dao"/>
+		<property name="basePackage" value="pochacm.dao"/>
 	</bean>
 	
 	<!-- 트랜잭션 매니저 설정 -->

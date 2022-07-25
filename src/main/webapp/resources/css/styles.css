@@ -78,6 +78,9 @@
 
 body {
   margin: 0;
+  padding: 0;
+  width:100%;
+  height: 100%;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
@@ -11291,7 +11294,7 @@ textarea.form-control-lg {
 }
 
 #sidebar-wrapper {
-  min-height: 100vh;
+  min-height: 80vh;
   margin-left: -15rem;
   transition: margin 0.25s ease-out;
 }

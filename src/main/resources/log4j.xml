@@ -10,7 +10,7 @@
 		</layout>
 	</appender>
 
-	<logger name="sjim">
+	<logger name="pochacm">
 		<level value="info" />
 	</logger>
 	

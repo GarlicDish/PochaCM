@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="pochacm.dao.face.UserDao">
+
+	<select id="getUserNoByEmail" resultType="boolean" parameterType="pochacm.dto.User">
+		SELECT count(*) FROM user_info
+		WHERE user_email = #{userEmail}
+	</select>
+	
+	<insert id="InsertUserInfo" parameterType="pochacm.dto.User">
+		INSERT INTO user_info (
+			user_num, user_email, user_password, user_name, user_gender,
+			user_phone, date_of_birth, branch_num, position_num, work_start_date,
+			emer_name, emer_phone, tax_file_check, bsb_num, bank_account_num,
+			sa_fund_name, sa_fund_num, home_address_l1, home_address_l2,
+			home_address_state,	home_address_sub, home_address_postcode,
+			terms_agree, sign_up_date, user_activate
+		) VALUES (
+			#{user_num}, #{user_email}, #{user_password}, #{user_name}, #{user_gender},
+			#{user_phone}, #{date_of_birth}, #{branch_num}, #{position_num}, #{work_start_date},
+			#{emer_name}, #{emer_phone}, #{tax_file_check}, #{bsb_num}, #{bank_account_num},
+			#{sa_fund_name}, #{sa_fund_num}, #{home_address_l1}, #{home_address_l2},
+			#{home_address_state}, #{home_address_sub}, #{home_address_postcode},
+			#{terms_agree}, #{sign_up_date}, #{user_activate}
+		)
+	</insert>
+	
+</mapper>
