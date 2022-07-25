@@ -48,6 +48,9 @@
 			position : relative;
 			transform : translateY(-100%);
 		}
+		.check{
+			width:80%;
+		}
 	</style>
 </head>
 

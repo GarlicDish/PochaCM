@@ -6,9 +6,14 @@
     
 <mapper namespace="pochacm.dao.face.UserDao">
 
-	<select id="getUserNoByEmail" resultType="boolean" parameterType="pochacm.dto.User">
+	<select id="selectCntByEmail" resultType="int" parameterType="pochacm.dto.User">
 		SELECT count(*) FROM user_info
-		WHERE user_email = #{userEmail}
+		WHERE user_email = #{userEmail }
+	</select>
+	
+	<select id="selectCntByPhone" resultType="int" parameterType="pochacm.dto.User">
+		SELECT count(*) FROM user_info
+		WHERE user_phone = #{userPhone }
 	</select>
 	
 	<insert id="InsertUserInfo" parameterType="pochacm.dto.User">

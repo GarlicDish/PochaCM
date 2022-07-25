@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import pochacm.dto.User;
 import pochacm.service.face.LoginService;
@@ -24,21 +26,21 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	User user = new User();
-
+	//Login Page
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage(HttpServletRequest request) {
 
-		// logger index
+		//logger index
 		int idx = 0;
 
 		logger.info("#{}. Entering login page [GET]", idx++);
 
-		// path check
+		//URL path check
 		String referer = request.getHeader("Referer");
 
 		logger.info("#{}. URL visited immediately prior to visiting this page = {}", idx++, referer);
 
+		//Save the URL path in session
 		request.getSession().setAttribute("redirectURL", referer);
 
 		logger.info("#{}. Saving the referer = {}", idx++, request.getSession().getAttribute("redirectURL"));
@@ -46,6 +48,7 @@ public class UserController {
 		return "user/login";
 	}
 
+	//Login check and move the page
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String loginProcess(User user, HttpSession session) {
 
@@ -92,6 +95,7 @@ public class UserController {
 		}
 	}
 
+	//logout
 	@RequestMapping(value = "/logout")
 	public String logout(HttpSession session) {
 		// logger index
@@ -124,7 +128,6 @@ public class UserController {
 		
 		// logger index
 		int idx = 0;
-
 		logger.info("#{}. joinProc", idx++);
 
 		// join result
@@ -148,5 +151,44 @@ public class UserController {
 
 			return "redirect:/join";
 		}
+	}
+	
+	
+	
+	
+	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
+	
+	//Check email duplication
+	@RequestMapping(value="/join/emailCheck", method= RequestMethod.GET)
+	@ResponseBody
+	public int emailDuplCheck(@RequestParam(value = "userEmail") String userEmail) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. emailDuplCheck", idx++);
+		logger.info("#{}. email transferred = {}", idx++, userEmail);
+		
+		//dto for carry the email info
+		User user = new User();
+		
+		user.setUserEmail(userEmail);
+		
+		return userService.checkEmailDuplByEmail(user);
+	}
+	
+	//Check Phone duplication
+	@RequestMapping(value="/join/phoneCheck", method= RequestMethod.GET)
+	@ResponseBody
+	public int phoneDuplCheck(@RequestParam(value = "userPhone") String userPhone) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. phoneDuplCheck", idx++);
+		logger.info("#{}. Phone transferred = {}", idx++, userPhone);
+		
+		//dto for carry the email info
+		User user = new User();
+		
+		user.setUserPhone(userPhone);
+		
+		return userService.checkPhoneDuplByEmail(user);
 	}
 }
