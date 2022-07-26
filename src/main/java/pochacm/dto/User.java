@@ -30,6 +30,7 @@ public class User {
 	private int termsAgree;
 	private Date signUpDate;
 	private int userActivate;
+	
 	@Override
 	public String toString() {
 		return "User [bankAccountNum=" + bankAccountNum + ", branchNum=" + branchNum + ", bsbNum=" + bsbNum

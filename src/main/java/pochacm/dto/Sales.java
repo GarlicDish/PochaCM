@@ -5,12 +5,12 @@ import java.sql.Date;
 public class Sales {
 	private int salesNum;
 	private int userNum;
-	private int menuNum;
+	private int recipeNum;
 	private Date salesDate;
 	private int salesQty;
 	@Override
 	public String toString() {
-		return "Sales [salesNum=" + salesNum + ", userNum=" + userNum + ", menuNum=" + menuNum + ", salesDate="
+		return "Sales [salesNum=" + salesNum + ", userNum=" + userNum + ", recipeNum=" + recipeNum + ", salesDate="
 				+ salesDate + ", salesQty=" + salesQty + "]";
 	}
 	public int getSalesNum() {
@@ -25,11 +25,11 @@ public class Sales {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	public int getMenuNum() {
-		return menuNum;
+	public int getrecipeNum() {
+		return recipeNum;
 	}
-	public void setMenuNum(int menuNum) {
-		this.menuNum = menuNum;
+	public void setrecipeNum(int recipeNum) {
+		this.recipeNum = recipeNum;
 	}
 	public Date getSalesDate() {
 		return salesDate;

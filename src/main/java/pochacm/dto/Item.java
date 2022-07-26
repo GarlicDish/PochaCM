@@ -17,6 +17,7 @@ public class Item {
 	private int targetWastePercentage;
 	private Date itemExpire;
 	private Date lastUpdateDate;
+	
 	public int getItemNum() {
 		return itemNum;
 	}

@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <html lang="ko">
 <head>
 	<!-- jQuery 2.2.4 -->
@@ -51,6 +55,40 @@
 		.check{
 			width:80%;
 		}
+		.page{
+			text-align: center;
+			width:100%;
+		}
+		.pagination {
+			list-style:none;
+			display: inline-block;
+			padding:0;
+			margin-top:20px;
+		}
+		.pagination li{
+			display: inline;
+			text-align: center;
+		}
+		.pagination a{
+			float: left;
+			display:block;
+			font-size:14px;
+			text-decoration: none;
+			padding: 5px 12px;
+			color: black;
+			line-height: 1.5;
+			
+		}
+		.first {
+			margin-right:15px;
+		}
+		.last {
+			left-right:15px;
+		}
+		.pagination a:hover{
+			background-color: #404040;
+			color:#ffffff;
+		}
 	</style>
 </head>
 
@@ -66,7 +104,7 @@
 			<div class="sidebar-heading border-bottom bg-light">Menu</div>
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/summary">Summary</a>
-                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/invoice?curPage=0">Invoice</a>
+                <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/invoice?curPage=1">Invoice</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/sales">Sales</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/myProfile">My Profile</a>
                 <c:if test="${ empty userNum ||  empty userEmail}">

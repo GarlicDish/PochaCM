@@ -92,7 +92,7 @@ public class UserController {
 			logger.info("login failure");
 			session.invalidate();
 
-			return "redirect: /user/login";
+			return "redirect:/login";
 		}
 	}
 

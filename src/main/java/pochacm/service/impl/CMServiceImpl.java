@@ -22,19 +22,25 @@ public class CMServiceImpl implements CMService {
 	public Paging getInvoicePaging(String curPage, String search) {
 		//logger index
 		int idx = 0;
+		
 		logger.info("#{}. getInvoicePaging [GET]", idx++);
+		
 		int page = 0;
 		
 		if( curPage != null && !"".equals(curPage) ) {
+			
 			page = Integer.parseInt(curPage);
 			logger.info("#{}. curPage : {}", idx++, curPage);
+			
 		} else {
+			
 			logger.warn("there is no curPage or null value");
+			
 		}
-		
 		
 		//select total count of invoice
 		int totalCount = cmDao.selectCntAllInvoice(search);
+		
 		logger.info("#{}. totalCount : {}", idx++, totalCount);
 		
 		//create Paging dto - calculate paging

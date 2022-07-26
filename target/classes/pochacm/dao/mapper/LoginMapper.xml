@@ -8,7 +8,7 @@
 
 	<select id="selectIdAndPw" resultType="int" parameterType="pochacm.dto.User">
 		SELECT count(*) FROM user_info
-		WHERE user_email = #{userEmail} and user_password = #{userPassword}
+		WHERE user_email = #{userEmail } and user_password = #{userPassword }
 	</select>
 	
 	<select id="getUserNoByEmail" resultType="int" parameterType="pochacm.dto.User">

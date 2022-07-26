@@ -25,19 +25,31 @@
 	<select id="selectAllInvoice" resultType="hashmap" parameterType="pochacm.dto.Paging">
 	<choose>
 		<when test='(search == null or search.equals("")) and (sort == null or sort.equals(""))'>
-		SELECT * FROM (
+		SELECT * FROM(
 			SELECT rownum rnum, p.* FROM (
-				SELECT 
-					iv.invoice_num, iv.invoice_date, u.user_name, 
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
 					sup.supplier_name, b.brand_name, (
 						SELECT count(*) FROM item bb
 						WHERE it.brand_num=bb.brand_num
-						) cnt
-				FROM invoice iv, user_info u, brand b, supplier sup, item it
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
 				WHERE iv.user_num = u.user_num (+)
 					and iv.item_num = it.item_num (+)
 					and it.brand_num = b.brand_num (+)
 					and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
 				ORDER BY invoice_date DESC
 			) p
     	) invc
@@ -45,42 +57,34 @@
 		AND #{endNo}
 		</when>
 		
-		<when test='search != null'>
-		SELECT * FROM (
+		
+		
+		<when test='sort != null and sort.equals("brand")'>
+			SELECT * FROM(
 			SELECT rownum rnum, p.* FROM (
-				SELECT 
-					iv.invoice_num, iv.invoice_date, u.user_name, 
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
 					sup.supplier_name, b.brand_name, (
 						SELECT count(*) FROM item bb
 						WHERE it.brand_num=bb.brand_num
-						) cnt
-				FROM invoice iv, user_info u, brand b, supplier sup, item it
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
 				WHERE iv.user_num = u.user_num (+)
 					and iv.item_num = it.item_num (+)
 					and it.brand_num = b.brand_num (+)
 					and it.supplier_num = sup.supplier_num (+)
-				AND brand_name LIKE '%' || #{search} || '%'
-				ORDER BY invoice_date DESC
-			) p
-    	) invc
-		WHERE rnum BETWEEN #{startNo}
-		AND #{endNo}	
-		</when>	
-		
-		<when test='sort != null and sort.equals("brand")'>
-			SELECT * FROM (
-			SELECT rownum rnum, p.* FROM (
-				SELECT 
-					iv.invoice_num, iv.invoice_date, u.user_name, 
-					sup.supplier_name, b.brand_name, (
-						SELECT count(*) FROM item bb
-						WHERE it.brand_num=bb.brand_num
-						) cnt
-					FROM invoice iv, user_info u, brand b, supplier sup, item it
-					WHERE iv.user_num = u.user_num (+)
-						and iv.item_num = it.item_num (+)
-						and it.brand_num = b.brand_num (+)
-						and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
 					ORDER BY brand_name DESC
 				) p
 	    	) invc
@@ -89,19 +93,31 @@
 		</when>
 		
 		<when test='sort != null and sort.equals("qty")'>
-			SELECT * FROM (
+			SELECT * FROM(
 			SELECT rownum rnum, p.* FROM (
-				SELECT 
-					iv.invoice_num, iv.invoice_date, u.user_name, 
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
 					sup.supplier_name, b.brand_name, (
 						SELECT count(*) FROM item bb
 						WHERE it.brand_num=bb.brand_num
-						) cnt
-					FROM invoice iv, user_info u, brand b, supplier sup, item it
-					WHERE iv.user_num = u.user_num (+)
-						and iv.item_num = it.item_num (+)
-						and it.brand_num = b.brand_num (+)
-						and it.supplier_num = sup.supplier_num (+)
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
 					ORDER BY cnt DESC
 				) p
 	    	) invc
@@ -110,24 +126,144 @@
 		</when>
 		
 		<when test='sort != null and sort.equals("supplier")'>
-			SELECT * FROM (
+			SELECT * FROM(
 			SELECT rownum rnum, p.* FROM (
-				SELECT 
-					iv.invoice_num, iv.invoice_date, u.user_name, 
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
 					sup.supplier_name, b.brand_name, (
 						SELECT count(*) FROM item bb
 						WHERE it.brand_num=bb.brand_num
-						) cnt
-					FROM invoice iv, user_info u, brand b, supplier sup, item it
-					WHERE iv.user_num = u.user_num (+)
-						and iv.item_num = it.item_num (+)
-						and it.brand_num = b.brand_num (+)
-						and it.supplier_num = sup.supplier_num (+)
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
 					ORDER BY supplier_name DESC
 				) p
 	    	) invc
 			WHERE rnum BETWEEN #{startNo}
 			AND #{endNo}
+		</when>	
+		
+		<when test='search != null and sort.equals("serial")'>
+		SELECT * FROM(
+			SELECT rownum rnum, p.* FROM (
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
+                        
+					AND iv.invoice_serial LIKE '%' || #{search} || '%'
+					
+				ORDER BY invoice_date DESC
+			) p
+    	) invc
+		WHERE rnum BETWEEN #{startNo}
+		AND #{endNo}	
+		</when>	
+		
+		<when test='search != null and sort.equals("brand")'>
+		SELECT * FROM(
+			SELECT rownum rnum, p.* FROM (
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
+                        
+					AND b.brand_num LIKE '%' || #{search} || '%'
+					
+				ORDER BY invoice_date DESC
+			) p
+    	) invc
+		WHERE rnum BETWEEN #{startNo}
+		AND #{endNo}	
+		</when>	
+		
+		<when test='search != null and sort.equals("supplier")'>
+		SELECT * FROM(
+			SELECT rownum rnum, p.* FROM (
+				SELECT
+					iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
+					sup.supplier_name, b.brand_name, (
+						SELECT count(*) FROM item bb
+						WHERE it.brand_num=bb.brand_num
+						) cnt, iite.iqt qqty
+				FROM invoice iv, user_info u, brand b, supplier sup, item it, (
+							SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+                            FROM invoice ivc, item itm
+                            WHERE ivc.item_num = itm.item_num (+)
+                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
+                            order by invoice_serial
+						) iite
+				WHERE iv.user_num = u.user_num (+)
+					and iv.item_num = it.item_num (+)
+					and it.brand_num = b.brand_num (+)
+					and it.supplier_num = sup.supplier_num (+)
+                    and ( 
+                    	iv.invoice_serial = iite.invoice_serial
+                        and iv.invoice_date = iite.invoice_date
+                        and b.brand_num = iite.brand_num
+                        and it.supplier_num = iite.supplier_num
+                        )
+                        
+					AND sup.supplier_name LIKE '%' || #{search} || '%'
+					
+				ORDER BY invoice_date DESC
+			) p
+    	) invc
+		WHERE rnum BETWEEN #{startNo}
+		AND #{endNo}	
 		</when>	
 	</choose>
 	</select>

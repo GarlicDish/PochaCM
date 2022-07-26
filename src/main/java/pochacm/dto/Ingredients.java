@@ -2,7 +2,7 @@ package pochacm.dto;
 
 public class Ingredients {
 	private int ingredientsNum;
-	private int menuNum;
+	private int recipeNum;
 	private int itemNum;
 	private int masterNum;
 	private int itemQty;
@@ -12,11 +12,11 @@ public class Ingredients {
 	public void setIngredientsNum(int ingredientsNum) {
 		this.ingredientsNum = ingredientsNum;
 	}
-	public int getMenuNum() {
-		return menuNum;
+	public int getrecipeNum() {
+		return recipeNum;
 	}
-	public void setMenuNum(int menuNum) {
-		this.menuNum = menuNum;
+	public void setrecipeNum(int recipeNum) {
+		this.recipeNum = recipeNum;
 	}
 	public int getItemNum() {
 		return itemNum;
@@ -38,7 +38,7 @@ public class Ingredients {
 	}
 	@Override
 	public String toString() {
-		return "Ingredients [ingredientsNum=" + ingredientsNum + ", menuNum=" + menuNum + ", itemNum=" + itemNum
+		return "Ingredients [ingredientsNum=" + ingredientsNum + ", recipeNum=" + recipeNum + ", itemNum=" + itemNum
 				+ ", masterNum=" + masterNum + ", itemQty=" + itemQty + "]";
 	}
 

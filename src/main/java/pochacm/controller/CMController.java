@@ -24,6 +24,17 @@ public class CMController {
 	
 	@Autowired CMService cmService;
 	
+	@GetMapping("/summary")
+	public String viewSummary(HttpRequest req) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. Entering summary page [GET]", idx++);
+		
+		
+		
+		return "cm/summary";
+	}
+	
 	@GetMapping("/invoice")
 	public String viewInvoiceList(
 			HttpSession session, String curPage, 
@@ -32,11 +43,13 @@ public class CMController {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /invoice [GET]", idx++);
+		
 		//if he/she does not login, back to login page
 		if(session.getAttribute("userNum") == null) {
 			logger.info("#{}. Not Logined", idx++);
 			return "redirect:/login";
 		}
+		
 		logger.info("#{}. sort : {}", idx++, sort);
 		logger.info("#{}. search : {}", idx++, search);
 		
@@ -44,6 +57,7 @@ public class CMController {
 		Paging paging = cmService.getInvoicePaging(curPage,search);
 		//make a model with invoice list
 		List<Invoice> invoiceList = cmService.getInvoiceList(paging);
+		logger.info("#{}. invoiceList : {}", idx++, invoiceList);
 		
 //		logger.info("#{}. curPage : {}", idx++, curPage);
 //		logger.info("#{}. search : {}", idx++, search);
@@ -70,17 +84,36 @@ public class CMController {
 //		
 //		logger.info("#{}. saturday : {}", idx++, saturday);
 		
+		model.addAttribute("invoiceList", invoiceList);
+		logger.info("#{}. model.getAttribute(\"invoiceList\") : {}", idx++, model.getAttribute("invoiceList"));
+		
+		model.addAttribute("paging", paging);
+		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
+		
+		model.addAttribute("search", search);
+		logger.info("#{}. model.getAttribute(\"search\") : {}", idx++, model.getAttribute("search"));
+		
+		model.addAttribute("sort",sort);
+		logger.info("#{}. model.getAttribute(\"sort\") : {}", idx++, model.getAttribute("sort"));
+		
 		return "cm/invoiceList";
 	}
-	@GetMapping("/summary")
-	public String viewSummary(HttpRequest req) {
+	
+	@GetMapping("/sales")
+	public String salesList(HttpSession session, String curPage, 
+			String search, String sort, Model model) {
+	
 		//logger index
 		int idx = 0;
-		logger.info("#{}. Entering summary page [GET]", idx++);
+		logger.info("#{}. /sales [GET]", idx++);
+
+		//if he/she does not login, back to login page
+		if(session.getAttribute("userNum") == null) {
+			logger.info("#{}. Not Logined", idx++);
+			return "redirect:/login";
+		}
 		
-		
-		
-		return "cm/summary";
+		return "cm/salesList";
 	}
 
 }
