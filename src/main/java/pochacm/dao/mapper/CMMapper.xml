@@ -22,7 +22,7 @@
 	</select>
 	
 	
-	<select id="selectAllInvoice" resultType="hashmap" parameterType="com.skip.www.util.Paging">
+	<select id="selectAllInvoice" resultType="hashmap" parameterType="pochacm.dto.Paging">
 	<choose>
 		<when test='(search == null or search.equals("")) and (sort == null or sort.equals(""))'>
 		SELECT * FROM (

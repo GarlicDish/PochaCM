@@ -3,7 +3,7 @@ package pochacm.dao.face;
 import java.util.List;
 
 import pochacm.dto.Invoice;
-import pochacm.util.Paging;
+import pochacm.dto.Paging;
 
 public interface CMDao {
 

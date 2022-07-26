@@ -14,8 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import pochacm.dto.Invoice;
+import pochacm.dto.Paging;
 import pochacm.service.face.CMService;
-import pochacm.util.Paging;
 
 @Controller
 public class CMController {

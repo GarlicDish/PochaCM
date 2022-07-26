@@ -1,6 +1,4 @@
-package pochacm.util;
-
-import java.sql.Date;
+package pochacm.dto;
 
 public class Paging {
 
@@ -96,11 +94,30 @@ public class Paging {
 		endNo = curPage * listCount;
 	}
 
+	
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
+	public String getViewMethod() {
+		return viewMethod;
+	}
+
+	public void setViewMethod(String viewMethod) {
+		this.viewMethod = viewMethod;
+	}
+
 	@Override
 	public String toString() {
 		return "Paging [curPage=" + curPage + ", totalCount=" + totalCount + ", listCount=" + listCount + ", totalPage="
 				+ totalPage + ", pageCount=" + pageCount + ", startPage=" + startPage + ", endPage=" + endPage
-				+ ", startNo=" + startNo + ", endNo=" + endNo + "]";
+				+ ", startNo=" + startNo + ", endNo=" + endNo + ", search=" + search + ", sort=" + sort
+				+ ", viewMethod=" + viewMethod + "]";
 	}
 
 	public int getCurPage() {
