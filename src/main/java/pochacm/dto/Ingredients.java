@@ -6,6 +6,7 @@ public class Ingredients {
 	private int itemNum;
 	private int masterNum;
 	private int itemQty;
+	
 	public int getIngredientsNum() {
 		return ingredientsNum;
 	}

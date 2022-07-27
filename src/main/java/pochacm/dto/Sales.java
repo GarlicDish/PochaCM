@@ -8,6 +8,7 @@ public class Sales {
 	private int recipeNum;
 	private Date salesDate;
 	private int salesQty;
+	
 	@Override
 	public String toString() {
 		return "Sales [salesNum=" + salesNum + ", userNum=" + userNum + ", recipeNum=" + recipeNum + ", salesDate="

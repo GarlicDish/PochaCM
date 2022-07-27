@@ -11,6 +11,11 @@ public class User {
 	private int userGender;
 	private String userPhone;
 	private Date dateOfBirth;
+	private String addressL1;
+	private String addressL2;
+	private String addressState;
+	private String addressSub;
+	private int addressPostCode;
 	private int branchNum;
 	private int positionNum;
 	private Date workStartDate;
@@ -22,11 +27,6 @@ public class User {
 	private int bankAccountNum;
 	private String saFundName;
 	private String saFundNum;
-	private String homeAddressL1;
-	private String homeAddressL2;
-	private String homeAddressState;
-	private String homeAddressSub;
-	private int homeAddressPostCode;
 	private int termsAgree;
 	private Date signUpDate;
 	private int userActivate;
@@ -35,8 +35,8 @@ public class User {
 	public String toString() {
 		return "User [bankAccountNum=" + bankAccountNum + ", branchNum=" + branchNum + ", bsbNum=" + bsbNum
 				+ ", dateOfBirth=" + dateOfBirth + ", emerName=" + emerName + ", emerPhone=" + emerPhone
-				+ ", homeAddressL1=" + homeAddressL1 + ", homeAddressL2=" + homeAddressL2 + ", homeAddressPostCode="
-				+ homeAddressPostCode + ", homeAddressState=" + homeAddressState + ", homeAddressSub=" + homeAddressSub
+				+ ", addressL1=" + addressL1 + ", addressL2=" + addressL2 + ", addressPostCode="
+				+ addressPostCode + ", addressState=" + addressState + ", addressSub=" + addressSub
 				+ ", positionNum=" + positionNum + ", saFundName=" + saFundName + ", saFundNum=" + saFundNum
 				+ ", signUpDate=" + signUpDate + ", taxFileCheck=" + taxFileCheck + ", taxFileNum=" + taxFileNum
 				+ ", termsAgree=" + termsAgree + ", userActivate=" + userActivate + ", userEmail=" + userEmail
@@ -151,35 +151,35 @@ public class User {
 	public void setSaFundNum(String saFundNum) {
 		this.saFundNum = saFundNum;
 	}
-	public String getHomeAddressL1() {
-		return homeAddressL1;
+	public String getaddressL1() {
+		return addressL1;
 	}
-	public void setHomeAddressL1(String homeAddressL1) {
-		this.homeAddressL1 = homeAddressL1;
+	public void setaddressL1(String addressL1) {
+		this.addressL1 = addressL1;
 	}
-	public String getHomeAddressL2() {
-		return homeAddressL2;
+	public String getaddressL2() {
+		return addressL2;
 	}
-	public void setHomeAddressL2(String homeAddressL2) {
-		this.homeAddressL2 = homeAddressL2;
+	public void setaddressL2(String addressL2) {
+		this.addressL2 = addressL2;
 	}
-	public String getHomeAddressState() {
-		return homeAddressState;
+	public String getaddressState() {
+		return addressState;
 	}
-	public void setHomeAddressState(String homeAddressState) {
-		this.homeAddressState = homeAddressState;
+	public void setaddressState(String addressState) {
+		this.addressState = addressState;
 	}
-	public String getHomeAddressSub() {
-		return homeAddressSub;
+	public String getaddressSub() {
+		return addressSub;
 	}
-	public void setHomeAddressSub(String homeAddressSub) {
-		this.homeAddressSub = homeAddressSub;
+	public void setaddressSub(String addressSub) {
+		this.addressSub = addressSub;
 	}
-	public int getHomeAddressPostCode() {
-		return homeAddressPostCode;
+	public int getaddressPostCode() {
+		return addressPostCode;
 	}
-	public void setHomeAddressPostCode(int homeAddressPostCode) {
-		this.homeAddressPostCode = homeAddressPostCode;
+	public void setaddressPostCode(int addressPostCode) {
+		this.addressPostCode = addressPostCode;
 	}
 	public int getTermsAgree() {
 		return termsAgree;

@@ -12,12 +12,22 @@ public class Item {
 	private int orderUnitNum;
 	private int itemUnitQty;
 	private int itemOrderUnitPrice;
-	private String primaryUnitNum;
-	private String secondaryUnitNum;
-	private int targetWastePercentage;
-	private Date itemExpire;
-	private Date lastUpdateDate;
+	private int primaryUnitNum;
+	private int secondaryUnitNum;
+	private int itemTarget_waste_percent;
+	private Date itemExpiryDate;
+	private Date itemLastUpdate;
+	private int userNum;
 	
+	@Override
+	public String toString() {
+		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", supplierNum=" + supplierNum + ", itemCateNum="
+				+ itemCateNum + ", itemName=" + itemName + ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum
+				+ ", itemUnitQty=" + itemUnitQty + ", itemOrderUnitPrice=" + itemOrderUnitPrice + ", primaryUnitNum="
+				+ primaryUnitNum + ", secondaryUnitNum=" + secondaryUnitNum + ", itemTarget_waste_percent="
+				+ itemTarget_waste_percent + ", itemExpiryDate=" + itemExpiryDate + ", itemLastUpdate=" + itemLastUpdate
+				+ ", userNum=" + userNum + "]";
+	}
 	public int getItemNum() {
 		return itemNum;
 	}
@@ -72,43 +82,41 @@ public class Item {
 	public void setItemOrderUnitPrice(int itemOrderUnitPrice) {
 		this.itemOrderUnitPrice = itemOrderUnitPrice;
 	}
-	public String getPrimaryUnitNum() {
+	public int getPrimaryUnitNum() {
 		return primaryUnitNum;
 	}
-	public void setPrimaryUnitNum(String primaryUnitNum) {
+	public void setPrimaryUnitNum(int primaryUnitNum) {
 		this.primaryUnitNum = primaryUnitNum;
 	}
-	public String getSecondaryUnitNum() {
+	public int getSecondaryUnitNum() {
 		return secondaryUnitNum;
 	}
-	public void setSecondaryUnitNum(String secondaryUnitNum) {
+	public void setSecondaryUnitNum(int secondaryUnitNum) {
 		this.secondaryUnitNum = secondaryUnitNum;
 	}
-	public int getTargetWastePercentage() {
-		return targetWastePercentage;
+	public int getItemTarget_waste_percent() {
+		return itemTarget_waste_percent;
 	}
-	public void setTargetWastePercentage(int targetWastePercentage) {
-		this.targetWastePercentage = targetWastePercentage;
+	public void setItemTarget_waste_percent(int itemTarget_waste_percent) {
+		this.itemTarget_waste_percent = itemTarget_waste_percent;
 	}
-	public Date getItemExpire() {
-		return itemExpire;
+	public Date getItemExpiryDate() {
+		return itemExpiryDate;
 	}
-	public void setItemExpire(Date itemExpire) {
-		this.itemExpire = itemExpire;
+	public void setItemExpiryDate(Date itemExpiryDate) {
+		this.itemExpiryDate = itemExpiryDate;
 	}
-	public Date getLastUpdateDate() {
-		return lastUpdateDate;
+	public Date getItemLastUpdate() {
+		return itemLastUpdate;
 	}
-	public void setLastUpdateDate(Date lastUpdateDate) {
-		this.lastUpdateDate = lastUpdateDate;
+	public void setItemLastUpdate(Date itemLastUpdate) {
+		this.itemLastUpdate = itemLastUpdate;
 	}
-	@Override
-	public String toString() {
-		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", supplierNum=" + supplierNum + ", itemCateNum="
-				+ itemCateNum + ", itemName=" + itemName + ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum
-				+ ", itemUnitQty=" + itemUnitQty + ", itemOrderUnitPrice=" + itemOrderUnitPrice + ", primaryUnitNum="
-				+ primaryUnitNum + ", secondaryUnitNum=" + secondaryUnitNum + ", targetWastePercentage="
-				+ targetWastePercentage + ", itemExpire=" + itemExpire + ", lastUpdateDate=" + lastUpdateDate + "]";
+	public int getUserNum() {
+		return userNum;
+	}
+	public void setUserNum(int userNum) {
+		this.userNum = userNum;
 	}
 	
 	

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import pochacm.dto.User;
-import pochacm.service.face.LoginService;
 import pochacm.service.face.UserService;
 
 @Controller
@@ -21,8 +20,6 @@ public class UserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-	@Autowired
-	private LoginService loginService;
 	@Autowired
 	private UserService userService;
 
@@ -56,16 +53,16 @@ public class UserController {
 
 		logger.info("#{}. Entering login page [POST]", idx++);
 
-		boolean loginResult = loginService.loginResult(user);
+		boolean loginResult = userService.loginResult(user);
 
 		if (loginResult) {
 
 			logger.info("#{}. loginResult = {}", idx++, loginResult);
 
 			session.setAttribute("login", loginResult);
-			session.setAttribute("userNum", loginService.getUserNoByEmail(user));
+			session.setAttribute("userNum", userService.getUserNoByEmail(user));
 			session.setAttribute("userEmail", user.getUserEmail());
-			session.setAttribute("positionNum", loginService.getUserPositionByEmail(user));
+			session.setAttribute("positionNum", userService.getUserPositionByEmail(user));
 
 			logger.info("#{}. session login = {}", idx++, session.getAttribute("login"));
 			logger.info("#{}. session userNum = {}", idx++, session.getAttribute("userNum"));
@@ -140,7 +137,7 @@ public class UserController {
 
 			// immediately save the session and get pop-up message for welcome
 			session.setAttribute("login", joinResult);
-			session.setAttribute("userNum", loginService.getUserNoByEmail(user));
+			session.setAttribute("userNum", userService.getUserNoByEmail(user));
 			session.setAttribute("userEmail", user.getUserEmail());
 
 			return "redirect:/joinResult";
@@ -153,6 +150,9 @@ public class UserController {
 			return "redirect:/join";
 		}
 	}
+	
+	
+	
 	
 	
 	

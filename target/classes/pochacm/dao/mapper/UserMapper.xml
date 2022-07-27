@@ -20,18 +20,32 @@
 		INSERT INTO user_info (
 			user_num, user_email, user_password, user_name, user_gender,
 			user_phone, date_of_birth, branch_num, position_num, work_start_date,
-			emer_name, emer_phone, tax_file_check, bsb_num, bank_account_num,
-			sa_fund_name, sa_fund_num, home_address_l1, home_address_l2,
-			home_address_state,	home_address_sub, home_address_postcode,
-			terms_agree, sign_up_date, user_activate
+			emer_name, emer_phone, tax_file_check, tax_file_num, bsb_num, bank_account_num,
+			sa_fund_name, sa_fund_num, address_l1, address_l2, address_state,
+			address_sub, address_postcode, terms_agree, sign_up_date, user_activate
 		) VALUES (
 			#{user_num}, #{user_email}, #{user_password}, #{user_name}, #{user_gender},
 			#{user_phone}, #{date_of_birth}, #{branch_num}, #{position_num}, #{work_start_date},
-			#{emer_name}, #{emer_phone}, #{tax_file_check}, #{bsb_num}, #{bank_account_num},
-			#{sa_fund_name}, #{sa_fund_num}, #{home_address_l1}, #{home_address_l2},
-			#{home_address_state}, #{home_address_sub}, #{home_address_postcode},
+			#{emer_name}, #{emer_phone}, #{tax_file_check}, #{tax_file_num }, #{bsb_num}, #{bank_account_num},
+			#{sa_fund_name}, #{sa_fund_num}, #{address_l1}, #{address_l2},
+			#{address_state}, #{address_sub}, #{address_postcode},
 			#{terms_agree}, #{sign_up_date}, #{user_activate}
 		)
 	</insert>
+	
+	<select id="selectIdAndPw" resultType="int" parameterType="pochacm.dto.User">
+		SELECT count(*) FROM user_info
+		WHERE user_email = #{userEmail } and user_password = #{userPassword }
+	</select>
+	
+	<select id="getUserNoByEmail" resultType="int" parameterType="pochacm.dto.User">
+		SELECT user_num FROM user_info
+		WHERE user_email = #{userEmail}
+	</select>
+	
+	<select id="selectPositionByEmail" resultType="int" parameterType="pochacm.dto.User">
+		SELECT position_num FROM user_info
+		WHERE user_email = #{userEmail}
+	</select>
 	
 </mapper>
