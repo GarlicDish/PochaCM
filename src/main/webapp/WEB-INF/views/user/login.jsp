@@ -8,9 +8,8 @@
 <!-- Page content-->
 <div class="container-fluid">
 
-
-<div class="loginPanel" style="height:600px; width:400px; margin:0 auto;">
-<h1>Login page</h1>
+<h1 class="mt-4">Login page</h1>
+<div class="loginPanel" style="height:600px; width:400px;">
 	<form class="form-horizontal" action="/login" method="post" >
 		<div class="form-group">
 			<label for="userEmail" class="col-sm-2 control-label">ID</label>

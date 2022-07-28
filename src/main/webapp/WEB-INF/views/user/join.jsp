@@ -10,7 +10,7 @@ $(document).ready(function() {
 	$("#formSubmit").click(function() {
 		$("#formSubmit").submit();
 	})
-	
+
 	// Email validation and duplication test
 	var userEmailValidation = false; //set as false before checking
 	
@@ -120,10 +120,11 @@ $(document).ready(function() {
 		
 		if(userName.length == 0) {
 			
-			$("#userNameCheck").html("Please fill the blank");
+			$("#userNameCheck").html("Please enter your name");
 			$("#userNameCheck").attr("class", "check text-danger");
 			
 			userNameValidation =  false;
+			
      	} else {
      		
 			$("#userNameCheck").html("");
@@ -139,16 +140,13 @@ $(document).ready(function() {
 		var id = $("input[name=userGender]:checked").attr("id")
 		var value = $("input[name=userGender]:checked").val();
 		
-		if(id != userGenderM && id != userGenderF) {
+		console.log(id,value);
+		
+		if(value=="" || value==null) {
 			
 			userGenderValidation =  false;
 			
-		}
-		if(value = null) {
-			
-			userGenderValidation =  false;
-			
-     	} else {
+		} else {
      		
 			$("#userGenderCheck").html("");
 			$("#userGenderCheck").attr("class", "check");
@@ -347,12 +345,19 @@ $(document).ready(function() {
 		var saName = $("#saName").val();
 		
 		if(saName.length == 0) {
+			
+			$("#saNameCheck").html("Please enter Superannuation Name.");
+			$("#saNameCheck").attr("class", "check text-danger");
 			userSANameValidation =  false;
-     	}
-		
+			
+     	} else{
+     		
+		$("#saNameCheck").html("");
 		userSANameValidation = true;
+		
+     	}
 	})
-	
+		
 	//user Superannuation(Pension) Number validation
 	var userSANumValidation = false;
 	$("#saNum").blur(function checkAddr1() {
@@ -360,10 +365,17 @@ $(document).ready(function() {
 		var saNum = $("#saNum").val();
 		
 		if(saNum.length == 0) {
+			
+			$("#saNumCheck").html("Please enter Superannuation Number without '-' or space.");
+			$("#saNumCheck").attr("class", "check text-danger");
+			
 			userSANumValidation =  false;
-     	}
-		
+     	} else {
+     		
+		$("#saNumCheck").html("");
 		userSANumValidation = true;
+     		
+     	}
 	})
 	
 	//Address Line 1 Validation (Address Line 2 is nullable)
@@ -509,11 +521,12 @@ $(document).ready(function() {
 				branchValidation &&
 				positionValidation &&
 				wSDValidation &&
-				taValidation	
+				taValidation
 				) {
 			
 			$("#taxFileNum").attr("disabled", false);
 			$("#form").attr("onsubmit","return true");
+			
 			if($("#taxFileNum").val() == '---------'){
 				$("#taxFileNum").attr("value", 0);
 			};
@@ -588,9 +601,9 @@ $(document).ready(function() {
 					<!-- *****  user gender  ***** -->
 						<div id="userGender" class="form-group">
 							<label for="userGender" class="col-sm-8 control-label">User Gender</label><br> 
-								<label class="radio-inline"> 
+								<label class="radio-inline col-3"> 
 								<input type="radio" name="userGender" id="userGenderM" value="0">Male</label> 
-								<label class="radio-inline"> 
+								<label class="radio-inline col-3"> 
 								<input type="radio" name="userGender" id="userGenderF" value="1">Female</label>
 						</div>
 						<!-- use AJAX for blank or not -->
@@ -635,37 +648,40 @@ $(document).ready(function() {
 						<div class="row">
 					<!-- *****  user Home Address State  ***** -->
 							<div class="form-group col-4">
-								<label for="homeAddressState" class="control-label">State</label>
+								<label for="inputStateList" class="control-label">State</label>
 								<div class="">
-									<select class="form-control input-sm">
+									<input class="form-control" list="stateListOptions" id="inputStateList" placeholder="Type to search...">
+									<datalist id="stateListOptions">
 										<c:forEach items="${stateList }" var="i">
 											<option value="${i.stateNum }">${i.stateName }</option>
 										</c:forEach>
-									</select>
+									</datalist>
 								</div>
 							</div>
 						
 					<!-- *****  user Home Address Suburban  ***** -->
 							<div class="form-group col-4">
-								<label for="homeAddressSub" class="control-label">Suburb</label>
+								<label for="inputSubList" class="control-label">Suburb</label>
 								<div class="">
-									<select class="form-control input-sm">
+									<input class="form-control" list="subListOptions" id="inputSubList" placeholder="Type to search...">
+									<datalist id="subListOptions">
 										<c:forEach items="${suburbList }" var="i">
 											<option value="${i.suburbNum }">${i.suburbName }</option>
 										</c:forEach>
-									</select>
+									</datalist>
 								</div>
 							</div>
 						
 					<!-- *****  user Home Address Post Code  ***** -->
 							<div class="form-group col-4">
-								<label for="homeAddressPostCode" class="control-label">Post Code</label>
+								<label for="inputPCList" class="control-label">Post Code</label>
 								<div class="">
-									<select class="form-control input-sm">
+									<input class="form-control" list="pcListOptions" id="inputPCList" placeholder="Type to search...">
+									<datalist id="pcListOptions">
 										<c:forEach items="${postcodeList }" var="i">
 											<option value="${i.postcodeNum }">${i.postcodeName }</option>
 										</c:forEach>
-									</select>
+									</datalist>
 								</div>
 							</div>
 						</div>
@@ -700,25 +716,27 @@ $(document).ready(function() {
 									<h4>Working Status</h4>
 						<!-- *****  Branch where user works at  ***** -->
 									<div class="form-group">
-										<label for="branchNum" class="col-sm-6 control-label">Branch</label>
+										<label for="inputBrcList" class="col-sm-6 control-label">Branch</label>
 										<div class="col-sm-10">
-											<select class="form-control input-sm">
+											<input class="form-control" list="brcListOptions" id="inputBrcList" placeholder="Type to search...">
+											<datalist id="brcListOptions">
 												<c:forEach items="${branchList }" var="i">
 													<option value="${i.branchNum }">${i.branchName }</option>
 												</c:forEach>
-											</select>
+											</datalist>
 										</div>
 									</div>
 			
 						<!-- *****  Position of user  ***** -->
 									<div class="form-group">
-										<label for="positionNum" class="col-sm-6 control-label">Position</label>
+										<label for="inputPstList" class="col-sm-6 control-label">Position</label>
 										<div class="col-sm-10">
-											<select class="form-control input-sm">
+											<input class="form-control" list="pstListOptions" id="inputPstList" placeholder="Type to search...">
+											<datalist id="pstListOptions">
 												<c:forEach items="${positionList }" var="i">
 													<option value="${i.positionNum }">${i.positionName }</option>
 												</c:forEach>
-											</select>
+											</datalist>
 										</div>
 									</div>
 			
@@ -777,6 +795,9 @@ $(document).ready(function() {
 								<input type="text" class="form-control input-sm" id="saName" name="saName" placeholder="Superannuation Name">
 							</div>
 						</div>
+						<!-- use AJAX for format checking -->
+						<div class="check" id="saNameCheck"></div>
+						
 						
 					<!-- *****  user Superannuation(Pension) Number  ***** -->
 						<div class="form-group">
@@ -786,7 +807,10 @@ $(document).ready(function() {
 								<input type="text" class="form-control input-sm" id="saNum"	name="saNum" placeholder="Superannuation Number">
 							</div>
 						</div>
-								</div>
+						<!-- use AJAX for format checking -->
+						<div class="check" id="saNumCheck"></div>
+						
+					</div>
 						<!-- Working Status End -->
 						<!-- *****  user Tax File Check(Presence or Absence)  ***** -->
 		

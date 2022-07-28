@@ -78,9 +78,6 @@
 
 body {
   margin: 0;
-  padding: 0;
-  width:100%;
-  height: 100%;
   font-family: var(--bs-body-font-family);
   font-size: var(--bs-body-font-size);
   font-weight: var(--bs-body-font-weight);
@@ -4797,7 +4794,14 @@ textarea.form-control-lg {
   color: #6c757d;
 }
 
-
+.pagination {
+  display: flex;
+  padding-left: 0;
+  list-style: none;
+}
+.pagination a {
+  border:1px solid #ffffff;
+}
 .page-link {
   position: relative;
   display: block;
@@ -11289,7 +11293,7 @@ textarea.form-control-lg {
 }
 
 #sidebar-wrapper {
-  min-height: 80vh;
+  min-height: 100vh;
   margin-left: -15rem;
   transition: margin 0.25s ease-out;
 }

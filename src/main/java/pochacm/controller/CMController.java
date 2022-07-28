@@ -1,19 +1,23 @@
 package pochacm.controller;
 
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import pochacm.dto.Invoice;
+import pochacm.dto.Item;
 import pochacm.dto.Paging;
 import pochacm.service.face.CMService;
 
@@ -25,20 +29,18 @@ public class CMController {
 	@Autowired CMService cmService;
 	
 	@GetMapping("/summary")
-	public String viewSummary(HttpRequest req) {
+	public String viewSummary(HttpServletRequest req) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. Entering summary page [GET]", idx++);
-		
-		
 		
 		return "cm/summary";
 	}
 	
 	@GetMapping("/invoice")
-	public String viewInvoiceList(
-			HttpSession session, String curPage, 
-			String search, String sort, Model model) {
+	public String invoiceList(
+			HttpSession session, HttpServletRequest request, 
+			ModelAndView mav, String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
@@ -50,39 +52,44 @@ public class CMController {
 			return "redirect:/login";
 		}
 		
-		logger.info("#{}. sort : {}", idx++, sort);
-		logger.info("#{}. search : {}", idx++, search);
+		if(curPage == null || curPage.equals("")) {
+			curPage = "1";
+		}
+		//Parameter delivery
+		String category = request.getParameter("category");
+		String keyword = request.getParameter("keyword");
 		
+		logger.info("#{}. category : {}", idx++, category);
+		logger.info("#{}. keyWord : {}", idx++, keyword);
+		logger.info("#{}. curPage : {}", idx++, curPage);
+	    
+		//prevent to insert null value to Mapper
+		if(category == null || (!"subject".equals(category) && !"name".equals(category)) ) {
+	       category = "";
+	    }
+	    
+	    if(keyword == null || "".equals(keyword) || keyword.trim().isEmpty() ) {
+	       keyword = "";
+	    }
+	    
+	    Map<String, String> map = new HashMap<>();
+	    
+	    map.put("category",category);
+	    map.put("keyword",keyword);
+	    
+	    Paging paging = new Paging();
+	    
+	    paging.setKeyword(keyword);
+	    paging.setCategory(category);
+	    paging.setCurPage(Integer.parseInt(curPage));
 		//create Paging dto with curPage & search 
-		Paging paging = cmService.getInvoicePaging(curPage,search);
+		paging = cmService.getInvoicePaging(paging);
+		logger.info("#{}. invoiceList : {}", idx++, paging);
+				
 		//make a model with invoice list
 		List<Invoice> invoiceList = cmService.getInvoiceList(paging);
-		logger.info("#{}. invoiceList : {}", idx++, invoiceList);
 		
-//		logger.info("#{}. curPage : {}", idx++, curPage);
-//		logger.info("#{}. search : {}", idx++, search);
-//		logger.info("#{}. sort : {}", idx++, sort);
-//		
-//		
-//		//setting for get Monday and Sunday information
-//		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");	
-//		
-//		//get today
-//		Calendar cal = Calendar.getInstance();
-//		logger.info("#{}. mDay : {}", idx++, cal);
-//		
-//		
-//		//get this week's SUNDAY
-//		cal.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
-//		String sunday = df.format(cal.getTime());
-//		
-//		logger.info("#{}. sunday : {}", idx++, sunday);
-//		
-//		//Get this week's Monday for paging as weekly
-//		cal.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
-//		String saturday = df.format(cal.getTime());
-//		
-//		logger.info("#{}. saturday : {}", idx++, saturday);
+		logger.info("#{}. invoiceList : {}", idx++, invoiceList);
 		
 		model.addAttribute("invoiceList", invoiceList);
 		logger.info("#{}. model.getAttribute(\"invoiceList\") : {}", idx++, model.getAttribute("invoiceList"));
@@ -90,13 +97,25 @@ public class CMController {
 		model.addAttribute("paging", paging);
 		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
 		
-		model.addAttribute("search", search);
-		logger.info("#{}. model.getAttribute(\"search\") : {}", idx++, model.getAttribute("search"));
-		
-		model.addAttribute("sort",sort);
-		logger.info("#{}. model.getAttribute(\"sort\") : {}", idx++, model.getAttribute("sort"));
-		
 		return "cm/invoiceList";
+	}
+	
+	@GetMapping("/invoiceView")
+	public String invoiceView(HttpSession session, Model model) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /invoiceView [GET]", idx++);
+		
+		Invoice invoice = new Invoice();
+		if(session.getAttribute("invoiceNum") != null || session.getAttribute("invoiceNum").equals("")) {
+			invoice.setInvoiceNum((int) session.getAttribute("invoiceNum"));
+		}
+		
+		List<Item> itemList = cmService.selectItemsByInvoiceNum(invoice);
+		
+		model.addAttribute("itemList",itemList);
+				
+		return "cm/invoiceView";
 	}
 	
 	@GetMapping("/sales")

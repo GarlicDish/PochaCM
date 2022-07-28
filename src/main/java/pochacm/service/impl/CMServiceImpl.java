@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import pochacm.dao.face.CMDao;
 import pochacm.dto.Invoice;
+import pochacm.dto.Item;
 import pochacm.dto.Paging;
 import pochacm.service.face.CMService;
 
@@ -18,40 +19,58 @@ public class CMServiceImpl implements CMService {
 
 	@Autowired CMDao cmDao;
 	
+	//invoice Paging
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
-	public Paging getInvoicePaging(String curPage, String search) {
+	public Paging getInvoicePaging(Paging paging) {
 		//logger index
 		int idx = 0;
-		
-		logger.info("#{}. getInvoicePaging [GET]", idx++);
+		logger.info("#{}. getInvoicePaging", idx++);
 		
 		int page = 0;
 		
-		if( curPage != null && !"".equals(curPage) ) {
-			
-			page = Integer.parseInt(curPage);
-			logger.info("#{}. curPage : {}", idx++, curPage);
-			
+		if( Integer.toString(paging.getCurPage()) != null && !"".equals(paging.getCurPage()) ) {
+			page = paging.getCurPage();
+			logger.info("#{}. paging.getCurPage() : {}", idx++, paging.getCurPage());
 		} else {
-			
-			logger.warn("there is no curPage or null value");
-			
+			logger.warn("there is no paging.getCurPage() or null value");
 		}
 		
+		String keyword = paging.getKeyword();
+		String category = paging.getCategory();
+		
 		//select total count of invoice
-		int totalCount = cmDao.selectCntAllInvoice(search);
+		int totalCount = cmDao.selectCntAllInvoice(paging);
 		
 		logger.info("#{}. totalCount : {}", idx++, totalCount);
 		
 		//create Paging dto - calculate paging
-		Paging paging = new Paging(totalCount, page);
+		Paging pagingReturn = new Paging(totalCount,page);
 		
-		return paging;
+		logger.info("#{}. pagingReturn : {}", idx++, pagingReturn);
+		pagingReturn.setCategory(category);
+		pagingReturn.setKeyword(keyword);
+		logger.info("#{}. pagingReturn : {}", idx++, pagingReturn);
+		
+		return pagingReturn;
 	}
 
+	//Get invoice list
 	@Override
 	public List<Invoice> getInvoiceList(Paging paging) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getInvoiceList", idx++);
 		return cmDao.selectAllInvoice(paging);
+	}
+
+	//view invoice detail
+	@Override
+	public List<Item> selectItemsByInvoiceNum(Invoice invoice) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. selectItemsByInvoiceNum", idx++);
+		return cmDao.selectItemsByInvoiceNum(invoice);
 	}
 
 

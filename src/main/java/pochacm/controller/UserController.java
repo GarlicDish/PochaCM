@@ -56,6 +56,7 @@ public class UserController {
 		boolean loginResult = userService.loginResult(user);
 
 		if (loginResult) {
+			// login success
 
 			logger.info("#{}. loginResult = {}", idx++, loginResult);
 
@@ -75,7 +76,6 @@ public class UserController {
 
 			// checking the previous page was login page or not.
 			if (ss != null) {
-				// login success
 				if (!ss.contains("/login")) {
 					return "redirect:" + session.getAttribute("redirectURL");
 				}

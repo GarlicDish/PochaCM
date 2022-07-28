@@ -5,17 +5,8 @@
 
 <c:import url="/WEB-INF/views/layout/header.jsp"  />
 
-<!-- Page content wrapper-->
-<div id="page-content-wrapper">
-	<!-- Page content-->
-	<div class="container-fluid">
-		<h1 class="mt-4">Sales</h1>
-	
-		
-	
+<h1 class="mt-4">Sales</h1>
 
+<%@ include file="../layout/salesPaging.jsp" %>
 
-
-	</div>
-</div>
 <%@ include file="../layout/footer.jsp" %>

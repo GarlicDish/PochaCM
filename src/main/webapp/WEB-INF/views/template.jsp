@@ -5,17 +5,13 @@
 
 <%@ include file="./layout/header.jsp" %>
 
-<!-- Page content wrapper-->
-<div id="page-content-wrapper">
-	<!-- Page content-->
-	<div class="container-fluid">
-		<h1 class="mt-4">페이지 제목</h1>
+
+<h1 class="mt-4">페이지 제목</h1>
 	
 	
 			<!-- 내용 -->
 
 
 
-	</div>
-</div>
+
 <%@ include file="./layout/footer.jsp" %>
