@@ -5,6 +5,7 @@ import java.util.List;
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
 import pochacm.dto.Paging;
+import pochacm.dto.Sales;
 
 public interface CMService {
 
@@ -27,6 +28,15 @@ public interface CMService {
 
 	
 	List<Item> selectItemsByInvoiceNum(Invoice invoice);
+
+
+	Paging getSalesPaging(Paging paging);
+
+
+	List<Sales> getSalesList(Paging paging);
+
+
+	Invoice getInvoiceByInvoiceNum(Invoice invoice);
 
 
 	

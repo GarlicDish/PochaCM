@@ -16,5 +16,7 @@ public interface CMDao {
 
 	int selectCntAllInvoice(Paging paging);
 
+	Invoice getInvoiceByInvoiceNum(Invoice invoice);
+
 
 }

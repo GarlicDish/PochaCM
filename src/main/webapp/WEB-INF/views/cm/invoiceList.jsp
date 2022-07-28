@@ -1,14 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
-<%@ include file="../layout/header.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:import url="/WEB-INF/views/layout/header.jsp"  />
 <script type="text/javascript">
 $(document).ready(function() {
 	
 	$("#searchBtn").click(function() {
 		$("#searchForm").submit();
 	});
-
 	 
 })
 </script>
@@ -32,7 +35,7 @@ $(document).ready(function() {
 			<c:forEach items="${invoiceList }"  var="i" >
 				<tr>
 					<td>${i.RNUM }</td>
-					<td><a href="./invoiceView?invoiceNum=${i.INVOICE_NUM }">${i.INVOICE_SERIAL }</a></td>
+					<td><a href="./invoiceView?invoiceNum=${i.INVOICE_NUM }&category=${category }&keyword=${keyword }">${i.INVOICE_SERIAL }</a></td>
 					<td><a>${i.BRAND_NAME }</a></td>
 					<td><a>${i.SUPPLIER_NAME }</a></td>
 					<td>${i.CNT }</td>
@@ -49,7 +52,7 @@ $(document).ready(function() {
 </div>
 
 <div class="text-center" id="searchPanel" style="padding:10px;">
-	<form id="searchForm" name="searchForm" action="/invoice?curPage=1&category='${category }'&keyword='${keyword }" method="get" >
+	<form id="searchForm" name="searchForm" action="/invoice?curPage=1&category=${category }&keyword=${keyword }" method="get" >
 		<select id="category" name="category">
 			<option value="" selected>Category</option>
 			<option value="Serial">Serial No.</option>

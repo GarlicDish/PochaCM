@@ -1,49 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-    
+<!--  마이바티스 3 Mapper DOCTYPE -->
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	    
 <mapper namespace="pochacm.dao.face.CMDao">
 
 	<select id="selectCntAllInvoice" parameterType="pochacm.dto.Paging" resultType="int">
-		<choose>
-			<when test='keyword == null or (keyword == "")'>
-				SELECT count(*) FROM invoice
-				ORDER BY invoice_date DESC
-			</when>
-			
-			<when test='keyword != null and (category == "Serial")'>	
-				SELECT count(*) FROM invoice
-				ORDER BY invoice_date DESC
-				WHERE ${invoice_serial } LIKE '%' || #{keyword } || '%'
-			</when>
-			
-			<when test='keyword != null and (category == "Brand")'>	
-				SELECT count(*) FROM invoice i, brand b
-				ORDER BY invoice_date DESC
-				WHERE i.brand_num = b.brand_num
-				AND ${b.brand_name } LIKE '%' || #{keyword } || '%'
-			</when>
-			
-			<when test='keyword != null and (category == "Supplier")'>	
-				SELECT count(*) FROM invoice i, supplier sup
-				ORDER BY invoice_date DESC
-				WHERE i.supplier_num = sup.supplier_num
-				AND ${supplier_name } LIKE '%' || #{keyword } || '%'
-			</when>
-			
-			<when test='keyword != null and (category == "Date")'>	
-				SELECT count(*) FROM invoice
-				ORDER BY invoice_date DESC
-				WHERE ${invoice_date } LIKE '%' || #{keyword } || '%'
-			</when>
-			
-			<when test='keyword != null and (category == "Writer")'>	
-				SELECT count(*) FROM invoice i, user_info u
-				ORDER BY invoice_date DESC
-				WHERE i.user_num = u.user_num
-				AND ${u.user_name } LIKE '%' || #{keyword } || '%'
-			</when>
-		</choose>
+				<choose>
+					<when test='keyword != null and (category == "Serial")'>	
+						SELECT count(*) FROM invoice i
+						WHERE i.invoice_serial LIKE '%'||#{keyword}||'%'
+					</when>
+					<when test='keyword != null and (category == "Brand")'>	
+						SELECT count(*) FROM invoice i, brand b, item it
+						WHERE i.item_num = it.item_num (+)
+                            AND it.brand_num = b.brand_num (+)
+							AND b.brand_name LIKE '%'||#{keyword}||'%'
+					</when>
+					<when test='keyword != null and (category == "Supplier")'>	
+						SELECT count(*) FROM invoice i, supplier sup, item it
+						WHERE i.item_num = it.item_num (+)
+                            AND it.supplier_num = sup.supplier_num (+)
+							AND sup.supplier_name LIKE '%'||#{keyword}||'%'
+					</when>
+					<when test='keyword != null and (category == "Date")'>	
+						SELECT count(*) FROM invoice i
+						WHERE i.invoice_date LIKE '%'||#{keyword}||'%'
+					</when>
+					<when test='keyword != null and (category == "Writer")'>	
+						SELECT count(*) FROM invoice i, user_info u
+						WHERE i.user_num = u.user_num (+)
+							AND u.user_name LIKE '%'||#{keyword}||'%'
+					</when>
+					<otherwise>
+						SELECT count(*) FROM invoice i
+					</otherwise>
+				</choose>
 	</select>
 	
 	<select id="selectAllInvoice" resultType="hashmap" parameterType="pochacm.dto.Paging">
@@ -53,10 +47,12 @@
 							iv.invoice_num, iv.invoice_date, u.user_name, iv.invoice_serial,
 							sup.supplier_name, b.brand_name, (
 								SELECT count(*) FROM item bb
-								WHERE it.brand_num=bb.brand_num
+								WHERE it.brand_num = bb.brand_num (+)
 								) cnt, iite.iqt qqty
 						FROM invoice iv, user_info u, brand b, supplier sup, item it, (
-									SELECT ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num, SUM(ivc.qty * itm.item_order_unit_price) iqt
+									SELECT ivc.invoice_serial, itm.brand_num, 
+										ivc.invoice_date, itm.supplier_num, 
+										SUM(ivc.qty * itm.item_order_unit_price) iqt
 		                            FROM invoice ivc, item itm
 		                            WHERE ivc.item_num = itm.item_num (+)
 		                            GROUP BY ivc.invoice_serial, itm.brand_num, ivc.invoice_date, itm.supplier_num
@@ -71,7 +67,7 @@
 		                        and iv.invoice_date = iite.invoice_date
 		                        and b.brand_num = iite.brand_num
 		                        and it.supplier_num = iite.supplier_num
-		                        )
+	                        )
 				<choose>
 					<when test='category == "Brand"'>
 						AND b.brand_name LIKE '%' || #{keyword} || '%'
@@ -96,18 +92,26 @@
 			
 	</select>
 	
-	<select id="selectItemsByInvoiceNum" resultType="HashMap" parameterType="pochacm.dto.Paging">
-	<choose>
-		<when test='keyword == null or keyword.equals("")'>
-			SELECT count(*) FROM invoice
-			ORDER BY invoice_date DESC
-		</when>
-		
-		<when test='keyword != null'>
-			SELECT count(*) FROM invoice i, brand b
-			ORDER BY invoice_date DESC
-			AND b.brand_name LIKE '%' || #{keyword} || '%'
-		</when>		
-	</choose>
+	<select id="selectItemsByInvoiceNum" parameterType="pochacm.dto.Invoice" resultType="hashmap">
+		SELECT * FROM (
+			SELECT rownum rnum, inview.* FROM (
+		      SELECT inv.invoice_num, inv.invoice_serial, inv.invoice_date, ui.user_num, b.brand_name,
+		          inv.qty, it.item_name, it.item_order_unit_price, cate.item_cate_name, sup.supplier_name, ui.user_name,
+		          ou.order_unit, (it.item_order_unit_price*inv.qty) total
+		      FROM invoice inv, item it, item_category cate, supplier sup, order_unit ou, user_info ui, brand b
+		      WHERE invoice_num = #{invoiceNum }
+		          AND inv.item_num = it.item_num
+		          AND it.item_cate_num = cate.item_cate_num (+)
+		          AND it.supplier_num = sup.supplier_num (+)
+		          AND inv.user_num = ui.user_num (+)
+		          AND it.brand_num = b.brand_num (+)
+		      ORDER BY b.brand_name
+		    ) inview
+		 )
+	</select>
+	
+	<select id="getInvoiceByInvoiceNum" parameterType="pochacm.dto.Invoice" resultType="pochacm.dto.Invoice">
+		SELECT * FROM invoice
+		WHERE invoice_num = #{invoiceNum}
 	</select>
 </mapper>

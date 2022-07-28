@@ -11,6 +11,7 @@ import pochacm.dao.face.CMDao;
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
 import pochacm.dto.Paging;
+import pochacm.dto.Sales;
 import pochacm.service.face.CMService;
 
 @Service
@@ -71,6 +72,24 @@ public class CMServiceImpl implements CMService {
 		int idx = 0;
 		logger.info("#{}. selectItemsByInvoiceNum", idx++);
 		return cmDao.selectItemsByInvoiceNum(invoice);
+	}
+
+	@Override
+	public Paging getSalesPaging(Paging paging) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Sales> getSalesList(Paging paging) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Invoice getInvoiceByInvoiceNum(Invoice invoice) {
+		
+		return cmDao.getInvoiceByInvoiceNum(invoice);
 	}
 
 
