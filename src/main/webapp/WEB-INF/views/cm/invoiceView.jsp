@@ -6,7 +6,7 @@
 <%@ include file="../layout/header.jsp" %>
 
 
-<h1 class="mt-4">INVOICE DETAIL</h1>
+<h1 class="mt-4">Invoice Detail</h1>
 	
 
 <table id="normal-info" class="table table-bordered" style="text-align:center;width:80%;">
@@ -42,7 +42,7 @@
 		<tr>
 			<td>${i.RNUM }</td>
 			<td>${i.ITEM_CATE_NAME }</td>
-			<td>${i.ITEM_NAME }</td>
+			<td><a href="<%= request.getContextPath() %>/item/view?itemNum=${i.ITEM_NUM }">${i.ITEM_NAME }</a></td>
 			<td>${i.ORDER_UNIT }</td>
 			<td>${i.ITEM_ORDER_UNIT_PRICE }</td>
 			<td>${i.QTY }</td>

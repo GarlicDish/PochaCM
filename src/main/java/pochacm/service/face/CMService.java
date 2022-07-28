@@ -39,5 +39,8 @@ public interface CMService {
 	Invoice getInvoiceByInvoiceNum(Invoice invoice);
 
 
+	Object getItemInfoByItem(Item item);
+
+
 	
 }

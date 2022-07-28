@@ -35,7 +35,7 @@ $(document).ready(function() {
 			<c:forEach items="${invoiceList }"  var="i" >
 				<tr>
 					<td>${i.RNUM }</td>
-					<td><a href="./invoiceView?invoiceNum=${i.INVOICE_NUM }&category=${category }&keyword=${keyword }">${i.INVOICE_SERIAL }</a></td>
+					<td><a href="<%= request.getContextPath() %>/invoice/view?invoiceNum=${i.INVOICE_NUM }&category=${category }&keyword=${keyword }">${i.INVOICE_SERIAL }</a></td>
 					<td><a>${i.BRAND_NAME }</a></td>
 					<td><a>${i.SUPPLIER_NAME }</a></td>
 					<td>${i.CNT }</td>

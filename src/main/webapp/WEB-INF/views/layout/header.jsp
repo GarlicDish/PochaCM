@@ -31,13 +31,16 @@
 		.check{
 			width:80%;
 		}
-		th {
-			cursor:pointer;
+		th, td {
+			vertical-align:middle;
 		}
 		.table__header {
-                background-color: transparent;
-                border: none;
-                cursor: pointer;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+        }
+        table, th, td {
+        	white-space:nowrap;
         }
 		
 	</style>

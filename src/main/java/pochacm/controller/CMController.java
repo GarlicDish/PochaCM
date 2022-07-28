@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import pochacm.dto.Invoice;
@@ -41,7 +42,7 @@ public class CMController {
 	@GetMapping("/invoice")
 	public String invoiceList(
 			HttpSession session, HttpServletRequest request, 
-			ModelAndView mav, String curPage, Model model) {
+			String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
@@ -73,18 +74,11 @@ public class CMController {
 	       keyword = "";
 	    }
 	    
-	    Map<String, String> map = new HashMap<>();
-	    
-	    map.put("category", category);
-	    map.put("keyword", keyword);
-	    
 	    Paging paging = new Paging();
 	    
 	    paging.setKeyword(keyword);
 	    paging.setCategory(category);
 	    paging.setCurPage(Integer.parseInt(curPage));
-	    
-	    mav.addObject("paging",paging);
 	    
 		//create Paging dto with curPage & search 
 		paging = cmService.getInvoicePaging(paging);
@@ -110,7 +104,7 @@ public class CMController {
 		return "cm/invoiceList";
 	}
 	
-	@GetMapping("/invoiceView")
+	@GetMapping("/invoice/view")
 	public String invoiceView(HttpSession session, HttpServletRequest request, Model model) {
 		//logger index
 		int idx = 0;
@@ -120,7 +114,6 @@ public class CMController {
 		//Parameter delivery
 		String category = request.getParameter("category");
 		String keyword = request.getParameter("keyword");
-		String invoiceNum = request.getParameter("invoiceNum");
 				
 		Invoice invoice = new Invoice();
 		if(request.getParameter("invoiceNum") != null || request.getParameter("invoiceNum").equals("")) {
@@ -144,6 +137,40 @@ public class CMController {
 		return "cm/invoiceView";
 	}
 	
+	@GetMapping("/item/view")
+	public String itemView(HttpSession session, HttpServletRequest request, Model model) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /itemView [GET]", idx++);
+		
+		//Parameter delivery
+		String itemNum = request.getParameter("itemNum");
+		logger.info("#{}. itemNum : {}", idx++, itemNum);
+		
+		Item item = new Item();
+		
+		item.setItemNum(Integer.parseInt(itemNum));
+		logger.info("#{}. item : {}", idx++, item);
+		
+		model.addAttribute("itemInfo", cmService.getItemInfoByItem(item));
+		logger.info("#{}. model.getAttribute(\"itemInfo\") : {}", idx++, model.getAttribute("itemInfo"));
+		
+		return "cm/itemView";
+	}
+	
+	@GetMapping("/item/update")
+	public String itemUpdate(HttpSession session, HttpServletRequest request, Model model) {
+		
+		return "cm/itemUpdate";
+	}
+	
+	@PostMapping("/item/update")
+	public String itemUpdateSubmit() {
+		
+		String itemNum = "";
+		
+		return "redirct : /cm/itemView?itemNum="+itemNum;
+	}
 	@GetMapping("/sales")
 	public String salesList(
 			HttpSession session, HttpServletRequest request, 

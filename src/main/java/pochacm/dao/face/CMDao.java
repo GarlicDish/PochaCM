@@ -18,5 +18,7 @@ public interface CMDao {
 
 	Invoice getInvoiceByInvoiceNum(Invoice invoice);
 
+	Object selectItemInfoByItemNum(Item item);
+
 
 }

@@ -59,38 +59,34 @@ public class CMServiceImpl implements CMService {
 	//Get invoice list
 	@Override
 	public List<Invoice> getInvoiceList(Paging paging) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. getInvoiceList", idx++);
 		return cmDao.selectAllInvoice(paging);
 	}
 
 	//view invoice detail
 	@Override
 	public List<Item> selectItemsByInvoiceNum(Invoice invoice) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. selectItemsByInvoiceNum", idx++);
 		return cmDao.selectItemsByInvoiceNum(invoice);
 	}
 
 	@Override
+	public Invoice getInvoiceByInvoiceNum(Invoice invoice) {
+		return cmDao.getInvoiceByInvoiceNum(invoice);
+	}
+	
+	@Override
+	public Object getItemInfoByItem(Item item) {
+		return cmDao.selectItemInfoByItemNum(item);
+	}
+	@Override
 	public Paging getSalesPaging(Paging paging) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<Sales> getSalesList(Paging paging) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public Invoice getInvoiceByInvoiceNum(Invoice invoice) {
-		
-		return cmDao.getInvoiceByInvoiceNum(invoice);
-	}
 
 
 
