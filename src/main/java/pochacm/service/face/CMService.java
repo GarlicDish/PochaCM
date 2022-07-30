@@ -4,8 +4,12 @@ import java.util.List;
 
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
+import pochacm.dto.ItemCategory;
+import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
+import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Sales;
+import pochacm.dto.SecondaryUnit;
 
 public interface CMService {
 
@@ -40,6 +44,21 @@ public interface CMService {
 
 
 	Object getItemInfoByItem(Item item);
+
+
+	List<OrderUnit> getOrderUnitList();
+
+
+	List<PrimaryUnit> getPrimaryUnitList();
+
+
+	List<SecondaryUnit> getSecondaryUnitList();
+
+
+	List<ItemCategory> getItemCategoryList();
+
+
+	List<String> getCategoryByKeyword(String keyword);
 
 
 	

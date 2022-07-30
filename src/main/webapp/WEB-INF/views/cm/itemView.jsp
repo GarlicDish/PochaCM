@@ -14,7 +14,7 @@ $(document).ready(function(){
 		history.go(-1);
 	})
 	$("#updateBtn").click(function(){
-		location.href='/item/update?itemName=${itemInfo.ITEM_NAME }'
+		location.href='/item/update?itemNum=${itemInfo.ITEM_NUM }'
 	})
 })
 </script>

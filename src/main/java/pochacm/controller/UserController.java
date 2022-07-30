@@ -6,7 +6,10 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +57,7 @@ public class UserController {
 		logger.info("#{}. Entering login page [POST]", idx++);
 
 		boolean loginResult = userService.loginResult(user);
-
+		
 		if (loginResult) {
 			// login success
 
@@ -69,24 +72,24 @@ public class UserController {
 			logger.info("#{}. session userNum = {}", idx++, session.getAttribute("userNum"));
 			logger.info("#{}. session userEmail = {}", idx++, session.getAttribute("userEmail"));
 			logger.info("#{}. session positionNum = {}", idx++, session.getAttribute("positionNum"));
-			
+
 			// referer check
 			logger.info("#{}. session referer: " + session.getAttribute("redirectURL"));
-			String ss = (String) session.getAttribute("redirectURL");
+//			String ss = (String) session.getAttribute("redirectURL");
 
 			// checking the previous page was login page or not.
-			if (ss != null) {
-				if (!ss.contains("/login")) {
-					return "redirect:" + session.getAttribute("redirectURL");
-				}
-			}
+//			if (ss != null) {
+//				if (!ss.contains("/login")) {
+//					return "redirect:" + session.getAttribute("redirectURL");
+//				}
+//			}
 			return "redirect:/main";
 
 		} else {
 			// login fail
 			logger.info("#{}. loginResult = {}", idx++, loginResult);
-
 			logger.info("login failure");
+			
 			session.invalidate();
 
 			return "redirect:/login";
@@ -162,7 +165,7 @@ public class UserController {
 	//Check email duplication
 	@RequestMapping(value="/join/emailCheck", method= RequestMethod.GET)
 	@ResponseBody
-	public int emailDuplCheck(@RequestParam(value = "userEmail") String userEmail) {
+	public int emailDuplCheck (@RequestParam(value = "userEmail") String userEmail) throws HttpMediaTypeNotAcceptableException {
 		// logger index
 		int idx = 0;
 		logger.info("#{}. emailDuplCheck", idx++);
@@ -179,7 +182,7 @@ public class UserController {
 	//Check Phone duplication
 	@RequestMapping(value="/join/phoneCheck", method= RequestMethod.GET)
 	@ResponseBody
-	public int phoneDuplCheck(@RequestParam(value = "userPhone") String userPhone) {
+	public int phoneDuplCheck(String userPhone) {
 		// logger index
 		int idx = 0;
 		logger.info("#{}. phoneDuplCheck", idx++);
@@ -189,7 +192,13 @@ public class UserController {
 		User user = new User();
 		
 		user.setUserPhone(userPhone);
+		logger.info("#{}. Phone user = {}", idx++, user);
+		logger.info("#{}. userService.checkPhoneDuplByEmail(user) = {}", idx++, userService.checkPhoneDuplByEmail(user));
 		
-		return userService.checkPhoneDuplByEmail(user);
+		if (userService.checkPhoneDuplByEmail(user) == 0) {
+			return 0;
+		} else {
+			return 1;
+		}
 	}
 }

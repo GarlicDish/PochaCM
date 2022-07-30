@@ -6,24 +6,128 @@
 <%@ include file="../layout/header.jsp" %>
 
 <h1 class="mt-4">Item Update</h1>
+<!-- <script type="text/javascript" src="<%=request.getContextPath() %>/data/js/httpRequest.js"> </script>-->
 <script type="text/javascript">
 $(document).ready(function(){
+	
+	Date.prototype.toDateInputValue = (function() {
+	    var local = new Date(this);
+	    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+	    return local.toJSON().slice(0,10);
+	});
+	
 	$("#cancelBtn").click(function(){
 		history.go(-1);
 	})
+	
 	$("#updateBtn").click(function(){
-		("#itemUpdateForm").submit();
+		$("#itemUpdateForm").submit();
 	})
+	
+	//get the item expiry date which originally saved
+	window.onload = function(){
+		date = "${itemInfo.ITEM_EXPIRY_DATE }";
+		//$("#expiryDate").val(new Date(date).toISOString().substr(0, 10));
+		$('#expiryDate').val('${itemInfo.ITEM_EXPIRY_DATE}'.slice(0, 10));
+	}
+	
+	// Trying to use AJAX for searching Item Category.... But....
+	
+	/* function itemCateNumKeyword(){
+		
+		var keyword = document.itemUpdateForm.itemCateNum.val();
+		
+		if(keyword==""){
+			hide();
+			return;
+		}
+		
+		var params = "keyword="+keyword;
+		
+		sendRequest("suggestItemCate.jsp",params,displaySuggest,"POST");
+	}
+	
+	function displaySuggest() {
+		
+		if(httpRequest.readyState==4){
+			
+			if(httpRequest.status==200){//Server Response normal
+				
+				var resultText = httpRequest.responseText; //get Text from resposne
+				//alert(resultText);
+				
+				var resultArray = resultText.split("|"); //5|abc,ajac,abc -> {5,{abc,ajax,abc}}
+				var count = parselnt(resultArray[0]); //5
+				var keywordList = null;
+				
+				if(count>0){
+					
+					keywordList = resultArray[1].split(",");
+					var html = "";
+					
+					for(var i=0; i<keywordList.length; i++){
+						html += "<a href=\"javascript:select('"
+									+ keywordList[i] 
+									+ "');\">" 
+									+ keywordList[i] 
+									+ "</a><br/>";
+					}
+					
+					var suggestListDiv = document.getElementById("suggestListDiv");
+					suggestListDiv.innerHTML = html;
+					show();
+					
+				} else {
+					
+					//count == 0
+					hide();
+				}
+			} else {
+				//status!=200
+				hide();
+			}
+		} else {
+			//readyState!=4
+			hide();
+		}
+		
+	}// displaySuggest function end
+	
+	//selected keyword
+	function select(seletedKeyword){
+		//put the seleted keyword in input box
+		document.itemUpdateForm.itemCateNum.val() = selectedKeyword;
+		hide();//hide another keywords
+	}
+
+	function show(){
+		var suggestDiv = document.getElementById("suggestDiv");
+		suggestDiv.style.display="block";
+	}
+	
+	function hide(){
+		var suggestDiv = document.getElementById("suggestDiv");
+		suggestDiv.style.display="none";
+	}
+
+	
+	//document ready function end
+	
+	window.onload = function (){
+		hide(); // invisible when window started
+	} */
+	
+	
 })
 </script>
 <div id="itemUpdateTable">
-	<form id="itemUpdateForm" class="form-inline" action="/item/update" method="post">
+	<form id="itemUpdateForm" class="form-inline" action="/item/update?itemNum=${itemInfo.ITEM_NUM }" method="post">
 		<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
-			<caption-top>Item Image</caption-top>
-			<tr style="">
+			<tr>
 				<td rowspan="9" colspan="2" style="width:200px"><img src="../../resources/images/imagePrepare.png" class="img-fluid table-dark"/></td>
 				<th style="min-width:150px;" class="table-dark">
 					<label for="itemName" class="col-sm-8 control-label">Item Name</label>
+					<input type="hidden" id="itemNum" name="itemNum" value="${itemInfo.ITEM_NUM }">
 				</th>
 				<td>
 					<input type="text" class="form-control input-sm" id="itemName"	name="itemName"  value="${itemInfo.ITEM_NAME }" autofocus>
@@ -39,33 +143,31 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="itemCate" class="col-sm-8 control-label">Item Category</label>
+					<label for="itemCateNum" class="col-sm-8 control-label">Item Category</label>
 				</th>
+				<!-- <input type="text" id="itemCateNum" name ="itemCateNum" onkeyup="itemCateNumKeyword()"/>
+					<div id="suggestDiv" class="suggest">
+						<div id="suggestListDiv"></div>
+					</div> -->
 				<td>
-					<div class="">
-						<input class="form-control" list="itemCate" id="itemCateListOption" placeholder="Type to search..." value="${itemInfo.ITEM_CATE_NAME }">
-						<datalist id="itemCate">
-							<c:forEach items="${itemCateList }" var="i">
-								<option value="${i.ITEM_CATE_NUM }">${i.ITEM_CATE_NAME }</option>
-							</c:forEach>
-						</datalist>
-					</div>
+					<select class="form-select" id="itemCateNum" >
+						<c:forEach items="${icList }" var="i">
+							<option value="${i.ITEM_CATE_NUM }" <c:if test="${itemInfo.ITEM_CATE_NUM eq i.ITEM_CATE_NUM }"> selected </c:if>>${i.ITEM_CATE_NAME }</option>
+						</c:forEach>
+					</select> 
+					
 				</td>
 			</tr>
 			<tr>
-				
 				<th class="table-dark">
-					<label for="orderUnit" class="col-sm-8 control-label">Order Unit</label>
+					<label for="orderUnitNum" class="col-sm-8 control-label">Order Unit</label>
 				</th>
 				<td>
-					<div class="">
-						<input class="form-control" list="orderUnit" id="orderUnitListOption" placeholder="Type to search..." value="${itemInfo.ORDER_UNIT }">
-						<datalist id="orderUnit">
-							<c:forEach items="${orderUnitList }" var="i">
-								<option value="${itemInfo.ORDER_UNIT_NUM }">${itemInfo.ORDER_UNIT }</option>
-							</c:forEach>
-						</datalist>
-					</div>
+					<select class="form-select" id="orderUnitNum">
+						<c:forEach items="${ouList }" var="i">
+							<option value="${i.ORDER_UNIT_NUM }" <c:if test="${itemInfo.ORDER_UNIT_NUM eq i.ORDER_UNIT_NUM }"> selected </c:if>>${i.ORDER_UNIT }</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -78,17 +180,14 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="primaryUnit" class="col-sm-8 control-label">Primary Unit</label>
+					<label for="primaryUnitNum" class="col-sm-8 control-label">Primary Unit</label>
 				</th>
 				<td>
-					<div class="">
-						<input class="form-control" list="primaryUnit" id="orderUnitListOption" placeholder="Type to search..." value="${itemInfo.PRIMARY_UNIT }">
-						<datalist id="primaryUnit">
-							<c:forEach items="${primaryUnitList }" var="i">
-								<option value="${itemInfo.PRIMARY_NUM }">${itemInfo.PRIMARY_UNIT }</option>
-							</c:forEach>
-						</datalist>
-					</div>
+					<select class="form-select" id="primaryUnitNum">
+						<c:forEach items="${puList }" var="i">
+							<option value="${i.PRIMARY_UNIT_NUM }" <c:if test="${itemInfo.PRIMARY_UNIT_NUM eq i.PRIMARY_UNIT_NUM }">selected</c:if>>${i.PRIMARY_UNIT }</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -101,17 +200,14 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="secondaryUnit" class="col-sm-8 control-label">Secondary Unit</label>
+					<label for="secondaryUnitNum" class="col-sm-8 control-label">Secondary Unit</label>
 				</th>
 				<td>
-					<div class="">
-						<input class="form-control" list="secondaryUnit" id="secondaryUnitListOption" placeholder="Type to search..." value="${itemInfo.SECONDARY_UNIT }">
-						<datalist id="secondaryUnit">
-							<c:forEach items="${secondaryUnitList }" var="i">
-								<option value="${itemInfo.SECONDARY_NUM }">${itemInfo.SECONDARY_UNIT }</option>
-							</c:forEach>
-						</datalist>
-					</div>
+					<select class="form-select" id="secondaryUnitNum">
+						<c:forEach items="${suList }" var="i">
+							<option value="${i.SECONDARY_UNIT_NUM }" <c:if test="${itemInfo.SECONDARY_UNIT_NUM eq i.SECONDARY_UNIT_NUM }">selected</c:if>>${i.SECONDARY_UNIT }</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -125,6 +221,7 @@ $(document).ready(function(){
 			<tr>
 				<th class="table-dark">
 					<label for="brandName" class="col-sm-8 control-label">Brand Name</label>
+					<input type="hidden" id="brandNum" name="brandNum" value="${itemInfo.BRAND_NUM }">
 				</th>
 				<td>
 					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }">
@@ -134,6 +231,7 @@ $(document).ready(function(){
 				</th>
 				<td>
 					<input type="text" class="form-control input-sm" id="supplierName"	name="supplierName"  value="${itemInfo.SUPPLIER_NAME }">
+					<input type="hidden" id="supplierNum" name="supplierNum" value="${itemInfo.SUPPLIER_NUM }">
 				</td>
 			</tr>
 			<tr>
@@ -147,16 +245,15 @@ $(document).ready(function(){
 					<label for="expiryDate" class="col-sm-8 control-label">Expiry Date</label>
 				</th>
 				<td>
-					<input type="date" class="form-control input-sm" id="expiryDate" name="expiryDate" value="${itemInfo.ITEM_EXPIRY_DATE }">
+					<input type="date" class="form-control input-sm" id="expiryDate" name="expiryDate">
 				</td>
 			</tr>
 		</table>
-		<input type="hidden" id="updateBy" value="${sessionScope.userNum }">
+					<input type="hidden" class="form-control input-sm" id="updateDate" name="updateDate" value="${itemInfo.ITEM_LAST_UPDATE }">
+					<input type="hidden" class="form-control input-sm" id="userNum" name="userNum" value="${session.userNum }">
 	</form>
 </div>
 <button type="button" id="updateBtn" >Update</button>
 <button type="button" id="cancelBtn">Cancel</button>
-
-
 
 <%@ include file="../layout/footer.jsp" %>

@@ -14,13 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
+import pochacm.dto.ItemCategory;
+import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
+import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Sales;
+import pochacm.dto.SecondaryUnit;
 import pochacm.service.face.CMService;
 
 @Controller
@@ -137,7 +142,7 @@ public class CMController {
 		return "cm/invoiceView";
 	}
 	
-	@GetMapping("/item/view")
+	@GetMapping(value="/item/view")
 	public String itemView(HttpSession session, HttpServletRequest request, Model model) {
 		//logger index
 		int idx = 0;
@@ -158,19 +163,58 @@ public class CMController {
 		return "cm/itemView";
 	}
 	
-	@GetMapping("/item/update")
-	public String itemUpdate(HttpSession session, HttpServletRequest request, Model model) {
+	@GetMapping(value="/item/update")
+	public String itemUpdate(HttpSession session, HttpServletRequest req, Model model) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /item/update [GET]", idx++);
+		
+		//Parameter delivery
+		String itemNum = req.getParameter("itemNum");
+		logger.info("#{}. itemNum : {}", idx++, itemNum);
+		
+		Item item = new Item();
+		
+		item.setItemNum(Integer.parseInt(itemNum));
+		logger.info("#{}. item : {}", idx++, item);
+		
+		//Get Order Unit, Primary Unit, Secondary Unit Lists
+		
+		List<ItemCategory> icList = cmService.getItemCategoryList();
+		List<OrderUnit> ouList = cmService.getOrderUnitList();
+		List<PrimaryUnit> puList = cmService.getPrimaryUnitList();
+		List<SecondaryUnit> suList = cmService.getSecondaryUnitList();
+		
+		model.addAttribute("itemInfo", cmService.getItemInfoByItem(item));
+		logger.info("#{}. model.getAttribute(\"itemInfo\") : {}", idx++, model.getAttribute("itemInfo"));
+		
+		model.addAttribute("icList", icList);
+		logger.info("#{}. icList : {}", idx++, icList);
+		
+		model.addAttribute("ouList", ouList);
+		logger.info("#{}. ouList : {}", idx++, ouList);
+		
+		model.addAttribute("puList", puList);
+		logger.info("#{}. puList : {}", idx++, puList);
+		
+		model.addAttribute("suList", suList);
+		logger.info("#{}. suList : {}", idx++, suList);
 		
 		return "cm/itemUpdate";
 	}
 	
-	@PostMapping("/item/update")
-	public String itemUpdateSubmit() {
+	@RequestMapping(value="/item/update", method=RequestMethod.POST)
+	public String itemUpdateSubmit(HttpSession session, HttpServletRequest req, Model model) {
+		
+		if (session.getAttribute("positionNum") == "2") {
+			return "redirect:/item/view?itemNum=";
+		}
 		
 		String itemNum = "";
 		
 		return "redirct : /cm/itemView?itemNum="+itemNum;
 	}
+	
 	@GetMapping("/sales")
 	public String salesList(
 			HttpSession session, HttpServletRequest request, 
@@ -206,7 +250,7 @@ public class CMController {
 	       keyword = "";
 	    }
 	    
-	    Map<String, String> map = new HashMap<>();
+	    Map<String, String> map = new HashMap<String, String>();
 	    
 	    map.put("category",category);
 	    map.put("keyword",keyword);
@@ -234,6 +278,19 @@ public class CMController {
 		
 		return "cm/salesList";
 	}
+	
+	
+	//------------------------AJAX ------------------------------
+//	@GetMapping("/item/getCategory")
+//	@ResponseBody
+//	public List<String> getCategory(String keyword){
+//		//logger index
+//		int idx = 0;
+//		logger.info("#{}. /item/getCategory [AJAX] [GET]", idx++);
+//		logger.info("#{}. keyword : {}", idx++, keyword);
+//		
+//		return cmService.getCategoryByKeyword(keyword);
+//	}
 
 	
 }

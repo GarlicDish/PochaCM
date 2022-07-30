@@ -27,12 +27,13 @@ $(document).ready(function() {
 			userEmailValidation = false;
 			
 		} else {
+			console.log(userEmail);
 			
 			$.ajax({
-			url : "/join/emailCheck?userEmail=" + userEmail
+			url : "/join/emailCheck"
 		   ,type : "GET"
-		   ,dataType : "JSON"
-		   ,data: userEmail
+		   ,dataType : "html"
+		   ,data: "userEmail=" + userEmail
 		   ,contentType : "application/json; charset=UTF-8"
 		   ,success : function(data) {
 			   
@@ -163,20 +164,25 @@ $(document).ready(function() {
 	$("#userPhone").blur(function checkPhone() {
 		
 		var userPhone = $("#userPhone").val();
+		console.log(userPhone);
+		
 		var regularExpression = /^[0-9]{11}$/;
 
 		if (!regularExpression.test(userPhone)) {
+				
 			
 			$("#userPhoneCheck").html("Please enter 11 Numbers without '-' .");
 			$("#userPhoneCheck").attr("class", "check text-danger");
 			
+			console.log(userPhone + ": 11자리가 아님")
 			userPhoneValidation = false;
 			
 		} else {
+			$("#userPhoneCheck").html("");
 			$.ajax({
-			url : "/join/phoneCheck?userPhone=" + userPhone
+			url : "/join/phoneCheck?userPhone="+userPhone
 		   ,type : "GET"
-		   ,dataType : "JSON"
+		   ,dataType : "html"
 		   ,data: userPhone
 		   ,contentType : "application/json; charset=UTF-8"
 		   ,success : function(data) {

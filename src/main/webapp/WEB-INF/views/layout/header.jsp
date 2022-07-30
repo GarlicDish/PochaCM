@@ -11,8 +11,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>Pocha Pocha Inventory Management</title>
-    <!-- jQuery 2.2.4 -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <!-- jQuery 3.5.1 -->
+	<script src="http://code.jquery.com/jquery-3.5.1.min.js"></script>
 	<!-- Favicon-->
     <link rel="icon" type="image/x-icon" href="../../resources/assets/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap)-->

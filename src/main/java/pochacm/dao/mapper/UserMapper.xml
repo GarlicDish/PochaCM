@@ -6,12 +6,12 @@
     
 <mapper namespace="pochacm.dao.face.UserDao">
 
-	<select id="selectCntByEmail" resultType="int" parameterType="pochacm.dto.User">
+	<select id="selectCntByEmail" parameterType="pochacm.dto.User" resultType="int">
 		SELECT count(*) FROM user_info
 		WHERE user_email = #{userEmail }
 	</select>
 	
-	<select id="selectCntByPhone" resultType="int" parameterType="pochacm.dto.User">
+	<select id="selectCntByPhone" parameterType="pochacm.dto.User" resultType="int">
 		SELECT count(*) FROM user_info
 		WHERE user_phone = #{userPhone }
 	</select>
@@ -33,17 +33,17 @@
 		)
 	</insert>
 	
-	<select id="selectIdAndPw" resultType="int" parameterType="pochacm.dto.User">
+	<select id="selectIdAndPw" parameterType="pochacm.dto.User" resultType="int">
 		SELECT count(*) FROM user_info
 		WHERE user_email = #{userEmail } and user_password = #{userPassword }
 	</select>
 	
-	<select id="getUserNoByEmail" resultType="int" parameterType="pochacm.dto.User">
+	<select id="getUserNoByEmail" parameterType="pochacm.dto.User" resultType="int">
 		SELECT user_num FROM user_info
 		WHERE user_email = #{userEmail}
 	</select>
 	
-	<select id="selectPositionByEmail" resultType="int" parameterType="pochacm.dto.User">
+	<select id="selectPositionByEmail" parameterType="pochacm.dto.User" resultType="int">
 		SELECT position_num FROM user_info
 		WHERE user_email = #{userEmail}
 	</select>

@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 import pochacm.dao.face.CMDao;
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
+import pochacm.dto.ItemCategory;
+import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
+import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Sales;
+import pochacm.dto.SecondaryUnit;
 import pochacm.service.face.CMService;
 
 @Service
@@ -85,6 +89,31 @@ public class CMServiceImpl implements CMService {
 	@Override
 	public List<Sales> getSalesList(Paging paging) {
 		return null;
+	}
+
+	@Override
+	public List<OrderUnit> getOrderUnitList() {
+		return cmDao.getOrderUnitList();
+	}
+
+	@Override
+	public List<PrimaryUnit> getPrimaryUnitList() {
+		return cmDao.getPrimaryUnitList();
+	}
+
+	@Override
+	public List<SecondaryUnit> getSecondaryUnitList() {
+		return cmDao.getSecondaryUnitList();
+	}
+
+	@Override
+	public List<ItemCategory> getItemCategoryList() {
+		return cmDao.getItemCategoryList();
+	}
+
+	@Override
+	public List<String> getCategoryByKeyword(String keyword) {
+		return cmDao.getCategoryByKeyword();
 	}
 
 
