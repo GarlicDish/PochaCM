@@ -30,12 +30,11 @@ $(document).ready(function() {
 			console.log(userEmail);
 			
 			$.ajax({
-		   	type : "GET",
-			url : "/join/emailCheck",
-			data : {
-				userEmail : userEmail
-			},
-			dataType: "html",
+			url : "/join/emailCheck?userEmail=",
+		   	type : "POST",
+		   	dataType : "JSON",
+			data: userEmail,
+			contentType : "application/json; charset=UTF-8",
 		   	success : function(data) {
 			   
 			   if (data == 0) {

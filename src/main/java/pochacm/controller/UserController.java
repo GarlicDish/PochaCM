@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -160,10 +161,21 @@ public class UserController {
 	
 	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
 	
+	class userEmail {
+	    private final String email;
+
+	    public userEmail(String email) {
+	        this.email = email;
+	    }
+
+	    public String getUserEmail() {
+	        return email;
+	    }
+	}
 	//Check email duplication
-	@RequestMapping(value="/join/emailCheck", method= RequestMethod.GET)
+	@PostMapping("/join/emailCheck")
 	@ResponseBody
-	public int emailDuplCheck (@RequestParam(value = "userEmail") String userEmail) throws HttpMediaTypeNotAcceptableException {
+	public int emailDuplCheck (@RequestParam(value = "userEmail") String userEmail){
 		// logger index
 		int idx = 0;
 		logger.info("#{}. emailDuplCheck", idx++);
@@ -175,7 +187,10 @@ public class UserController {
 		user = userService.getUserEmailFromParmater(userEmail);
 		logger.info("#{}. user = {}", idx++, user);
 		
-		return userService.checkEmailDuplByEmail(user);
+		int cnt = userService.checkEmailDuplByEmail(user);
+		logger.info("#{}. cnt = {}", idx++, cnt);
+		
+		return cnt;
 	}
 	
 	//Check Phone duplication

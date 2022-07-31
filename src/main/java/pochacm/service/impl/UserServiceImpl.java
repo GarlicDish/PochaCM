@@ -39,9 +39,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int checkEmailDuplByEmail(User user) {
 		// logger index
-				int idx = 0;
-				logger.info("#{}. checkEmailDuplByEmail", idx++);
-		return userDao.selectCntByEmail(user);
+		int idx = 0;
+		logger.info("#{}. checkEmailDuplByEmail", idx++);
+		
+		int cnt = userDao.selectCntByEmail(user);
+		logger.info("#{}. cnt : {}", idx++, cnt);
+		
+		return cnt;
 	}
 
 	@Override
