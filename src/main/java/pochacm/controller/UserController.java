@@ -158,8 +158,6 @@ public class UserController {
 	
 	
 	
-	
-	
 	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
 	
 	//Check email duplication
@@ -174,7 +172,8 @@ public class UserController {
 		//dto for carry the email info
 		User user = new User();
 		
-		user.setUserEmail(userEmail);
+		user = userService.getUserEmailFromParmater(userEmail);
+		logger.info("#{}. user = {}", idx++, user);
 		
 		return userService.checkEmailDuplByEmail(user);
 	}

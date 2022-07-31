@@ -151,4 +151,123 @@
 		SELECT * FROM item_category
 		ORDER BY item_cate_num
 	</select>
+	
+	<select id="selectCntAllSales" parameterType="pochacm.dto.Paging" resultType="int">
+		<choose>
+			<when test='keyword != null and (category == "Date")'>	
+				SELECT count(*) FROM sales s
+				WHERE s.sales_date LIKE '%'||#{keyword}||'%'
+			</when>
+			<when test='keyword != null and (category == "Writer")'>	
+				SELECT count(*) FROM sales s, user_info u
+				WHERE s.user_num = u.user_num (+)
+					AND u.user_name LIKE '%'||#{keyword}||'%'
+			</when>
+			<otherwise>
+				SELECT count(*) FROM sales s
+			</otherwise>
+		</choose>
+	</select>
+	<select id="selectAllSales" resultType="hashmap" parameterType="pochacm.dto.Paging">
+		SELECT * FROM (
+			SELECT rownum rnum, ssssrrrr.* FROM (
+				SELECT u.user_name, s.sales_date, s.user_num, NVL(ss1.sr1,0) nvl1, NVL(ss2.sr2,0) nvl2, 
+					NVL(ss3.sr3,0) nvl3, NVL(ss4.sr4,0) nvl4, NVL(ss5.sr5,0) nvl5, NVL(ss6.sr6,0) nvl6, 
+					NVL(ss7.sr7,0) nvl7, NVL(ss8.sr8,0) nvl8, srsrsr.totalsum
+				FROM sales s, user_info u, (
+		            SELECT sss.sales_date, SUM(sss.sales_qty * rrr.recipe_price) totalsum
+		            FROM sales sss, recipe rrr
+		            WHERE sss.recipe_num = rrr.recipe_num (+)
+		            group by sss.sales_date
+		            ) srsrsr, (
+			            SELECT s1.SALES_NUM, s1.USER_NUM, s1.RECIPE_NUM, s1.sales_date,
+			                r1.RECIPE_PRICE, sum(s1.sales_qty * r1.recipe_price) sr1
+			            FROM SALES s1, RECIPE r1
+			            WHERE s1.recipe_num = r1.recipe_num
+			                AND s1.sales_source_num = 1
+			            GROUP BY s1.SALES_NUM, s1.USER_NUM, s1.RECIPE_NUM, 
+			                s1.sales_date, r1.RECIPE_PRICE
+		        	) ss1, (
+			            SELECT s2.SALES_NUM, s2.USER_NUM, s2.RECIPE_NUM, s2.sales_date,
+			                r2.RECIPE_PRICE, sum(s2.sales_qty * r2.recipe_price) sr2
+			            FROM SALES s2, RECIPE r2
+			            WHERE s2.recipe_num = r2.recipe_num
+			                AND s2.sales_source_num = 2
+			            GROUP BY s2.SALES_NUM, s2.USER_NUM, s2.RECIPE_NUM, 
+			                s2.sales_date, r2.RECIPE_PRICE
+		        	) ss2, (
+			            SELECT s3.SALES_NUM, s3.USER_NUM, s3.RECIPE_NUM, s3.sales_date,
+			                r3.RECIPE_PRICE, sum(s3.sales_qty * r3.recipe_price) sr3
+			            FROM SALES s3, RECIPE r3
+			            WHERE s3.recipe_num = r3.recipe_num
+			                AND s3.sales_source_num = 3
+			            GROUP BY s3.SALES_NUM, s3.USER_NUM, s3.RECIPE_NUM,
+			                s3.sales_date, r3.RECIPE_PRICE
+		        	) ss3, (
+			            SELECT s4.SALES_NUM, s4.USER_NUM, s4.RECIPE_NUM, s4.sales_date,
+			                r4.RECIPE_PRICE, sum(s4.sales_qty * r4.recipe_price) sr4
+			            FROM SALES s4, RECIPE r4
+			            WHERE s4.recipe_num = r4.recipe_num
+			                AND s4.sales_source_num = 4
+			            GROUP BY s4.SALES_NUM, s4.USER_NUM, s4.RECIPE_NUM, 
+			                s4.sales_date, r4.RECIPE_PRICE
+		        	) ss4, (
+			            SELECT s5.SALES_NUM, s5.USER_NUM, s5.RECIPE_NUM, s5.sales_date,
+			                r5.RECIPE_PRICE, sum(s5.sales_qty * r5.recipe_price) sr5
+			            FROM SALES s5, RECIPE r5
+			            WHERE s5.recipe_num = r5.recipe_num
+			                AND s5.sales_source_num = 5
+			            GROUP BY s5.SALES_NUM, s5.USER_NUM, s5.RECIPE_NUM, 
+			                s5.sales_date, r5.RECIPE_PRICE
+			        ) ss5, (
+			            SELECT s6.SALES_NUM, s6.USER_NUM, s6.RECIPE_NUM, s6.sales_date,
+			                r6.RECIPE_PRICE, sum(s6.sales_qty * r6.recipe_price) sr6
+			            FROM SALES s6, RECIPE r6
+			            WHERE s6.recipe_num = r6.recipe_num
+			                AND s6.sales_source_num = 6
+			            GROUP BY s6.SALES_NUM, s6.USER_NUM, s6.RECIPE_NUM, 
+			                s6.sales_date, r6.RECIPE_PRICE
+			        ) ss6, (
+			            SELECT s7.SALES_NUM, s7.USER_NUM, s7.RECIPE_NUM, s7.sales_date,
+			                r7.RECIPE_PRICE, sum(s7.sales_qty * r7.recipe_price) sr7
+			            FROM SALES s7, RECIPE r7
+			            WHERE s7.recipe_num = r7.recipe_num
+			                AND s7.sales_source_num = 7
+			            GROUP BY s7.SALES_NUM, s7.USER_NUM, s7.RECIPE_NUM, 
+			                s7.sales_date, r7.RECIPE_PRICE
+			        ) ss7, (
+			            SELECT s8.SALES_NUM, s8.USER_NUM, s8.RECIPE_NUM, s8.sales_date,
+			                r8.RECIPE_PRICE, sum(s8.sales_qty * r8.recipe_price) sr8
+			            FROM SALES s8, RECIPE r8
+			            WHERE s8.recipe_num = r8.recipe_num
+			                AND s8.sales_source_num = 8
+			            GROUP BY s8.SALES_NUM, s8.USER_NUM, s8.RECIPE_NUM, 
+			                s8.sales_date, r8.RECIPE_PRICE
+			        ) ss8
+				WHERE s.sales_date = ss1.sales_Date(+)
+				    AND s.sales_date = ss2.sales_Date(+)
+				    AND s.sales_date = ss3.sales_Date(+)
+				    AND s.sales_date = ss4.sales_Date(+)
+				    AND s.sales_date = ss5.sales_Date(+)
+				    AND s.sales_date = ss6.sales_Date(+)
+				    AND s.sales_date = ss7.sales_Date(+)
+				    AND s.sales_date = ss8.sales_Date(+)
+				    AND s.sales_date = srsrsr.sales_Date (+)
+				    AND s.user_num = u.user_num (+)
+					<choose>
+						<when test='category == "Date"'>
+							AND s.sales_date LIKE '%' || #{keyword} || '%'
+						</when>
+						<when test='category == "Writer"'>
+							AND u.user_name LIKE '%' || #{keyword} || '%'
+						</when>
+						<otherwise></otherwise>
+					</choose>	
+				ORDER BY s.sales_date
+				) ssssrrrr
+			) srp
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+		
+	</select>
 </mapper>

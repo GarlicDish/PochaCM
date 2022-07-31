@@ -8,6 +8,7 @@ import pochacm.dto.ItemCategory;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
+import pochacm.dto.Sales;
 import pochacm.dto.SecondaryUnit;
 
 public interface CMDao {
@@ -33,5 +34,11 @@ public interface CMDao {
 	List<ItemCategory> getItemCategoryList();
 
 	List<String> getCategoryByKeyword();
+
+	int selectCntAllSales(Paging paging);
+
+	List<Sales> selectAllSales(Paging paging);
+
+	
 
 }

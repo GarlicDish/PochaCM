@@ -81,14 +81,44 @@ public class CMServiceImpl implements CMService {
 	public Object getItemInfoByItem(Item item) {
 		return cmDao.selectItemInfoByItemNum(item);
 	}
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public Paging getSalesPaging(Paging paging) {
-		return null;
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getSalesPaging", idx++);
+		
+		int page = 0;
+		
+		if( Integer.toString(paging.getCurPage()) != null && !"".equals(paging.getCurPage()) ) {
+			page = paging.getCurPage();
+			logger.info("#{}. paging.getCurPage() : {}", idx++, paging.getCurPage());
+		} else {
+			logger.warn("there is no paging.getCurPage() or null value");
+		}
+		
+		String keyword = paging.getKeyword();
+		String category = paging.getCategory();
+		
+		//select total count of invoice
+		int totalCount = cmDao.selectCntAllSales(paging);
+		
+		logger.info("#{}. totalCount : {}", idx++, totalCount);
+		
+		//create Paging dto - calculate paging
+		Paging pagingReturn = new Paging(totalCount,page);
+		
+		logger.info("#{}. pagingReturn : {}", idx++, pagingReturn);
+		pagingReturn.setCategory(category);
+		pagingReturn.setKeyword(keyword);
+		logger.info("#{}. pagingReturn : {}", idx++, pagingReturn);
+		
+		return pagingReturn;
 	}
 
 	@Override
 	public List<Sales> getSalesList(Paging paging) {
-		return null;
+		return cmDao.selectAllSales(paging);
 	}
 
 	@Override

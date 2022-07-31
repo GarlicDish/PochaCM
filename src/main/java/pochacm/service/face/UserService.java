@@ -32,4 +32,6 @@ public interface UserService {
 	 */
 	int getUserPositionByEmail(User user);
 
+	User getUserEmailFromParmater(String userEmail);
+
 }

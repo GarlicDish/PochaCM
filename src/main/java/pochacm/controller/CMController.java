@@ -275,7 +275,6 @@ public class CMController {
 		model.addAttribute("paging", paging);
 		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
 		
-		
 		return "cm/salesList";
 	}
 	

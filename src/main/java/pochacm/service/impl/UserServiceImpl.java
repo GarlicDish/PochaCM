@@ -84,4 +84,14 @@ public class UserServiceImpl implements UserService {
 		return userDao.selectPositionByEmail(user);
 	}
 
+	@Override
+	public User getUserEmailFromParmater(String userEmail) {
+		int idx = 0;
+		
+		logger.info("#{}. Entering loginService - getUserEmailFromParmater", idx++);
+			User user = new User();
+			user.setUserEmail(userEmail);
+		return user;
+	}
+
 }
