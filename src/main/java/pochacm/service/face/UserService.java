@@ -1,5 +1,9 @@
 package pochacm.service.face;
 
+import java.util.List;
+
+import pochacm.dto.Branch;
+import pochacm.dto.Position;
 import pochacm.dto.User;
 
 public interface UserService {
@@ -33,5 +37,15 @@ public interface UserService {
 	int getUserPositionByEmail(User user);
 
 	User getUserEmailFromParmater(String userEmail);
+
+	List<Position> getAllPosition();
+
+	List<Branch> getAllBranch();
+
+//	Object getAllState();
+//
+//	Object getAllSuburb();
+//
+//	Object getAllPostcode();
 
 }

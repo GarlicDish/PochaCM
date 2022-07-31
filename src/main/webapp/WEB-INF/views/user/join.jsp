@@ -10,6 +10,10 @@ $(document).ready(function() {
 	$("#formSubmit").click(function() {
 		$("#formSubmit").submit();
 	})
+	
+	$("#state").change(function(){
+		getSuburb($(this).val());
+	})
 
 	// Email validation and duplication test
 	var userEmailValidation = false; //set as false before checking
@@ -410,6 +414,7 @@ $(document).ready(function() {
 		userStateValidation = true;
 	})
 	
+	
 	//Home Address Suburban Validation
 	var userSuburbanValidation = false;
 	$("#homeAddressSub").blur(function checkAddr1() {
@@ -543,7 +548,31 @@ $(document).ready(function() {
 			$("#form").attr("onsubmit","return false");
 		}
 	})
+	
+	
 })
+
+function getSuburb(state){
+	if($("#state").val() != null ) {
+		$.ajax({
+			type:"get",
+			url: "/join/suburb",
+			data : {
+				state : state
+			},
+			dataType: "html",
+			success : function(data) {
+				console.log("AJAX SUCCESS");
+				console.log(data);
+				$("#suburbBox select").html(data);
+			},
+			
+			error : function(){
+				console.log("AJAX FAILURE")
+			}
+		})
+	}
+}
 </script>
 
 <!-- Page content wrapper-->
@@ -654,41 +683,32 @@ $(document).ready(function() {
 						<div class="row">
 					<!-- *****  user Home Address State  ***** -->
 							<div class="form-group col-4">
-								<label for="inputStateList" class="control-label">State</label>
-								<div class="">
-									<input class="form-control" list="stateListOptions" id="inputStateList" placeholder="Type to search...">
-									<datalist id="stateListOptions">
-										<c:forEach items="${stateList }" var="i">
-											<option value="${i.stateNum }">${i.stateName }</option>
-										</c:forEach>
-									</datalist>
-								</div>
+								<label for="state" class="control-label">State</label>
+								<select class="form-select col-sm-6" id="state">
+									<option>-- State --</option>
+									<c:forEach var="i" items="${stateList }">
+										<option value="${i }">${i }</option>
+									</c:forEach>
+								</select>
 							</div>
 						
 					<!-- *****  user Home Address Suburban  ***** -->
-							<div class="form-group col-4">
-								<label for="inputSubList" class="control-label">Suburb</label>
-								<div class="">
-									<input class="form-control" list="subListOptions" id="inputSubList" placeholder="Type to search...">
-									<datalist id="subListOptions">
-										<c:forEach items="${suburbList }" var="i">
-											<option value="${i.suburbNum }">${i.suburbName }</option>
-										</c:forEach>
-									</datalist>
-								</div>
+							<div class="form-group col-4" id="suburbBox">
+								<label for="suburb" class="control-label">Suburb</label>
+								<select class="form-select col-sm-6" id="suburb" name="suburbanList">
+									<option>-- Suburban --</option>
+								</select>
 							</div>
 						
 					<!-- *****  user Home Address Post Code  ***** -->
-							<div class="form-group col-4">
-								<label for="inputPCList" class="control-label">Post Code</label>
-								<div class="">
-									<input class="form-control" list="pcListOptions" id="inputPCList" placeholder="Type to search...">
-									<datalist id="pcListOptions">
-										<c:forEach items="${postcodeList }" var="i">
-											<option value="${i.postcodeNum }">${i.postcodeName }</option>
-										</c:forEach>
-									</datalist>
-								</div>
+							<div class="form-group col-4" id="postcodeBox">
+								<label for="postcode" class="control-label">Post Code</label>
+								<select class="form-select col-sm-6" id="postcode">
+									<option>-- Postcode --</option>
+									<c:forEach items="${postcodeList }" var="i">
+										<option value="${i.postcodeNum }">${i.postcodeName }</option>
+									</c:forEach>
+								</select>
 							</div>
 						</div>
 					</div>
@@ -722,28 +742,22 @@ $(document).ready(function() {
 									<h4>Working Status</h4>
 						<!-- *****  Branch where user works at  ***** -->
 									<div class="form-group">
-										<label for="inputBrcList" class="col-sm-6 control-label">Branch</label>
-										<div class="col-sm-10">
-											<input class="form-control" list="brcListOptions" id="inputBrcList" placeholder="Type to search...">
-											<datalist id="brcListOptions">
-												<c:forEach items="${branchList }" var="i">
-													<option value="${i.branchNum }">${i.branchName }</option>
-												</c:forEach>
-											</datalist>
-										</div>
+										<label for="branchNum" class="col-sm-6 control-label">Branch</label>
+										<select class="form-select col-sm-6" id="branchNum">
+											<c:forEach items="${branchList }" var="i">
+												<option value="${i.branchNum }">${i.branchName }</option>
+											</c:forEach>
+										</select>
 									</div>
 			
 						<!-- *****  Position of user  ***** -->
 									<div class="form-group">
-										<label for="inputPstList" class="col-sm-6 control-label">Position</label>
-										<div class="col-sm-10">
-											<input class="form-control" list="pstListOptions" id="inputPstList" placeholder="Type to search...">
-											<datalist id="pstListOptions">
-												<c:forEach items="${positionList }" var="i">
-													<option value="${i.positionNum }">${i.positionName }</option>
-												</c:forEach>
-											</datalist>
-										</div>
+										<label for="positionNum" class="col-sm-6 control-label">Position</label>
+										<select class="form-select col-sm-6" id="positionNum">
+											<c:forEach items="${positionList }" var="i">
+												<option value="${i.positionNum }">${i.positionName }</option>
+											</c:forEach>
+										</select>
 									</div>
 			
 						<!-- *****  Work Start Date of user  ***** -->

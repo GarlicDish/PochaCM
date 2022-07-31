@@ -1,11 +1,15 @@
 package pochacm.service.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pochacm.dao.face.UserDao;
+import pochacm.dto.Branch;
+import pochacm.dto.Position;
 import pochacm.dto.User;
 import pochacm.service.face.UserService;
 
@@ -97,5 +101,30 @@ public class UserServiceImpl implements UserService {
 			user.setUserEmail(userEmail);
 		return user;
 	}
+
+	@Override
+	public List<Position> getAllPosition() {
+		return userDao.getAllPosition();
+	}
+
+	@Override
+	public List<Branch> getAllBranch() {
+		return userDao.getAllBranch();
+	}
+
+//	@Override
+//	public Object getAllState() {
+//		return userDao.getAllState();
+//	}
+//
+//	@Override
+//	public Object getAllSuburb() {
+//		return userDao.getAllSuburb();
+//	}
+//
+//	@Override
+//	public Object getAllPostcode() {
+//		return userDao.getAllPostcode();
+//	}
 
 }

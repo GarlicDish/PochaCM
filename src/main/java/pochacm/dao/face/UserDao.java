@@ -1,5 +1,9 @@
 package pochacm.dao.face;
 
+import java.util.List;
+
+import pochacm.dto.Branch;
+import pochacm.dto.Position;
 import pochacm.dto.User;
 
 public interface UserDao {
@@ -25,4 +29,14 @@ public interface UserDao {
 	int getUserNoByEmail(User user);
 
 	int selectPositionByEmail(User user);
+
+	List<Position> getAllPosition();
+
+	List<Branch> getAllBranch();
+
+//	Object getAllState();
+//
+//	Object getAllSuburb();
+//
+//	Object getAllPostcode();
 }

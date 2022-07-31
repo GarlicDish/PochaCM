@@ -24,6 +24,12 @@
 	
 	<dependencies>
 	
+	<!-- json simple (make a list from json file -->
+	<dependency>
+		<groupId>com.googlecode.json-simple</groupId>
+		<artifactId>json-simple</artifactId>
+		<version>1.1</version>
+	</dependency>
 	<!--  log4jdbc-remix  -->
 		<!-- https://mvnrepository.com/artifact/org.lazyluke/log4jdbc-remix -->
 		<dependency>

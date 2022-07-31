@@ -47,5 +47,16 @@
 		SELECT position_num FROM user_info
 		WHERE user_email = #{userEmail}
 	</select>
+	<select id="getAllPosition" resultType="hashmap">
+		SELECT position_num, position_name 
+		FROM position
+		ORDER BY position_num
+	</select>
+	<select id="getAllBranch" resultType="hashmap">
+		SELECT branch_num, branch_name, branch_address, branch_phone
+		FROM branch
+		ORDER BY branch_num
+	</select>
+	
 	
 </mapper>

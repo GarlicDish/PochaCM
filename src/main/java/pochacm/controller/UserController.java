@@ -1,15 +1,22 @@
 package pochacm.controller;
 
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import pochacm.dto.User;
 import pochacm.service.face.UserService;
+import pochacm.util.CSVReader;
 
 @Controller
 public class UserController {
@@ -112,14 +120,40 @@ public class UserController {
 		return "redirect: /main";
 	}
 
+	 
+	 
 	// move to join page
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String join() {
+	public String join(Model model) throws FileNotFoundException {
 		
 		// logger index
 		int idx = 0;
-
 		logger.info("#{}. join", idx++);
+		
+		CSVReader csvReader = new CSVReader();
+		
+		List<List<String>> addressList = csvReader.readCSV();
+		logger.info("#{}. csvReader.readCSV() : {}", idx++, addressList);
+		
+		
+		//GET STATE LIST FROM CSV FILE
+		List<String> stateList1 = new ArrayList<>();
+		for(int i=0; i < addressList.size() ;i++) {
+			String state = addressList.get(i).get(3).toString();
+//			logger.info("#{}. state : {}", idx++, state);
+			stateList1.add(state);
+		}
+		Set<String> set = new HashSet<String>(stateList1);
+		List<String> stateList = new ArrayList<String>(set);
+		stateList.remove("state_code");
+		stateList.sort(null);
+		logger.info("#{}. stateList : {}", idx++, stateList);
+		
+		model.addAttribute("stateList", stateList);
+		model.addAttribute("branchList", userService.getAllBranch());
+		logger.info("#{}. model.getAttribute(\"branchList\") : {}", idx++, model.getAttribute("branchList"));
+		model.addAttribute("positionList", userService.getAllPosition());
+		logger.info("#{}. model.getAttribute(\"positionList\") : {}", idx++, model.getAttribute("positionList"));
 		
 		return "user/join";
 	}
@@ -159,19 +193,21 @@ public class UserController {
 	
 	
 	
+	
+
 	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
 	
-	class userEmail {
-	    private final String email;
-
-	    public userEmail(String email) {
-	        this.email = email;
-	    }
-
-	    public String getUserEmail() {
-	        return email;
-	    }
-	}
+//	class userEmail {
+//	    private final String email;
+//
+//	    public userEmail(String email) {
+//	        this.email = email;
+//	    }
+//
+//	    public String getUserEmail() {
+//	        return email;
+//	    }
+//	}
 	//Check email duplication
 	@PostMapping("/join/emailCheck")
 	@ResponseBody
@@ -214,5 +250,35 @@ public class UserController {
 		} else {
 			return 1;
 		}
+	}
+	
+	//GET SUBURBAN LIST
+	@GetMapping("/join/suburb")
+	@ResponseBody
+	public String getSuburbList(Model model, String state) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. phoneDuplCheck", idx++);
+		
+		logger.info("#{}. state = {}", idx++, state);
+		CSVReader csvReader = new CSVReader();
+		
+		List<List<String>> addressList = csvReader.readCSV();
+		
+		List<String> suburbList = new ArrayList<>();
+		for(int i=0; i< addressList.size();i++) {
+			if (addressList.get(i).get(3).toString().equals(state)) {
+				suburbList.add(addressList.get(i).get(1).toString());
+			}
+		}
+		suburbList.sort(null);
+		
+		model.addAttribute("suburbList", suburbList);
+		logger.info("#{}. suburbList = {}", idx++, suburbList);
+		
+		return "<option>-- State --</option>" + 
+				"<c:forEach var = \"i\" items = \"${suburbList }\">" + 
+				"	<option value=\"${i }\">${i }</option>" + 
+				"</c:forEach>";
 	}
 }
