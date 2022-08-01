@@ -9,20 +9,27 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import pochacm.dto.AUPostcode;
 import pochacm.dto.User;
 import pochacm.service.face.UserService;
 import pochacm.util.CSVReader;
@@ -133,7 +140,7 @@ public class UserController {
 		CSVReader csvReader = new CSVReader();
 		
 		List<List<String>> addressList = csvReader.readCSV();
-		logger.info("#{}. csvReader.readCSV() : {}", idx++, addressList);
+//		logger.info("#{}. csvReader.readCSV() : {}", idx++, addressList);
 		
 		
 		//GET STATE LIST FROM CSV FILE
@@ -188,8 +195,6 @@ public class UserController {
 			return "redirect:/join";
 		}
 	}
-	
-	
 	
 	
 	
@@ -252,33 +257,5 @@ public class UserController {
 		}
 	}
 	
-	//GET SUBURBAN LIST
-	@GetMapping("/join/suburb")
-	@ResponseBody
-	public String getSuburbList(Model model, String state) {
-		// logger index
-		int idx = 0;
-		logger.info("#{}. phoneDuplCheck", idx++);
-		
-		logger.info("#{}. state = {}", idx++, state);
-		CSVReader csvReader = new CSVReader();
-		
-		List<List<String>> addressList = csvReader.readCSV();
-		
-		List<String> suburbList = new ArrayList<>();
-		for(int i=0; i< addressList.size();i++) {
-			if (addressList.get(i).get(3).toString().equals(state)) {
-				suburbList.add(addressList.get(i).get(1).toString());
-			}
-		}
-		suburbList.sort(null);
-		
-		model.addAttribute("suburbList", suburbList);
-		logger.info("#{}. suburbList = {}", idx++, suburbList);
-		
-		return "<option>-- State --</option>" + 
-				"<c:forEach var = \"i\" items = \"${suburbList }\">" + 
-				"	<option value=\"${i }\">${i }</option>" + 
-				"</c:forEach>";
 	}
-}
+

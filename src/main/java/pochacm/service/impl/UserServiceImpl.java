@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pochacm.dao.face.UserDao;
+import pochacm.dto.AUPostcode;
 import pochacm.dto.Branch;
 import pochacm.dto.Position;
 import pochacm.dto.User;
@@ -111,6 +112,7 @@ public class UserServiceImpl implements UserService {
 	public List<Branch> getAllBranch() {
 		return userDao.getAllBranch();
 	}
+
 
 //	@Override
 //	public Object getAllState() {

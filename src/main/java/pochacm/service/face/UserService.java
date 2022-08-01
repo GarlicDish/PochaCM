@@ -2,6 +2,7 @@ package pochacm.service.face;
 
 import java.util.List;
 
+import pochacm.dto.AUPostcode;
 import pochacm.dto.Branch;
 import pochacm.dto.Position;
 import pochacm.dto.User;
@@ -42,10 +43,5 @@ public interface UserService {
 
 	List<Branch> getAllBranch();
 
-//	Object getAllState();
-//
-//	Object getAllSuburb();
-//
-//	Object getAllPostcode();
 
 }

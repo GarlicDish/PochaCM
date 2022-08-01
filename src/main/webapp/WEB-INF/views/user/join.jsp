@@ -11,9 +11,31 @@ $(document).ready(function() {
 		$("#formSubmit").submit();
 	})
 	
-	$("#state").change(function(){
-		getSuburb($(this).val());
-	})
+	$('#state').change(function () {
+		console.log($("#state").val());
+            var url = "../../../resources/json/au_postcodes.json";
+
+            $.getJSON(url, function (data) {
+            	console.log(url);
+            	console.log(data);
+                $.each(data, function (index, value) {
+                	//console.log(index);
+                	//console.log(value.state_code);
+                	console.log($("#state").val());
+                    // APPEND OR INSERT DATA TO SELECT ELEMENT.
+                    if ( value.state_code == $("#state").val() ){
+                    	console.log(value.state_code)
+                    	$('#suburb').append('<option value="' + value.place_name + '">' + value.place_name + '</option>');
+                    	console.log(value.place_name)
+                    }
+                });
+            });
+        });
+
+        // SHOW SELECTED VALUE.
+        $('#state').change(function () {
+            $('#msg').text('Selected Item: ' + this.options[this.selectedIndex].text);
+        });
 
 	// Email validation and duplication test
 	var userEmailValidation = false; //set as false before checking
@@ -41,7 +63,7 @@ $(document).ready(function() {
 			contentType : "application/json; charset=UTF-8",
 		   	success : function(data) {
 			   
-			   if (data == 0) {
+			   if (data == 1) {
 				   
 					$("#userEmailCheck").html("This email is avilable.");
 					$("#userEmailCheck").attr("class", "check text-success");
@@ -551,28 +573,6 @@ $(document).ready(function() {
 	
 	
 })
-
-function getSuburb(state){
-	if($("#state").val() != null ) {
-		$.ajax({
-			type:"get",
-			url: "/join/suburb",
-			data : {
-				state : state
-			},
-			dataType: "html",
-			success : function(data) {
-				console.log("AJAX SUCCESS");
-				console.log(data);
-				$("#suburbBox select").html(data);
-			},
-			
-			error : function(){
-				console.log("AJAX FAILURE")
-			}
-		})
-	}
-}
 </script>
 
 <!-- Page content wrapper-->
@@ -684,10 +684,10 @@ function getSuburb(state){
 					<!-- *****  user Home Address State  ***** -->
 							<div class="form-group col-4">
 								<label for="state" class="control-label">State</label>
-								<select class="form-select col-sm-6" id="state">
+								<select class="form-select col-sm-6" id="state" name="state">
 									<option>-- State --</option>
 									<c:forEach var="i" items="${stateList }">
-										<option value="${i }">${i }</option>
+										<option value="${i}">${i}</option>
 									</c:forEach>
 								</select>
 							</div>
@@ -695,7 +695,7 @@ function getSuburb(state){
 					<!-- *****  user Home Address Suburban  ***** -->
 							<div class="form-group col-4" id="suburbBox">
 								<label for="suburb" class="control-label">Suburb</label>
-								<select class="form-select col-sm-6" id="suburb" name="suburbanList">
+								<select class="form-select col-sm-6" id="suburb" name="suburb">
 									<option>-- Suburban --</option>
 								</select>
 							</div>
@@ -744,8 +744,9 @@ function getSuburb(state){
 									<div class="form-group">
 										<label for="branchNum" class="col-sm-6 control-label">Branch</label>
 										<select class="form-select col-sm-6" id="branchNum">
+											<option>---Branch Name ---</option>
 											<c:forEach items="${branchList }" var="i">
-												<option value="${i.branchNum }">${i.branchName }</option>
+												<option value="${i.BRANCH_NUM }">${i.BRANCH_NAME }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -754,8 +755,9 @@ function getSuburb(state){
 									<div class="form-group">
 										<label for="positionNum" class="col-sm-6 control-label">Position</label>
 										<select class="form-select col-sm-6" id="positionNum">
+											<option>---Position---</option>
 											<c:forEach items="${positionList }" var="i">
-												<option value="${i.positionNum }">${i.positionName }</option>
+												<option value="${i.POSITION_NUM }">${i.POSITION_NAME }</option>
 											</c:forEach>
 										</select>
 									</div>
@@ -855,9 +857,7 @@ function getSuburb(state){
 						<div id="buttonCheck"></div>
 					</div>
 				</div>
-		
 	</div>
 </div>
-		
 	
 <%@ include file="../layout/footer.jsp"%>
