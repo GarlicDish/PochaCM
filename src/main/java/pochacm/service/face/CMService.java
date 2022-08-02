@@ -8,6 +8,7 @@ import pochacm.dto.ItemCategory;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
+import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
 import pochacm.dto.SecondaryUnit;
 
@@ -59,6 +60,15 @@ public interface CMService {
 
 
 	List<String> getCategoryByKeyword(String keyword);
+
+
+	Object getSalesSourceList();
+
+
+	Recipe getRecipeByRecipeName(String menuName);
+
+
+	List<Recipe> getMenuSearchList(Recipe recipe);
 
 
 	

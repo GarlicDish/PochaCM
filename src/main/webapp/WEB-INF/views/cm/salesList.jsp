@@ -12,7 +12,10 @@ $(document).ready(function() {
 	$("#searchBtn").click(function() {
 		$("#searchForm").submit();
 	});
-	 
+	
+	$("#addBtn").click(function(){
+		location.href='/sales/add'
+	})
 })
 </script>
 <h1 class="mt-4">Sales</h1>
@@ -20,11 +23,11 @@ $(document).ready(function() {
 	<table id="salesListTab" class="table table-light table-striped table-hover" style="text-align:center;">
 		<thead>
 			<tr class="table-dark">
-				<th ROWspan="2">#</th>
-				<th ROWspan="2">Sales Date</th>
+				<th rowspan="2">#</th>
+				<th rowspan="2">Sales Date</th>
 				<th colspan="8">Sales Source</th>
-				<th rowspan="8">Total</th>
-				<th ROWspan="2">Writer</th>
+				<th rowspan="2">Total</th>
+				<th rowspan="2">Writer</th>
 				<c:if test="${session.positionNum ne 2 }"><th ROWspan="2">Remove</th></c:if>
 			</tr>
 			<tr class="table-dark">
@@ -52,10 +55,9 @@ $(document).ready(function() {
 					<td>${i.NVL7 }</td>
 					<td>${i.NVL8 }</td>
 					<td>${i.TOTALSUM }</td>
-					<td>${i.USER_NAME }</a></td>
-					<td><a>X</a></td>
+					<td>${i.USER_NAME }</td>
 					<c:if test="${session.positionNum ne 2 }">
-						<td><a></a></td>
+						<td><a>X</a></td>
 					</c:if>
 				</tr>
 			</c:forEach>
@@ -63,7 +65,8 @@ $(document).ready(function() {
 	</table>
 </div>
 
-<div class="">
+<div id="button">
+	<button type="button" id="addBtn" name="addBtn">ADD</button>
 </div>
 
 <div class="text-center" id="searchPanel" style="padding:10px;">

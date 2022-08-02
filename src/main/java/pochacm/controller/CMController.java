@@ -14,8 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import pochacm.dto.Invoice;
@@ -24,6 +27,7 @@ import pochacm.dto.ItemCategory;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
+import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
 import pochacm.dto.SecondaryUnit;
 import pochacm.service.face.CMService;
@@ -278,8 +282,35 @@ public class CMController {
 		return "cm/salesList";
 	}
 	
+	@GetMapping("/sales/add")
+	public String salesAdd(Model model) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /sales/add [GET]", idx++);
+		
+		model.addAttribute("salesSourceList",cmService.getSalesSourceList());
+		
+		return "cm/salesAdd";
+	}
+	
 	
 	//------------------------AJAX ------------------------------
+	
+	@PostMapping("/menuList")
+	@ResponseBody
+	public List<Recipe> getMenuSearchList(@RequestParam(value="menuName")String menuName){
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /menuList [AJAX] [GET]", idx++);
+		
+		logger.info("#{}. menuName : {}", idx++, menuName);
+		
+		Recipe recipe = cmService.getRecipeByRecipeName(menuName);
+		logger.info("#{}. recipe : {}", idx++, recipe);
+		
+		return cmService.getMenuSearchList(recipe);
+	}
+	
 //	@GetMapping("/item/getCategory")
 //	@ResponseBody
 //	public List<String> getCategory(String keyword){

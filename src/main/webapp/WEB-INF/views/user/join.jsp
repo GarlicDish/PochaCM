@@ -31,6 +31,26 @@ $(document).ready(function() {
                 });
             });
         });
+	$('#suburb').change(function () {
+		console.log($("#suburb").val());
+            var url = "../../../resources/json/au_postcodes.json";
+
+            $.getJSON(url, function (data) {
+            	console.log(url);
+            	console.log(data);
+                $.each(data, function (index, value) {
+                	//console.log(index);
+                	//console.log(value.state_code);
+                	console.log($("#suburb").val());
+                    // APPEND OR INSERT DATA TO SELECT ELEMENT.
+                    if ( value.state_code == $("#suburb").val() ){
+                    	console.log(value.place_name)
+                    	$('#postcode').append('<option value="' + value.postcode + '">' + value.postcode + '</option>');
+                    	console.log(value.place_name)
+                    }
+                });
+            });
+        });
 
         // SHOW SELECTED VALUE.
         $('#state').change(function () {
@@ -696,7 +716,7 @@ $(document).ready(function() {
 							<div class="form-group col-4" id="suburbBox">
 								<label for="suburb" class="control-label">Suburb</label>
 								<select class="form-select col-sm-6" id="suburb" name="suburb">
-									<option>-- Suburban --</option>
+									<option value="noSub">-- Suburban --</option>
 								</select>
 							</div>
 						
@@ -704,10 +724,7 @@ $(document).ready(function() {
 							<div class="form-group col-4" id="postcodeBox">
 								<label for="postcode" class="control-label">Post Code</label>
 								<select class="form-select col-sm-6" id="postcode">
-									<option>-- Postcode --</option>
-									<c:forEach items="${postcodeList }" var="i">
-										<option value="${i.postcodeNum }">${i.postcodeName }</option>
-									</c:forEach>
+									<option value="000">-- Postcode --</option>
 								</select>
 							</div>
 						</div>

@@ -270,4 +270,16 @@
 		ORDER BY rnum
 		
 	</select>
+	
+	<select id="getSalesSourceList" resultType="hashmap">
+		SELECT sales_source_num, sales_source_name 
+		FROM sales_source
+		ORDER BY sales_source_num
+	</select>
+	
+	<select id="selectMenuSearchList" parameterType="pochacm.dto.Recipe" resultType="hashmap">
+		SELECT * FROM recipe
+		WHERE recipe_name LIKE '%' || #{recipeName} || '%'
+		ORDER BY recipe_name
+	</select>
 </mapper>

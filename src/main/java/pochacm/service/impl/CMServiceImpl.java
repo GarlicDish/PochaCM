@@ -14,7 +14,9 @@ import pochacm.dto.ItemCategory;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
+import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
+import pochacm.dto.SalesSource;
 import pochacm.dto.SecondaryUnit;
 import pochacm.service.face.CMService;
 
@@ -144,6 +146,31 @@ public class CMServiceImpl implements CMService {
 	@Override
 	public List<String> getCategoryByKeyword(String keyword) {
 		return cmDao.getCategoryByKeyword();
+	}
+
+	@Override
+	public List<SalesSource> getSalesSourceList() {
+		return cmDao.getSalesSourceList();
+	}
+
+	@Override
+	public Recipe getRecipeByRecipeName(String menuName) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getRecipeByRecipeName", idx++);
+		
+		Recipe recipeName = new Recipe();
+		
+		recipeName.setRecipeName(menuName);
+		logger.info("#{}. recipeName : {}", idx++, recipeName);
+		
+		return recipeName;
+	}
+
+	@Override
+	public List<Recipe> getMenuSearchList(Recipe recipe) {
+		
+		return cmDao.selectMenuSearchList(recipe);
 	}
 
 

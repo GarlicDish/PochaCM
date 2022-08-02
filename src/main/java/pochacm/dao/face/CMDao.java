@@ -8,7 +8,9 @@ import pochacm.dto.ItemCategory;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
+import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
+import pochacm.dto.SalesSource;
 import pochacm.dto.SecondaryUnit;
 
 public interface CMDao {
@@ -38,6 +40,10 @@ public interface CMDao {
 	int selectCntAllSales(Paging paging);
 
 	List<Sales> selectAllSales(Paging paging);
+
+	List<SalesSource> getSalesSourceList();
+
+	List<Recipe> selectMenuSearchList(Recipe recipe);
 
 	
 
