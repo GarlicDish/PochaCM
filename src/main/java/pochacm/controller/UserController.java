@@ -214,9 +214,9 @@ public class UserController {
 //	    }
 //	}
 	//Check email duplication
-	@PostMapping("/join/emailCheck")
+	@GetMapping("/join/emailCheck")
 	@ResponseBody
-	public int emailDuplCheck (@RequestParam(value = "userEmail") String userEmail){
+	public int emailDuplCheck ( String userEmail){
 		// logger index
 		int idx = 0;
 		logger.info("#{}. emailDuplCheck", idx++);

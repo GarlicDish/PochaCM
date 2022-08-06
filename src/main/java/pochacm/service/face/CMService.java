@@ -65,11 +65,13 @@ public interface CMService {
 	Object getSalesSourceList();
 
 
-	Recipe getRecipeByRecipeName(String menuName);
+	Recipe getRecipeDtoWithRecipeName(String menuName);
 
 
 	List<Recipe> getMenuSearchList(Recipe recipe);
 
+
+	Recipe getRecipeByRecipeName(Recipe recipe);
 
 	
 }

@@ -45,6 +45,6 @@ public interface CMDao {
 
 	List<Recipe> selectMenuSearchList(Recipe recipe);
 
-	
+	Recipe selectMenuBymenuName(Recipe recipe);
 
 }

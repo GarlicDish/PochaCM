@@ -296,19 +296,39 @@ public class CMController {
 	
 	//------------------------AJAX ------------------------------
 	
-	@PostMapping("/menuList")
+	@GetMapping("/menuList")
 	@ResponseBody
-	public List<Recipe> getMenuSearchList(@RequestParam(value="menuName")String menuName){
+	public List<Recipe> getMenuSearchList(String menuName){
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /menuList [AJAX] [GET]", idx++);
 		
 		logger.info("#{}. menuName : {}", idx++, menuName);
 		
-		Recipe recipe = cmService.getRecipeByRecipeName(menuName);
+		Recipe recipe = cmService.getRecipeDtoWithRecipeName(menuName);
 		logger.info("#{}. recipe : {}", idx++, recipe);
 		
-		return cmService.getMenuSearchList(recipe);
+		List<Recipe> resultList = cmService.getMenuSearchList(recipe);
+		logger.info("#{}. resultList : {}", idx++, resultList);
+		
+		return resultList;
+	}
+	@GetMapping("/menuPrice")
+	@ResponseBody
+	public Recipe getMenuPrice(String menuName){
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /menuPrice [AJAX] [GET]", idx++);
+		
+		logger.info("#{}. menuName : {}", idx++, menuName);
+		
+		Recipe recipe = cmService.getRecipeDtoWithRecipeName(menuName);
+		logger.info("#{}. recipe : {}", idx++, recipe);
+		
+		recipe = cmService.getRecipeByRecipeName(recipe);
+		logger.info("#{}. recipe : {}", idx++, recipe);
+		
+		return recipe;
 	}
 	
 //	@GetMapping("/item/getCategory")

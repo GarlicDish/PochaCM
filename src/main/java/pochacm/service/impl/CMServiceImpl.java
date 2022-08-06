@@ -154,7 +154,7 @@ public class CMServiceImpl implements CMService {
 	}
 
 	@Override
-	public Recipe getRecipeByRecipeName(String menuName) {
+	public Recipe getRecipeDtoWithRecipeName(String menuName) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. getRecipeByRecipeName", idx++);
@@ -169,8 +169,12 @@ public class CMServiceImpl implements CMService {
 
 	@Override
 	public List<Recipe> getMenuSearchList(Recipe recipe) {
-		
 		return cmDao.selectMenuSearchList(recipe);
+	}
+
+	@Override
+	public Recipe getRecipeByRecipeName(Recipe recipe) {
+		return cmDao.selectMenuBymenuName(recipe);
 	}
 
 

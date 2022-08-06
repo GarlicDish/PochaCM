@@ -76,14 +76,13 @@ $(document).ready(function() {
 			console.log(userEmail);
 			
 			$.ajax({
-			url : "/join/emailCheck?userEmail=",
-		   	type : "POST",
+			url : "/join/emailCheck?userEmail="+userEmail,
+		   	type : "GET",
 		   	dataType : "JSON",
-			data: userEmail,
 			contentType : "application/json; charset=UTF-8",
 		   	success : function(data) {
 			   
-			   if (data == 1) {
+			   if (data == 0) {
 				   
 					$("#userEmailCheck").html("This email is avilable.");
 					$("#userEmailCheck").attr("class", "check text-success");

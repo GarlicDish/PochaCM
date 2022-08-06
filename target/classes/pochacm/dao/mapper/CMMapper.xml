@@ -278,8 +278,14 @@
 	</select>
 	
 	<select id="selectMenuSearchList" parameterType="pochacm.dto.Recipe" resultType="hashmap">
-		SELECT * FROM recipe
+		SELECT recipe_num, recipe_name, recipe_price, classification FROM recipe
 		WHERE recipe_name LIKE '%' || #{recipeName} || '%'
 		ORDER BY recipe_name
+	</select>
+	
+	<select id="selectMenuBymenuName" parameterType="pochacm.dto.Recipe" resultType="pochacm.dto.Recipe">
+		SELECT recipe_num, recipe_name, recipe_price, classification
+		FROM recipe
+		WHERE recipe_name = #{recipeName}
 	</select>
 </mapper>
