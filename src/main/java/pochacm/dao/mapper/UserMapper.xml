@@ -24,12 +24,12 @@
 			sa_fund_name, sa_fund_num, address_l1, address_l2, address_state,
 			address_sub, address_postcode, terms_agree, sign_up_date, user_activate
 		) VALUES (
-			#{user_num}, #{user_email}, #{user_password}, #{user_name}, #{user_gender},
-			#{user_phone}, #{date_of_birth}, #{branch_num}, #{position_num}, #{work_start_date},
-			#{emer_name}, #{emer_phone}, #{tax_file_check}, #{tax_file_num }, #{bsb_num}, #{bank_account_num},
-			#{sa_fund_name}, #{sa_fund_num}, #{address_l1}, #{address_l2},
-			#{address_state}, #{address_sub}, #{address_postcode},
-			#{terms_agree}, #{sign_up_date}, #{user_activate}
+			user_num_seq.nextval, #{userEmail}, #{userPassword}, #{userName}, #{userGender},
+			#{userPhone}, #{dateOfBirth}, #{branchNum}, #{positionNum}, #{workStartDate},
+			#{emerName}, #{emerPhone}, #{taxFileCheck}, #{taxFileNum }, #{bsbNum}, #{bankAccountNum},
+			#{saFundName}, #{saFundNum}, #{addressL1}, #{addressL2},
+			#{addressState}, #{addressSub}, #{addressPostCode },
+			#{termsAgree}, SYSDATE, #{userActivate}
 		)
 	</insert>
 	

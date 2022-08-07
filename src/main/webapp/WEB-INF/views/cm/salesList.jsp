@@ -16,6 +16,8 @@ $(document).ready(function() {
 	$("#addBtn").click(function(){
 		location.href='/sales/add'
 	})
+	
+	
 })
 </script>
 <h1 class="mt-4">Sales</h1>
@@ -28,7 +30,7 @@ $(document).ready(function() {
 				<th colspan="8">Sales Source</th>
 				<th rowspan="2">Total</th>
 				<th rowspan="2">Writer</th>
-				<c:if test="${session.positionNum ne 2 }"><th ROWspan="2">Remove</th></c:if>
+				<th rowspan="2">Remark</th>
 			</tr>
 			<tr class="table-dark">
 				<th>CASH</th>
@@ -44,21 +46,48 @@ $(document).ready(function() {
 		<tbody>
 			<c:forEach items="${salesList }"  var="i" >
 				<tr>
-					<td>${i.RNUM }</td>
-					<td><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/> </td>
-					<td>${i.NVL1 }</td>
-					<td>${i.NVL2 }</td>
-					<td>${i.NVL3 }</td>
-					<td>${i.NVL4 }</td>
-					<td>${i.NVL5 }</td>
-					<td>${i.NVL6 }</td>
-					<td>${i.NVL7 }</td>
-					<td>${i.NVL8 }</td>
-					<td>${i.TOTALSUM }</td>
-					<td>${i.USER_NAME }</td>
-					<c:if test="${session.positionNum ne 2 }">
-						<td><a>X</a></td>
-					</c:if>
+					<td class="table-dark">${i.RNUM }</td>
+					<td class="table-dark"><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/> </td>
+					<td>
+						<c:if test="${i.NVL1 == null }">0</c:if>
+						<c:if test="${i.NVL1 != null }">${i.NVL1}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL2 == null }">0</c:if>
+						<c:if test="${i.NVL2 != null }">${i.NVL2}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL3 == null }">0</c:if>
+						<c:if test="${i.NVL3 != null }">${i.NVL3}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL4 == null }">0</c:if>
+						<c:if test="${i.NVL4 != null }">${i.NVL4}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL5 == null }">0</c:if>
+						<c:if test="${i.NVL5 != null }">${i.NVL5}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL6 == null }">0</c:if>
+						<c:if test="${i.NVL6 != null }">${i.NVL6}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL7 == null }">0</c:if>
+						<c:if test="${i.NVL7 != null }">${i.NVL7}</c:if>
+					</td>
+					<td>
+						<c:if test="${i.NVL8 == null }">0</c:if>
+						<c:if test="${i.NVL8 != null }">${i.NVL8}</c:if>
+					</td>
+					<td class="table-dark">
+						<c:if test="${i.TOTAL == null }">0</c:if>
+						<c:if test="${i.TOTAL != null }">${i.TOTAL}</c:if>
+					</td>
+					<td class="table-dark">${i.USER_NAME }</td>
+					<td class="table-dark">
+						<a href="/sales/view?salesDate=${i.SALES_DATE }"><button type="button" class="btn btn-success btn-sm" id="viewBtn">Detail</button></a>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
@@ -66,7 +95,7 @@ $(document).ready(function() {
 </div>
 
 <div id="button">
-	<button type="button" id="addBtn" name="addBtn">ADD</button>
+	<button type="button" id="addBtn" name="addBtn" class="btn btn-secondary">ADD</button>
 </div>
 
 <div class="text-center" id="searchPanel" style="padding:10px;">

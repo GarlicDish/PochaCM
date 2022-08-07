@@ -2,6 +2,8 @@ package pochacm.service.face;
 
 import java.util.List;
 
+import org.springframework.ui.Model;
+
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
 import pochacm.dto.ItemCategory;
@@ -9,10 +11,9 @@ import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
-import pochacm.dto.Sales;
 import pochacm.dto.SecondaryUnit;
 
-public interface CMService {
+public interface InvoiceService {
 
 	/**
 	 * Get Paging information based on category and keyword
@@ -35,10 +36,8 @@ public interface CMService {
 	List<Item> selectItemsByInvoiceNum(Invoice invoice);
 
 
-	Paging getSalesPaging(Paging paging);
 
 
-	List<Sales> getSalesList(Paging paging);
 
 
 	Invoice getInvoiceByInvoiceNum(Invoice invoice);
@@ -62,8 +61,6 @@ public interface CMService {
 	List<String> getCategoryByKeyword(String keyword);
 
 
-	Object getSalesSourceList();
-
 
 	Recipe getRecipeDtoWithRecipeName(String menuName);
 
@@ -71,7 +68,19 @@ public interface CMService {
 	List<Recipe> getMenuSearchList(Recipe recipe);
 
 
-	Recipe getRecipeByRecipeName(Recipe recipe);
+
+	List<Recipe> makeRecipeListFromParams(Model model);
+
+
+	void updateItemInformation(Item item);
+
+
+
+
+
+
+
+
 
 	
 }

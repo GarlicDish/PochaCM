@@ -16,7 +16,7 @@ $(document).ready(function(){
 	    return local.toJSON().slice(0,10);
 	});
 	
-	$("#cancelBtn").click(function(){
+	$("#backBtn").click(function(){
 		history.go(-1);
 	})
 	
@@ -34,8 +34,9 @@ $(document).ready(function(){
 })
 </script>
 <div id="itemUpdateTable">
-	<form id="itemUpdateForm" class="form-inline" action="/item/update?itemNum=${itemInfo.ITEM_NUM }" method="post">
+	<form id="itemUpdateForm" class="form-inline" action="/item/update" method="post">
 		<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
+			<!-- Item Name and Number -->
 			<tr>
 				<td rowspan="9" colspan="2" style="width:200px"><img src="../../resources/images/imagePrepare.png" class="img-fluid table-dark"/></td>
 				<th style="min-width:150px;" class="table-dark">
@@ -46,6 +47,7 @@ $(document).ready(function(){
 					<input type="text" class="form-control input-sm" id="itemName"	name="itemName"  value="${itemInfo.ITEM_NAME }" autofocus>
 				</td>
 			</tr>
+			<!-- item code  -->
 			<tr>
 				<th class="table-dark">
 					<label for="itemCode" class="col-sm-8 control-label">Item Code</label>
@@ -105,14 +107,6 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="primaryUnitQty" class="col-sm-8 control-label">Primary Unit Qty</label>
-				</th>
-				<td>
-					<input type="text" class="form-control input-sm" id="primaryUnitQty"	name="primaryUnitQty"  value="${itemInfo.PRIMARY_UNIT_QTY}">
-				</td>
-			</tr>
-			<tr>
-				<th class="table-dark">
 					<label for="secondaryUnitNum" class="col-sm-8 control-label">Secondary Unit</label>
 				</th>
 				<td>
@@ -125,20 +119,14 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="secondaryUnitQty" class="col-sm-8 control-label">Secondary Unit Qty</label>
-				</th>
-				<td>
-					<input type="text" class="form-control input-sm" id="secondaryUnitQty"	name="secondaryUnitQty"  value="${itemInfo.SECONDARY_UNIT_QTY}">
-				</td>
-			</tr>
-			<tr>
-				<th class="table-dark">
 					<label for="brandName" class="col-sm-8 control-label">Brand Name</label>
 					<input type="hidden" id="brandNum" name="brandNum" value="${itemInfo.BRAND_NUM }">
 				</th>
 				<td>
 					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }">
 				</td>
+			</tr>
+			<tr>
 				<th class="table-dark">
 					<label for="supplierName" class="col-sm-8 control-label">Supplier Name</label>
 				</th>
@@ -162,11 +150,13 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
-					<input type="hidden" class="form-control input-sm" id="updateDate" name="updateDate" value="${itemInfo.ITEM_LAST_UPDATE }">
-					<input type="hidden" class="form-control input-sm" id="userNum" name="userNum" value="${session.userNum }">
 	</form>
 </div>
-<button type="button" id="updateBtn" >Update</button>
-<button type="button" id="cancelBtn">Cancel</button>
+<div style="text-align:center;">
+<c:if test="${sessionScope.positionNum ne 2 }">
+	<button type="button" id="updateBtn" class="btn btn-secondary">Update</button>
+</c:if>
+<button type="button" id="backBtn" class="btn btn-secondary">Back</button>
+</div>
 
 <%@ include file="../layout/footer.jsp" %>

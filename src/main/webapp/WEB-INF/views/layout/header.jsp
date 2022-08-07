@@ -55,7 +55,7 @@
     <div class="d-flex" id="wrapper">
     
         <!-- Sidebar-->
-        <div class="border-end bg-white" id="sidebar-wrapper" style="min-height:80vh;">
+        <div class="border-end bg-white" id="sidebar-wrapper" style="min-height:70vh;">
 			<div class="sidebar-heading border-bottom bg-light">Menu</div>
             <div class="list-group list-group-flush">
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/summary">Summary</a>
@@ -64,7 +64,7 @@
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/myProfile">My Profile</a>
                 <c:if test="${ empty userNum ||  empty userEmail}">
                 	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/login">LogIn</a>
-                	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/join">Join</a>
+                	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/join">Sign Up</a>
                 </c:if>
                 <c:if test="${userNum ne null && userEmail ne null}">
                 	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/logout">LogOut</a>

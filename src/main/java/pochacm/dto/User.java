@@ -1,6 +1,8 @@
 package pochacm.dto;
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 public class User {
 
@@ -10,6 +12,7 @@ public class User {
 	private String userName;
 	private int userGender;
 	private String userPhone;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date dateOfBirth;
 	private String addressL1;
 	private String addressL2;
@@ -18,6 +21,7 @@ public class User {
 	private int addressPostCode;
 	private int branchNum;
 	private int positionNum;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date workStartDate;
 	private String emerName;
 	private String emerPhone;
@@ -28,20 +32,21 @@ public class User {
 	private String saFundName;
 	private String saFundNum;
 	private int termsAgree;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date signUpDate;
 	private int userActivate;
-	
 	@Override
 	public String toString() {
-		return "User [bankAccountNum=" + bankAccountNum + ", branchNum=" + branchNum + ", bsbNum=" + bsbNum
-				+ ", dateOfBirth=" + dateOfBirth + ", emerName=" + emerName + ", emerPhone=" + emerPhone
-				+ ", addressL1=" + addressL1 + ", addressL2=" + addressL2 + ", addressPostCode="
-				+ addressPostCode + ", addressState=" + addressState + ", addressSub=" + addressSub
-				+ ", positionNum=" + positionNum + ", saFundName=" + saFundName + ", saFundNum=" + saFundNum
-				+ ", signUpDate=" + signUpDate + ", taxFileCheck=" + taxFileCheck + ", taxFileNum=" + taxFileNum
-				+ ", termsAgree=" + termsAgree + ", userActivate=" + userActivate + ", userEmail=" + userEmail
-				+ ", userGender=" + userGender + ", userName=" + userName + ", userNum=" + userNum + ", userPassword="
-				+ userPassword + ", userPhone=" + userPhone + ", workStartDate=" + workStartDate + "]";
+		return "User [userNum=" + userNum + ", userEmail=" + userEmail + ", userPassword=" + userPassword
+				+ ", userName=" + userName + ", userGender=" + userGender + ", userPhone=" + userPhone
+				+ ", dateOfBirth=" + dateOfBirth + ", addressL1=" + addressL1 + ", addressL2=" + addressL2
+				+ ", addressState=" + addressState + ", addressSub=" + addressSub + ", addressPostCode="
+				+ addressPostCode + ", branchNum=" + branchNum + ", positionNum=" + positionNum + ", workStartDate="
+				+ workStartDate + ", emerName=" + emerName + ", emerPhone=" + emerPhone + ", taxFileCheck="
+				+ taxFileCheck + ", taxFileNum=" + taxFileNum + ", bsbNum=" + bsbNum + ", bankAccountNum="
+				+ bankAccountNum + ", saFundName=" + saFundName + ", saFundNum=" + saFundNum + ", termsAgree="
+				+ termsAgree + ", signUpDate=" + signUpDate + ", userActivate=" + userActivate + ", getClass()="
+				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	public int getUserNum() {
 		return userNum;
@@ -84,6 +89,36 @@ public class User {
 	}
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+	public String getAddressL1() {
+		return addressL1;
+	}
+	public void setAddressL1(String addressL1) {
+		this.addressL1 = addressL1;
+	}
+	public String getAddressL2() {
+		return addressL2;
+	}
+	public void setAddressL2(String addressL2) {
+		this.addressL2 = addressL2;
+	}
+	public String getAddressState() {
+		return addressState;
+	}
+	public void setAddressState(String addressState) {
+		this.addressState = addressState;
+	}
+	public String getAddressSub() {
+		return addressSub;
+	}
+	public void setAddressSub(String addressSub) {
+		this.addressSub = addressSub;
+	}
+	public int getAddressPostCode() {
+		return addressPostCode;
+	}
+	public void setAddressPostCode(int addressPostCode) {
+		this.addressPostCode = addressPostCode;
 	}
 	public int getBranchNum() {
 		return branchNum;
@@ -151,36 +186,6 @@ public class User {
 	public void setSaFundNum(String saFundNum) {
 		this.saFundNum = saFundNum;
 	}
-	public String getaddressL1() {
-		return addressL1;
-	}
-	public void setaddressL1(String addressL1) {
-		this.addressL1 = addressL1;
-	}
-	public String getaddressL2() {
-		return addressL2;
-	}
-	public void setaddressL2(String addressL2) {
-		this.addressL2 = addressL2;
-	}
-	public String getaddressState() {
-		return addressState;
-	}
-	public void setaddressState(String addressState) {
-		this.addressState = addressState;
-	}
-	public String getaddressSub() {
-		return addressSub;
-	}
-	public void setaddressSub(String addressSub) {
-		this.addressSub = addressSub;
-	}
-	public int getaddressPostCode() {
-		return addressPostCode;
-	}
-	public void setaddressPostCode(int addressPostCode) {
-		this.addressPostCode = addressPostCode;
-	}
 	public int getTermsAgree() {
 		return termsAgree;
 	}
@@ -199,7 +204,6 @@ public class User {
 	public void setUserActivate(int userActivate) {
 		this.userActivate = userActivate;
 	}
-	
 	
 	
 	

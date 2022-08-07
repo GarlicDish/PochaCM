@@ -5,31 +5,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import pochacm.dto.AUPostcode;
 import pochacm.dto.User;
 import pochacm.service.face.UserService;
 import pochacm.util.CSVReader;
@@ -167,11 +156,11 @@ public class UserController {
 
 	// join process
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String joinProc(User user, HttpSession session) {
+	public String joinProc(User user, String workStartDate, HttpSession session) {
 		
 		// logger index
 		int idx = 0;
-		logger.info("#{}. joinProc", idx++);
+		logger.info("#{}. /join [POST]", idx++);
 
 		// join result
 		boolean joinResult = userService.join(user);
@@ -185,7 +174,7 @@ public class UserController {
 			session.setAttribute("userNum", userService.getUserNoByEmail(user));
 			session.setAttribute("userEmail", user.getUserEmail());
 
-			return "redirect:/joinResult";
+			return "main";
 		} else {
 			logger.info("#{}. join FAIL", idx++);
 
@@ -219,7 +208,7 @@ public class UserController {
 	public int emailDuplCheck ( String userEmail){
 		// logger index
 		int idx = 0;
-		logger.info("#{}. emailDuplCheck", idx++);
+		logger.info("#{}. /join/emailCheck [AJAX]", idx++);
 		logger.info("#{}. email transferred = {}", idx++, userEmail);
 		
 		//dto for carry the email info
@@ -240,7 +229,7 @@ public class UserController {
 	public int phoneDuplCheck(String userPhone) {
 		// logger index
 		int idx = 0;
-		logger.info("#{}. phoneDuplCheck", idx++);
+		logger.info("#{}. /join/phoneCheck [AJAX]", idx++);
 		logger.info("#{}. Phone transferred = {}", idx++, userPhone);
 		
 		//dto for carry the email info

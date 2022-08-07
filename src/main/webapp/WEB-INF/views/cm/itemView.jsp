@@ -18,6 +18,11 @@ $(document).ready(function(){
 	})
 })
 </script>
+<style type="text/css">
+button {
+	align:center;
+}
+</style>
 <div id="itemViewTable">
 
 	<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
@@ -75,8 +80,10 @@ $(document).ready(function(){
 		</tr>
 	</table>
 </div>
+<div style="text-align:center;">
 <c:if test="${sessionScope.positionNum ne 2 }">
-	<button type="button" id="updateBtn" >Update</button>
+	<button type="button" id="updateBtn" class="btn btn-secondary">Update</button>
 </c:if>
-<button type="button" id="toInvoiceBtn">To Invoice</button>
+<button type="button" id="toInvoiceBtn" class="btn btn-secondary">To Invoice</button>
+</div>
 <%@ include file="..//layout/footer.jsp" %>

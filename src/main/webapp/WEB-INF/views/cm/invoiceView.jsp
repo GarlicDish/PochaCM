@@ -5,7 +5,14 @@
 
 <%@ include file="../layout/header.jsp" %>
 
+<script type="text/javascript">
 
+$(document).ready(function(){
+	$("#goBack").click(function(){
+		history.go(-1);
+	});
+})
+</script>
 <h1 class="mt-4">Invoice Detail</h1>
 	
 
@@ -50,5 +57,6 @@
 		</tr>
 	</c:forEach>
 </table>
+<button type="button" class="btn btn-secondary" id="goBack">Back</button>
 
 <%@ include file="../layout/footer.jsp" %>

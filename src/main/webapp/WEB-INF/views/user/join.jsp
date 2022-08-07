@@ -7,55 +7,85 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#formSubmit").click(function() {
-		$("#formSubmit").submit();
+	
+	// cancel join and go back to previous page
+	$("#cancelBtn").click(function() {
+		history.go(-1);
 	})
 	
-	$('#state').change(function () {
-		console.log($("#state").val());
-            var url = "../../../resources/json/au_postcodes.json";
+	//when state is changed, suburb list will be updated
+	$('#addressState').change(function () {
+		console.log("STATE CHANGED");
+		console.log($("#addressState").val());
+		var url = "../../../resources/json/au_postcodes.json";
+    	let list = new Set();
+    	
+    	$('#addressSub').empty();
+		$.getJSON(url, function (data) {
 
+			$.each(data, function (index, value) {
+				
+				//console.log(index);
+				//console.log(value.state_code);
+				
+			    // MAKE THE DATA SET AS UNIQUE
+			    
+			    if ( value.state_code == $("#addressState").val() ){
+			    	//console.log(value.state_code)
+			    	if ( !list.has(value.place_name) ) {
+				    	list.add(value.place_name);
+				    }
+			    	//console.log(value.place_name);
+				}
+			    
+			})
+			
+			//MOVE TO ARRAY TYPE TO SORT THE LIST
+			
+		    //console.log(list);
+			const arrayList = Array.from(list);
+			//console.log(arrayList);
+			arrayList.sort();
+			//console.log(arrayList);
+			
+			arrayList.forEach(function(value){
+				//console.log(value);
+				$('#addressSub').append('<option value="' + value + '">' + value + '</option>');
+				
+			})
+		})
+	})
+	$('#addressSub').change(function () {
+		console.log("SUBURB CHANGED");
+		console.log($("#addressSub").val());
+		
+           	console.log($("#addressSub").val());
+            var url = "../../../resources/json/au_postcodes.json";
+            let list = new Set();
+        	$('#addressPostCode').empty();
             $.getJSON(url, function (data) {
-            	console.log(url);
-            	console.log(data);
+            	//console.log(url);
+            	//console.log(data);
                 $.each(data, function (index, value) {
                 	//console.log(index);
                 	//console.log(value.state_code);
-                	console.log($("#state").val());
                     // APPEND OR INSERT DATA TO SELECT ELEMENT.
-                    if ( value.state_code == $("#state").val() ){
-                    	console.log(value.state_code)
-                    	$('#suburb').append('<option value="' + value.place_name + '">' + value.place_name + '</option>');
-                    	console.log(value.place_name)
+                    if ( value.place_name == $("#addressSub").val() && value.state_code == $("#addressState").val() ){
+                    	//console.log(value.place_name)
+                    	if ( !list.has(value.postcode) ) {
+                    		list.add(value.postcode);
+                    	$('#addressPostCode').append('<option value="' + value.postcode + '">' + value.postcode + '</option>');
+                    	}
+                    	//console.log(value.place_name)
                     }
-                });
-            });
-        });
-	$('#suburb').change(function () {
-		console.log($("#suburb").val());
-            var url = "../../../resources/json/au_postcodes.json";
+                })
+            })
+        })
 
-            $.getJSON(url, function (data) {
-            	console.log(url);
-            	console.log(data);
-                $.each(data, function (index, value) {
-                	//console.log(index);
-                	//console.log(value.state_code);
-                	console.log($("#suburb").val());
-                    // APPEND OR INSERT DATA TO SELECT ELEMENT.
-                    if ( value.state_code == $("#suburb").val() ){
-                    	console.log(value.place_name)
-                    	$('#postcode').append('<option value="' + value.postcode + '">' + value.postcode + '</option>');
-                    	console.log(value.place_name)
-                    }
-                });
-            });
-        });
-
-        // SHOW SELECTED VALUE.
-        $('#state').change(function () {
-            $('#msg').text('Selected Item: ' + this.options[this.selectedIndex].text);
-        });
+	// SHOW SELECTED VALUE.
+	$('#addressState').change(function () {
+	    $('#msg').text('Selected Item: ' + this.options[this.selectedIndex].text);
+	})
 
 	// Email validation and duplication test
 	var userEmailValidation = false; //set as false before checking
@@ -97,7 +127,8 @@ $(document).ready(function() {
 					}	
 				}		
 			})
-		}		
+		}	
+		console.log('userEmailValidation : ' + userEmailValidation);
 	})
 	
 	// Password Validation
@@ -122,6 +153,7 @@ $(document).ready(function() {
 			userPwValidation = true;
 			
 		}
+		console.log(userPwValidation);
 	})
 	
 	// Password Double Check validation
@@ -156,6 +188,8 @@ $(document).ready(function() {
 				
 			}
      	}
+		console.log(userPwDoubleValidation);
+
 	})
 	
 	//Name validation
@@ -174,9 +208,9 @@ $(document).ready(function() {
      	} else {
      		
 			$("#userNameCheck").html("");
+			userNameValidation = true;
      	}
-		
-		userNameValidation = true;
+		console.log(userNameValidation);
 	})
 	
 	//Gender validation
@@ -201,7 +235,7 @@ $(document).ready(function() {
      		
 		userGenderValidation = true;
      	}
-		
+		console.log(userGenderValidation);
 	})
 	
 	//Phone Validation
@@ -250,16 +284,17 @@ $(document).ready(function() {
 				}		
 			})
 		}		
+		console.log(userPhoneValidation);
 	});
 	
-	//userDateOfBirth validation
+	//dateOfBirth validation
 	var userBirthDayValidation = false;
-	$("#userDateOfBirth").blur(function checkAddr1() {
+	$("#dateOfBirth").blur(function checkAddr1() {
 		
-		var userDateOfBirth = $("#userDateOfBirth").val();
+		var dateOfBirth = $("#dateOfBirth").val();
 		
-		if(userDateOfBirth == "") {
-			console.log($("#userDateOfBirth").val())
+		if(dateOfBirth == "") {
+			console.log($("#dateOfBirth").val())
 			$("#userBirthCheck").html("Please select your birthday.");
 			$("#userBirthCheck").attr("class", "check text-danger");
 			
@@ -267,9 +302,10 @@ $(document).ready(function() {
      	} else {
      		
 			$("#userBirthCheck").html("");
+		userBirthDayValidation = true;
      	}
 		
-		userBirthDayValidation = true;
+		console.log(userBirthDayValidation);
 	})
 	
 	//user Tax File Check(Presence or Absence) &&
@@ -284,33 +320,40 @@ $(document).ready(function() {
 		
 		console.log(checkVal);
 		
-		if(checkVal.length == 0) {
-			userTFCValidation =  false;
-			console.log(userTFCValidation);
-     	}
-		
 		//IF TFN is not issued, TFN will be '0' and became disabled.
 		if(checkVal == 0){
 			
 			$("#userTFNCheck").html("");
-			$("#taxFileNum").attr("value", '---------');
+			$("#taxFileNum").html("");
+			$("#taxFileNum").attr("placeholder", "Don't have Tax File Number");
 			$("#taxFileNum").attr("disabled", true);
-			console.log(userTFCValidation);
-			
+			userTFCValidation = true;
+			userTFNValidation =  true;
+
 		} else {
+			
 			//TFN Value is not 0 -> the user issued TFN.
+			$("#userTFNCheck").html("");
+			$("#taxFileNum").attr("placeholder", "Tax File Number (9 characters)");
 			$("#taxFileNum").attr("value", "");
 			$("#taxFileNum").attr("disabled", false);
 			console.log(checkVal);
-			console.log(userTFCValidation);
 			
-			
+			if(checkVal.length == 0) {
+				userTFCValidation =  false;
+	     	} else {
+				userTFCValidation = true;
+	     	}
+				
 			$("#taxFileNum").blur(function checkAddr1() {
 				
 				var taxFileNum = $("#taxFileNum").val();
 				var regularExpression = /^[0-9]{9}$/;
+				
 				if(taxFileNum.length == null) {
+					
 					userTFNValidation =  false;
+					
 		     	} else {
 		     		
 					if (!regularExpression.test(taxFileNum)) {
@@ -325,20 +368,15 @@ $(document).ready(function() {
 						$("#userTFNCheck").html("");
 						
 					}
+					
+					$("#taxFileCheck").attr("value",checkVal);
+					userTFCValidation = true;
 		     	}
-				
-				userTFNValidation = true;
 			})
 		}
-		
-		$("#taxFileCheck").attr("value",checkVal);
-		userTFCValidation = true;
+			console.log(userTFCValidation);
 			console.log(userTFCValidation);
 	})
-	
-	
-	
-	
 	
 	//userBSBNum validation
 	var userBSBNumValidation = false;
@@ -351,6 +389,7 @@ $(document).ready(function() {
 			userBSBNumValidation =  false;
      	}else {
 			if (!regularExpression.test(userBSBNum)) {
+				
 				$("#userBSBNCheck").html("Please enter 6 Numbers without '-' or space.");
 				$("#userBSBNCheck").attr("class", "check text-danger");
 				
@@ -358,11 +397,10 @@ $(document).ready(function() {
 				
 			} else {
 				$("#userBSBNCheck").html("");
-				
+				userBSBNumValidation = true;
 			}
      	}
-		
-		userBSBNumValidation = true;
+		console.log(userBSBNumValidation);
 	})
 	
 	//userBankAccountNumber validation
@@ -383,19 +421,19 @@ $(document).ready(function() {
 				
 			} else {
 				$("#userBANCheck").html("");
+				userBANValidation = true;
 			}
      	}
-     		
-		userBANValidation = true;
+		console.log(userBANValidation);
 	})
 	
 	//user Superannuation(Pension) Name validation
 	var userSANameValidation = false;
-	$("#saName").blur(function checkAddr1() {
+	$("#saFundName").blur(function checkAddr1() {
 		
-		var saName = $("#saName").val();
+		var saFundName = $("#saFundName").val();
 		
-		if(saName.length == 0) {
+		if(saFundName.length == 0) {
 			
 			$("#saNameCheck").html("Please enter Superannuation Name.");
 			$("#saNameCheck").attr("class", "check text-danger");
@@ -403,100 +441,91 @@ $(document).ready(function() {
 			
      	} else{
      		
-		$("#saNameCheck").html("");
-		userSANameValidation = true;
-		
+			$("#saNameCheck").html("");
+			userSANameValidation = true;
      	}
+		console.log(userSANameValidation);
 	})
 		
 	//user Superannuation(Pension) Number validation
 	var userSANumValidation = false;
-	$("#saNum").blur(function checkAddr1() {
+	$("#saFundNum").blur(function checkAddr1() {
 		
-		var saNum = $("#saNum").val();
+		var saFundNum = $("#saFundNum").val();
 		
-		if(saNum.length == 0) {
+		if(saFundNum.length == 0) {
 			
 			$("#saNumCheck").html("Please enter Superannuation Number without '-' or space.");
 			$("#saNumCheck").attr("class", "check text-danger");
 			
 			userSANumValidation =  false;
      	} else {
-     		
-		$("#saNumCheck").html("");
-		userSANumValidation = true;
-     		
+			$("#saNumCheck").html("");
+			userSANumValidation = true;
      	}
+		console.log(userSANumValidation);
 	})
 	
 	//Address Line 1 Validation (Address Line 2 is nullable)
 	var userAddr1Validation = false;
-	$("#homeAddressL1").blur(function checkAddr1() {
+	$("#addressL1").blur(function checkAddr1() {
 		
-		var userAddr1 = $("#homeAddressL1").val();
+		var userAddr1 = $("#addressL1").val();
 		
 		if(userAddr1.length == 0) {
 			userAddr1Validation =  false;
+     	} else {
+			userAddr1Validation = true;
      	}
-		
-		userAddr1Validation = true;
+		console.log(userAddr1Validation);
 	})
 	
 	//Home Address State Validation
 	var userStateValidation = false;
-	$("#homeAddressState").blur(function checkAddr1() {
+	$("#addressState").change(function checkAddr1() {
 		
-		var userAddr1 = $("#homeAddressState").val();
-		
-		if(homeAddressState.length == 0) {
+		var userAddr1 = $("#addressState").val();
+		console.log(userAddr1);
+		if(userAddr1 == null) {
 			userStateValidation =  false;
+     	} else {
+			userStateValidation = true;
      	}
-		
-		userStateValidation = true;
+		console.log(userStateValidation);
 	})
 	
 	
 	//Home Address Suburban Validation
 	var userSuburbanValidation = false;
-	$("#homeAddressSub").blur(function checkAddr1() {
+	$("#addressSub").blur(function checkAddr1() {
 		
-		var homeAddressSub = $("#homeAddressSub").val();
+		var homeAddressSub = $("#addressSub").val();
 		
 		if(homeAddressSub.length == 0) {
 			userSuburbanValidation =  false;
+     	} else {
+			userSuburbanValidation = true;
      	}
 		
-		userSuburbanValidation = true;
+		console.log(userSuburbanValidation);
 	})
 	
 	//Home Address Post Code Validation
 	var userPCValidation = false;
-	$("#homeAddressPostCode").blur(function checkAddr1() {
+	$("#addressPostCode").blur(function checkAddr1() {
 		
-		var homeAddressPostCode = $("#homeAddressPostCode").val();
-		
-		if(homeAddressPostCode.length == 0) {
-			userPCValidation =  false;
-     	}
-		
-		userPCValidation = true;
-	})
-	
-	//Home Address Post Code Validation
-	var userPCValidation = false;
-	$("#homeAddressPostCode").blur(function checkAddr1() {
-		
-		var homeAddressPostCode = $("#homeAddressPostCode").val();
+		var homeAddressPostCode = $("#addressPostCode").val();
 		
 		if(homeAddressPostCode.length == 0) {
 			userPCValidation =  false;
-     	}
-		
+     	} else {
 		userPCValidation = true;
+     	}
+		console.log(userPCValidation);
+
 	})
 	
 	//+++++++ Emergency Information(Name, Phone) can be nullable +++++
-	
 	
 	//Branch Number Validation
 	var branchValidation = false;
@@ -506,9 +535,10 @@ $(document).ready(function() {
 		
 		if(branchNum.length == 0) {
 			branchValidation =  false;
+     	} else {
+			branchValidation = true;
      	}
-		
-		branchValidation = true;
+		console.log(branchValidation);
 	})
 	//Position Validation
 	var positionValidation = false;
@@ -517,10 +547,11 @@ $(document).ready(function() {
 		var positionNum = $("#positionNum").val();
 		
 		if(positionNum.length == 0) {
-			positionValidation =  false;
+			positionValidation = false;
+     	} else {
+			positionValidation = true;
      	}
-		
-		positionValidation = true;
+		console.log(branchValidation);
 	})
 	//Work Start Date Validation
 	var wSDValidation = false;
@@ -529,10 +560,11 @@ $(document).ready(function() {
 		var positionNum = $("#workStartDate").val();
 		
 		if(workStartDate.length == 0) {
-			wSDValidation =  false;
+			wSDValidation = false;
+     	} else {
+			wSDValidation = true;
      	}
-		
-		wSDValidation = true;
+		console.log(branchValidation);
 	})
 	
 	//Terms Agree Validation
@@ -542,55 +574,65 @@ $(document).ready(function() {
 		var id=$("input[name=termsAgree]:checked").attr("id");
 		var value=$("input[name=termsAgree]:checked").val();
 		
-		if(termsAgree.length == 0) {
+		if(value == 0) {
 			taValidation =  false;
+     	} else {
+			$("#tAndC").attr("value",value);
+			
+			taValidation = true;
      	}
-		
-		$("#tAndC").attr("value",value);
-		
-		taValidation = true;
+		console.log(taValidation);
+
 	})
 	
 	// onsubmit condition
-	$("#formSubmit").click(function btnClick() {
-		if ( userEmailValidation && 
-				userPwValidation && 
-				userPwDoubleValidation && 
-				userNameValidation && 
-				userGenderValidation &&
-				userPhoneValidation && 
-				userBirthDayValidation &&
-				userTFCValidation &&
-				userTFNValidation &&
-				userBSBNumValidation &&
-				userBANValidation &&
-				userSANameValidation &&
-				userSANumValidation &&
-				userAddr1Validation && 
-				userStateValidation &&
-				userSuburbanValidation &&
-				userPCValidation &&
-				branchValidation &&
-				positionValidation &&
-				wSDValidation &&
-				taValidation
-				) {
-			
+	$("#submitBtn").click(function() {
+		if ( userEmailValidation && userPwValidation && 
+			userPwDoubleValidation && userNameValidation && 
+			userGenderValidation && userPhoneValidation && 
+			userBirthDayValidation && userTFCValidation &&
+			userTFNValidation && userBSBNumValidation &&
+			userBANValidation && userSANameValidation &&
+			userSANumValidation && userAddr1Validation && 
+			userStateValidation && userSuburbanValidation &&
+			userPCValidation && branchValidation &&
+			positionValidation && wSDValidation && taValidation
+		) {
 			$("#taxFileNum").attr("disabled", false);
-			$("#form").attr("onsubmit","return true");
 			
-			if($("#taxFileNum").val() == '---------'){
+			if($("#taxFileNum").val() == null || $("#taxFileNum").val() == ""){
 				$("#taxFileNum").attr("value", 0);
-			};
+			}
+			$("#joinForm").submit();
 			
 		} else {
+			console.log('userEmailValidation : '+userEmailValidation ); 
+			console.log('userPwValidation : '+userPwValidation ); 
+			console.log('userPwDoubleValidation : '+userPwDoubleValidation ); 
+			console.log('userNameValidation : '+userNameValidation ); 
+			console.log('userGenderValidation : '+userGenderValidation );
+			console.log('userPhoneValidation : '+userPhoneValidation ); 
+			console.log('userBirthDayValidation : '+userBirthDayValidation );
+			console.log('userTFCValidation : '+userTFCValidation );
+			console.log('userTFNValidation : '+userTFNValidation );
+			console.log('userBSBNumValidation : '+userBSBNumValidation );
+			console.log('userBANValidation : '+userBANValidation );
+			console.log('userSANameValidation : '+userSANameValidation );
+			console.log('userSANumValidation : '+userSANumValidation );
+			console.log('userAddr1Validation : '+userAddr1Validation ); 
+			console.log('userStateValidation : '+userStateValidation );
+			console.log('userSuburbanValidation : '+userSuburbanValidation );
+			console.log('userPCValidation : '+userPCValidation );
+			console.log('branchValidation : '+branchValidation );
+			console.log('positionValidation : '+positionValidation );
+			console.log('wSDValidation : '+wSDValidation );
+			console.log('taValidation : '+taValidation);
+			
 			$("#buttonCheck").html("There is/are blank cell in the form")
 			$("#buttonCheck").attr("class", "text-danger");
 			$("#form").attr("onsubmit","return false");
 		}
 	})
-	
-	
 })
 </script>
 
@@ -604,7 +646,7 @@ $(document).ready(function() {
 			<!-- form for informations to join -->
 			
 			<!-- taxFileNum's disabled attribution will be false when submit. -->
-			<form class="form-inline" action="/join" method="post" onsubmit="return false" style="display:flex;">
+			<form id="joinForm" class="form-inline" action="/join" method="post" style="display:flex;">
 				<div class="col-6">
 					<div id="personalInfo" class="form-group " style="padding: 10px;">
 						<h4>Personal Information</h4>
@@ -674,9 +716,9 @@ $(document).ready(function() {
 		
 					<!-- *****  user date of birth  ***** -->
 						<div class="form-group">
-							<label for="userDateOfBirth" class="col-sm-8 control-label" >Date of Birth</label>
+							<label for="dateOfBirth" class="col-sm-8 control-label" >Date of Birth</label>
 							<div class="col-sm-10">
-								<input type="date" class="form-control input-sm" id="userDateOfBirth" name="userDateOfBirth" value="">
+								<input type="Date" class="form-control input-sm" id="dateOfBirth" name="dateOfBirth" value="">
 							</div>
 						</div>
 						<!-- use AJAX for blank or not -->
@@ -684,45 +726,45 @@ $(document).ready(function() {
 						
 											<!-- *****  user Home Address Line 1  ***** -->
 						<div class="form-group">
-							<label for="homeAddressL1" class="col-sm-8 control-label">Home
+							<label for="addressL1" class="col-sm-8 control-label">Home
 								Address Line 1</label><br>
 							<div class="col-sm-10">
-								<input type="text" class="form-control input-sm" id="homeAddressL1" name="homeAddressL1" placeholder="Home Address Line 1">
+								<input type="text" class="form-control input-sm" id="addressL1" name="addressL1" placeholder="Home Address">
 							</div>
 						</div>
 						
 					<!-- *****  user Home Address Line 2  ***** -->
 						<div class="form-group">
-							<label for="homeAddressL2" class="col-sm-8 control-label">Home Address Line 2</label>
+							<label for="addressL2" class="col-sm-8 control-label">Home Address Line 2</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control input-sm" id="homeAddressL2" name="homeAddressL2" placeholder="Home Address Line 2">
+								<input type="text" class="form-control input-sm" id="addressL2" name="addressL2" placeholder="Home Address">
 							</div>
 						</div>
 						
 						<div class="row">
 					<!-- *****  user Home Address State  ***** -->
 							<div class="form-group col-4">
-								<label for="state" class="control-label">State</label>
-								<select class="form-select col-sm-6" id="state" name="state">
+								<label for="addressState" class="control-label">State</label>
+								<select class="form-select col-sm-6" id="addressState" name="addressState">
 									<option>-- State --</option>
 									<c:forEach var="i" items="${stateList }">
 										<option value="${i}">${i}</option>
 									</c:forEach>
 								</select>
 							</div>
-						
 					<!-- *****  user Home Address Suburban  ***** -->
 							<div class="form-group col-4" id="suburbBox">
-								<label for="suburb" class="control-label">Suburb</label>
-								<select class="form-select col-sm-6" id="suburb" name="suburb">
+								<label for="addressSub" class="control-label">Suburb</label>
+								<select class="form-select col-sm-6" id="addressSub" name="addressSub">
 									<option value="noSub">-- Suburban --</option>
 								</select>
 							</div>
 						
+						
 					<!-- *****  user Home Address Post Code  ***** -->
 							<div class="form-group col-4" id="postcodeBox">
-								<label for="postcode" class="control-label">Post Code</label>
-								<select class="form-select col-sm-6" id="postcode">
+								<label for="addressPostCode" class="control-label">Post Code</label>
+								<select class="form-select col-sm-6" id="addressPostCode">
 									<option value="000">-- Postcode --</option>
 								</select>
 							</div>
@@ -746,9 +788,9 @@ $(document).ready(function() {
 					
 								<!-- *****  user Emergency Contact's Phone  ***** -->
 									<div class="form-group">
-										<label for="userEmerPhone" class="col-sm-8 control-label">Phone Number</label>
+										<label for="emerPhone" class="col-sm-8 control-label">Phone Number</label>
 										<div class="col-sm-10">
-											<input type="text" class="form-control input-sm" id="userEmerPhone"	name="userEmerPhone" placeholder="User's Emergency Phone">
+											<input type="text" class="form-control input-sm" id="emerPhone"	name="emerPhone" placeholder="User's Emergency Phone">
 										</div>
 									</div>
 								</div>
@@ -782,7 +824,7 @@ $(document).ready(function() {
 									<div class="form-group">
 										<label for="workStartDate" class="col-sm-6 control-label">Work Start Date</label>
 										<div class="col-sm-10">
-										<input type="date" class="form-control input-sm" id="workStartDate" name="workStartDate">
+											<input type="Date" class="form-control input-sm" id="workStartDate" name="workStartDate" value="">
 										</div>
 									</div>
 						<div id="taxFileCheck" class="form-group">
@@ -828,9 +870,9 @@ $(document).ready(function() {
 		
 					<!-- *****  user Superannuation(Pension) Name  ***** -->
 						<div class="form-group">
-							<label for="saName" class="col-sm-8 control-label">Superannuation Name</label><br>
+							<label for="saFundName" class="col-sm-8 control-label">Superannuation Name</label><br>
 							<div class="col-sm-10">
-								<input type="text" class="form-control input-sm" id="saName" name="saName" placeholder="Superannuation Name">
+								<input type="text" class="form-control input-sm" id="saFundName" name="saFundName" placeholder="Superannuation Name">
 							</div>
 						</div>
 						<!-- use AJAX for format checking -->
@@ -840,21 +882,19 @@ $(document).ready(function() {
 					<!-- *****  user Superannuation(Pension) Number  ***** -->
 						<div class="form-group">
 
-							<label for="saNum" class="col-sm-8 control-label">Superannuation Number</label>
+							<label for="saFundNum" class="col-sm-8 control-label">Superannuation Number</label>
 							<div class="col-sm-10">
-								<input type="text" class="form-control input-sm" id="saNum"	name="saNum" placeholder="Superannuation Number">
+								<input type="text" class="form-control input-sm" id="saFundNum"	name="saFundNum" placeholder="Superannuation Number">
 							</div>
 						</div>
 						<!-- use AJAX for format checking -->
 						<div class="check" id="saNumCheck"></div>
 						
-					</div>
-						<!-- Working Status End -->
-						<!-- *****  user Tax File Check(Presence or Absence)  ***** -->
-		
-							</div>
-							
-					</div>
+						</div>
+							<!-- Working Status End -->
+							<!-- *****  user Tax File Check(Presence or Absence)  ***** -->
+								</div>
+						</div>
 					</form>
 				</div>
 				<div class="row">
@@ -868,9 +908,10 @@ $(document).ready(function() {
 						</div>
 					</div>
 					
-					<div id="button" style="padding:30px;">
-						<button class="position-absolute" type="button" id="formSubmit" name="formSubmit" style="margin:0 auto;">Sign Up</button>
-						<div id="buttonCheck"></div>
+					<div id="buttonCheck"></div>
+					<div id="button" style="padding:30px;text-align:center;">
+						<button class="btn btn-secondary btn-lg" type="button" id="cancelBtn" name="cancelBtn">Cancel</button>
+						<button class="btn btn-secondary btn-lg" type="button" id="submitBtn" name="submitBtn">Sign Up</button>
 					</div>
 				</div>
 	</div>

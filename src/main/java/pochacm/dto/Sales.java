@@ -1,6 +1,6 @@
 package pochacm.dto;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Sales {
 	private int salesNum;
@@ -8,11 +8,11 @@ public class Sales {
 	private int recipeNum;
 	private Date salesDate;
 	private int salesQty;
-	
+	private int salesSourceNum;
 	@Override
 	public String toString() {
 		return "Sales [salesNum=" + salesNum + ", userNum=" + userNum + ", recipeNum=" + recipeNum + ", salesDate="
-				+ salesDate + ", salesQty=" + salesQty + "]";
+				+ salesDate + ", salesQty=" + salesQty + ", salesSourceNum=" + salesSourceNum + "]";
 	}
 	public int getSalesNum() {
 		return salesNum;
@@ -26,10 +26,10 @@ public class Sales {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	public int getrecipeNum() {
+	public int getRecipeNum() {
 		return recipeNum;
 	}
-	public void setrecipeNum(int recipeNum) {
+	public void setRecipeNum(int recipeNum) {
 		this.recipeNum = recipeNum;
 	}
 	public Date getSalesDate() {
@@ -44,6 +44,11 @@ public class Sales {
 	public void setSalesQty(int salesQty) {
 		this.salesQty = salesQty;
 	}
-	
+	public int getSalesSourceNum() {
+		return salesSourceNum;
+	}
+	public void setSalesSourceNum(int salesSourceNum) {
+		this.salesSourceNum = salesSourceNum;
+	}
 	
 }

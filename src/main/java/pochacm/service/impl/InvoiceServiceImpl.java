@@ -6,8 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import pochacm.dao.face.CMDao;
+import pochacm.dao.face.InvoiceDao;
 import pochacm.dto.Invoice;
 import pochacm.dto.Item;
 import pochacm.dto.ItemCategory;
@@ -15,16 +16,14 @@ import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
-import pochacm.dto.Sales;
-import pochacm.dto.SalesSource;
 import pochacm.dto.SecondaryUnit;
-import pochacm.service.face.CMService;
+import pochacm.service.face.InvoiceService;
 
 @Service
-public class CMServiceImpl implements CMService {
-	private static final Logger logger = LoggerFactory.getLogger(CMServiceImpl.class);
+public class InvoiceServiceImpl implements InvoiceService {
+	private static final Logger logger = LoggerFactory.getLogger(InvoiceServiceImpl.class);
 
-	@Autowired CMDao cmDao;
+	@Autowired InvoiceDao invoiceDao;
 	
 	//invoice Paging
 	@SuppressWarnings("unlikely-arg-type")
@@ -47,7 +46,7 @@ public class CMServiceImpl implements CMService {
 		String category = paging.getCategory();
 		
 		//select total count of invoice
-		int totalCount = cmDao.selectCntAllInvoice(paging);
+		int totalCount = invoiceDao.selectCntAllInvoice(paging);
 		
 		logger.info("#{}. totalCount : {}", idx++, totalCount);
 		
@@ -65,93 +64,54 @@ public class CMServiceImpl implements CMService {
 	//Get invoice list
 	@Override
 	public List<Invoice> getInvoiceList(Paging paging) {
-		return cmDao.selectAllInvoice(paging);
+		return invoiceDao.selectAllInvoice(paging);
 	}
 
 	//view invoice detail
 	@Override
 	public List<Item> selectItemsByInvoiceNum(Invoice invoice) {
-		return cmDao.selectItemsByInvoiceNum(invoice);
-	}
+		return invoiceDao.selectItemsByInvoiceNum(invoice);
+	}	
 
 	@Override
 	public Invoice getInvoiceByInvoiceNum(Invoice invoice) {
-		return cmDao.getInvoiceByInvoiceNum(invoice);
+		return invoiceDao.getInvoiceByInvoiceNum(invoice);
 	}
 	
 	@Override
 	public Object getItemInfoByItem(Item item) {
-		return cmDao.selectItemInfoByItemNum(item);
+		return invoiceDao.selectItemInfoByItemNum(item);
 	}
-	@SuppressWarnings("unlikely-arg-type")
-	@Override
-	public Paging getSalesPaging(Paging paging) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. getSalesPaging", idx++);
-		
-		int page = 0;
-		
-		if( Integer.toString(paging.getCurPage()) != null && !"".equals(paging.getCurPage()) ) {
-			page = paging.getCurPage();
-			logger.info("#{}. paging.getCurPage() : {}", idx++, paging.getCurPage());
-		} else {
-			logger.warn("there is no paging.getCurPage() or null value");
-		}
-		
-		String keyword = paging.getKeyword();
-		String category = paging.getCategory();
-		
-		//select total count of invoice
-		int totalCount = cmDao.selectCntAllSales(paging);
-		
-		logger.info("#{}. totalCount : {}", idx++, totalCount);
-		
-		//create Paging dto - calculate paging
-		Paging pagingReturn = new Paging(totalCount,page);
-		
-		logger.info("#{}. pagingReturn : {}", idx++, pagingReturn);
-		pagingReturn.setCategory(category);
-		pagingReturn.setKeyword(keyword);
-		logger.info("#{}. pagingReturn : {}", idx++, pagingReturn);
-		
-		return pagingReturn;
-	}
+	
 
-	@Override
-	public List<Sales> getSalesList(Paging paging) {
-		return cmDao.selectAllSales(paging);
-	}
+	
 
 	@Override
 	public List<OrderUnit> getOrderUnitList() {
-		return cmDao.getOrderUnitList();
+		return invoiceDao.getOrderUnitList();
 	}
 
 	@Override
 	public List<PrimaryUnit> getPrimaryUnitList() {
-		return cmDao.getPrimaryUnitList();
+		return invoiceDao.getPrimaryUnitList();
 	}
 
 	@Override
 	public List<SecondaryUnit> getSecondaryUnitList() {
-		return cmDao.getSecondaryUnitList();
+		return invoiceDao.getSecondaryUnitList();
 	}
 
 	@Override
 	public List<ItemCategory> getItemCategoryList() {
-		return cmDao.getItemCategoryList();
+		return invoiceDao.getItemCategoryList();
 	}
 
 	@Override
 	public List<String> getCategoryByKeyword(String keyword) {
-		return cmDao.getCategoryByKeyword();
+		return invoiceDao.getCategoryByKeyword();
 	}
 
-	@Override
-	public List<SalesSource> getSalesSourceList() {
-		return cmDao.getSalesSourceList();
-	}
+	
 
 	@Override
 	public Recipe getRecipeDtoWithRecipeName(String menuName) {
@@ -169,13 +129,26 @@ public class CMServiceImpl implements CMService {
 
 	@Override
 	public List<Recipe> getMenuSearchList(Recipe recipe) {
-		return cmDao.selectMenuSearchList(recipe);
+		return invoiceDao.selectMenuSearchList(recipe);
+	}
+
+	
+
+	@Override
+	public List<Recipe> makeRecipeListFromParams(Model model) {
+		
+		return null;
 	}
 
 	@Override
-	public Recipe getRecipeByRecipeName(Recipe recipe) {
-		return cmDao.selectMenuBymenuName(recipe);
+	public void updateItemInformation(Item item) {
+		invoiceDao.updateItemInformation(item);
 	}
+
+	
+
+	
+
 
 
 

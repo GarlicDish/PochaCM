@@ -13,7 +13,7 @@ import pochacm.dto.Sales;
 import pochacm.dto.SalesSource;
 import pochacm.dto.SecondaryUnit;
 
-public interface CMDao {
+public interface InvoiceDao {
 
 	int selectCntAllInvoice(String keyword, String category);
 
@@ -37,14 +37,8 @@ public interface CMDao {
 
 	List<String> getCategoryByKeyword();
 
-	int selectCntAllSales(Paging paging);
-
-	List<Sales> selectAllSales(Paging paging);
-
-	List<SalesSource> getSalesSourceList();
-
 	List<Recipe> selectMenuSearchList(Recipe recipe);
 
-	Recipe selectMenuBymenuName(Recipe recipe);
+	void updateItemInformation(Item item);
 
 }

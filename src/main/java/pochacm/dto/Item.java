@@ -10,23 +10,21 @@ public class Item {
 	private String itemName;
 	private String itemCode;
 	private int orderUnitNum;
-	private int itemUnitQty;
 	private int itemOrderUnitPrice;
 	private int primaryUnitNum;
 	private int secondaryUnitNum;
-	private int itemTarget_waste_percent;
+	private int itemTargetWastePercent;
 	private Date itemExpiryDate;
 	private Date itemLastUpdate;
 	private int userNum;
-	
 	@Override
 	public String toString() {
 		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", supplierNum=" + supplierNum + ", itemCateNum="
 				+ itemCateNum + ", itemName=" + itemName + ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum
-				+ ", itemUnitQty=" + itemUnitQty + ", itemOrderUnitPrice=" + itemOrderUnitPrice + ", primaryUnitNum="
-				+ primaryUnitNum + ", secondaryUnitNum=" + secondaryUnitNum + ", itemTarget_waste_percent="
-				+ itemTarget_waste_percent + ", itemExpiryDate=" + itemExpiryDate + ", itemLastUpdate=" + itemLastUpdate
-				+ ", userNum=" + userNum + "]";
+				+ ", itemOrderUnitPrice=" + itemOrderUnitPrice + ", primaryUnitNum=" + primaryUnitNum
+				+ ", secondaryUnitNum=" + secondaryUnitNum + ", itemTargetWastePercent=" + itemTargetWastePercent
+				+ ", itemExpiryDate=" + itemExpiryDate + ", itemLastUpdate=" + itemLastUpdate + ", userNum=" + userNum
+				+ "]";
 	}
 	public int getItemNum() {
 		return itemNum;
@@ -70,12 +68,6 @@ public class Item {
 	public void setOrderUnitNum(int orderUnitNum) {
 		this.orderUnitNum = orderUnitNum;
 	}
-	public int getItemUnitQty() {
-		return itemUnitQty;
-	}
-	public void setItemUnitQty(int itemUnitQty) {
-		this.itemUnitQty = itemUnitQty;
-	}
 	public int getItemOrderUnitPrice() {
 		return itemOrderUnitPrice;
 	}
@@ -94,11 +86,11 @@ public class Item {
 	public void setSecondaryUnitNum(int secondaryUnitNum) {
 		this.secondaryUnitNum = secondaryUnitNum;
 	}
-	public int getItemTarget_waste_percent() {
-		return itemTarget_waste_percent;
+	public int getItemTargetWastePercent() {
+		return itemTargetWastePercent;
 	}
-	public void setItemTarget_waste_percent(int itemTarget_waste_percent) {
-		this.itemTarget_waste_percent = itemTarget_waste_percent;
+	public void setItemTargetWastePercent(int itemTargetWastePercent) {
+		this.itemTargetWastePercent = itemTargetWastePercent;
 	}
 	public Date getItemExpiryDate() {
 		return itemExpiryDate;
@@ -118,8 +110,4 @@ public class Item {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	
-	
-	
-	
 }
