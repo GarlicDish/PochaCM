@@ -1,6 +1,7 @@
 package pochacm.dao.face;
 
 import java.util.List;
+import java.util.Map;
 
 import pochacm.dto.Branch;
 import pochacm.dto.Position;
@@ -33,6 +34,12 @@ public interface UserDao {
 	List<Position> getAllPosition();
 
 	List<Branch> getAllBranch();
+
+	int selectUserValidationByEmail(User user);
+
+	Map<String, String> selectUserByUserNum(User user);
+
+	int selectUserByUserNumAndPW(User user);
 
 //	Object getAllState();
 //

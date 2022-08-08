@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,11 +69,19 @@ public class UserController {
 			// login success
 
 			logger.info("#{}. loginResult = {}", idx++, loginResult);
-
+			
+			boolean isValid = userService.getUserValidationByEmail(user);
+			
+			if( !isValid ) {
+				session.invalidate();
+				return "redirect:/login";
+			}
+			
 			session.setAttribute("login", loginResult);
 			session.setAttribute("userNum", userService.getUserNoByEmail(user));
 			session.setAttribute("userEmail", user.getUserEmail());
 			session.setAttribute("positionNum", userService.getUserPositionByEmail(user));
+			session.setAttribute("invalidation", isValid);
 
 			logger.info("#{}. session login = {}", idx++, session.getAttribute("login"));
 			logger.info("#{}. session userNum = {}", idx++, session.getAttribute("userNum"));
@@ -80,6 +90,7 @@ public class UserController {
 
 			// referer check
 			logger.info("#{}. session referer: " + session.getAttribute("redirectURL"));
+			
 //			String ss = (String) session.getAttribute("redirectURL");
 
 			// checking the previous page was login page or not.
@@ -185,10 +196,60 @@ public class UserController {
 		}
 	}
 	
-	
-	
-	
+	@GetMapping("/myProfile")
+	public String viewMyProfile(HttpSession session, Model model) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. /myProfile [GET]", idx++);
+		
+		User user = new User();
+		user.setUserNum((int) session.getAttribute("userNum"));
+		logger.info("#{}. user : {}", idx++, user);
+		
+		Map<String,String> map = userService.getUserByUserNum(user);
+		logger.info("#{}. map : {}", idx++, map);
 
+		model.addAttribute("userName",map.get("USER_NAME"));
+		model.addAttribute("userPhone",map.get("USER_PHONE"));
+		model.addAttribute("userEmail",map.get("USER_EMAIL"));
+		model.addAttribute("branchName",map.get("BRANCH_NAME"));
+		model.addAttribute("positionName",map.get("POSITION_NAME"));
+		
+		return "user/myProfile";
+	}
+	
+	@GetMapping("/myprofile/validation")
+	public String validationForUpdateMyProfile() {
+		
+		return "user/validationPopUp";
+	}
+	
+	@PostMapping("/myprofile/validation")
+	public String validationSubmission(HttpSession session, String password) {
+		User user = new User();
+		user.setUserNum((int)session.getAttribute("userNum"));
+		user.setUserPassword(password);
+		boolean isValidated = userService.checkValidation(user);
+		if (isValidated) {
+			
+			return "/myProfile/update";
+		} else {
+
+			return "redirect: /myProfile";
+		}
+	}
+	
+	@GetMapping("/myProfile/update")
+	public String updateMyProfile(HttpSession session, Model model) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. /myProfile/update [GET]", idx++);
+		
+		return "user/myProfileUpdate";
+	}
+
+	
+	
 	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
 	
 //	class userEmail {

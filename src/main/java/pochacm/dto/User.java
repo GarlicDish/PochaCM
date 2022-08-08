@@ -34,6 +34,7 @@ public class User {
 	private int termsAgree;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date signUpDate;
+	private int validationBySup;
 	private int userActivate;
 	@Override
 	public String toString() {
@@ -45,8 +46,8 @@ public class User {
 				+ workStartDate + ", emerName=" + emerName + ", emerPhone=" + emerPhone + ", taxFileCheck="
 				+ taxFileCheck + ", taxFileNum=" + taxFileNum + ", bsbNum=" + bsbNum + ", bankAccountNum="
 				+ bankAccountNum + ", saFundName=" + saFundName + ", saFundNum=" + saFundNum + ", termsAgree="
-				+ termsAgree + ", signUpDate=" + signUpDate + ", userActivate=" + userActivate + ", getClass()="
-				+ getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+				+ termsAgree + ", signUpDate=" + signUpDate + ", validationBySup=" + validationBySup + ", userActivate="
+				+ userActivate + "]";
 	}
 	public int getUserNum() {
 		return userNum;
@@ -198,12 +199,19 @@ public class User {
 	public void setSignUpDate(Date signUpDate) {
 		this.signUpDate = signUpDate;
 	}
+	public int getValidationBySup() {
+		return validationBySup;
+	}
+	public void setValidationBySup(int validationBySup) {
+		this.validationBySup = validationBySup;
+	}
 	public int getUserActivate() {
 		return userActivate;
 	}
 	public void setUserActivate(int userActivate) {
 		this.userActivate = userActivate;
 	}
+	
 	
 	
 	

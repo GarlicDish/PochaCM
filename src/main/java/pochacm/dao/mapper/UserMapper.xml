@@ -58,5 +58,21 @@
 		ORDER BY branch_num
 	</select>
 	
+	<select id="selectUserValidationByEmail" parameterType="pochacm.dto.User" resultType="int">
+		SELECT validation_by_sup FROM user_info
+		WHERE user_email = #{userEmail}
+	</select>
 	
+	<select id="selectUserByUserNum" parameterType="pochacm.dto.User" resultType="hashmap">
+		SELECT user_name,user_email,user_phone,branch_name,position_name 
+		FROM user_info u, branch b, position p
+		WHERE user_num = #{userNum}	
+			AND u.branch_num = b.branch_num (+)
+			AND u.position_num = p.position_num (+)
+	</select>
+	<select id="selectUserByUserNumAndPW" parameterType="pochacm.dto.User" resultType="int">
+		SELECT count(*) FROM user_info
+		WHERE user_num = #{userNum }
+			AND user_password = #{userPassword }
+	</select>
 </mapper>

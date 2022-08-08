@@ -1,6 +1,7 @@
 package pochacm.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -96,7 +97,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserEmailFromParmater(String userEmail) {
 		int idx = 0;
-		
 		logger.info("#{}. Entering loginService - getUserEmailFromParmater", idx++);
 			User user = new User();
 			user.setUserEmail(userEmail);
@@ -111,6 +111,50 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Branch> getAllBranch() {
 		return userDao.getAllBranch();
+	}
+
+	@Override
+	public boolean getUserValidationByEmail(User user) {
+			
+		int isValid = userDao.selectUserValidationByEmail(user);
+		
+		if (isValid > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public Map<String,String> getUserByUserNum(User user) {
+		int idx = 0;
+		logger.info("#{}. Entering loginService - getUserByUserNum", idx++);
+
+		logger.info("#{}. userNum : {}", idx++, user.getUserNum());
+		
+		Map<String,String> map = userDao.selectUserByUserNum(user);
+		
+		return map;
+	}
+
+	@Override
+	public boolean checkValidation(User user) {
+		int idx = 0;
+		logger.info("#{}. Entering loginService - getUserByUserNum", idx++);
+		
+		logger.info("#{}. user : {}", idx++, user);
+		
+		int isValidated = userDao.selectUserByUserNumAndPW(user);
+		if (isValidated > 0) {
+			logger.info("#{}. isValidated : {}", idx++, isValidated);
+			
+			return true;
+		} else {
+			
+			logger.info("#{}. isValidated : {}", idx++, isValidated);
+			return false;
+		}
+		
 	}
 
 

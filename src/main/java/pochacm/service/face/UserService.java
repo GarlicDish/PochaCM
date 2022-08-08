@@ -1,6 +1,7 @@
 package pochacm.service.face;
 
 import java.util.List;
+import java.util.Map;
 
 import pochacm.dto.AUPostcode;
 import pochacm.dto.Branch;
@@ -42,6 +43,12 @@ public interface UserService {
 	List<Position> getAllPosition();
 
 	List<Branch> getAllBranch();
+
+	boolean getUserValidationByEmail(User user);
+
+	Map<String, String> getUserByUserNum(User user);
+
+	boolean checkValidation(User user);
 
 
 }

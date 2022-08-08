@@ -636,11 +636,6 @@ $(document).ready(function() {
 })
 </script>
 
-<!-- Page content wrapper-->
-<div id="page-content-wrapper">
-
-	<!-- Page content-->
-	<div class="container-fluid">
 		<h1 class="mt-4">Sign Up</h1>
 			<div class="row">
 			<!-- form for informations to join -->
@@ -914,7 +909,5 @@ $(document).ready(function() {
 						<button class="btn btn-secondary btn-lg" type="button" id="submitBtn" name="submitBtn">Sign Up</button>
 					</div>
 				</div>
-	</div>
-</div>
 	
 <%@ include file="../layout/footer.jsp"%>
