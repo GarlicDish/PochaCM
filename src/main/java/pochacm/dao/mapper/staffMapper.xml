@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="pochacm.dao.face.StaffDao">
+	<select id="selectAllBranchStaffByUserNum" parameterType="pochacm.dto.User" resultType="hashmap">
+		SELECT * FROM ( 
+		    SELECT rownum rnum, ol.*
+		    FROM (
+		        SELECT u.*, p.position_name, b.branch_name
+		        FROM user_info u, position p, branch b, ( 
+		            SELECT uu.branch_num uun
+		            FROM user_info uu 
+		            WHERE uu.user_num = #{userNum }
+		        ) ft
+		        WHERE u.position_num = p.position_num (+)
+		            AND u.branch_num = b.branch_num (+)
+		            <choose>
+			            <when test='positionNum == 1'>
+				            AND u.branch_num = uun 
+			            </when>
+		            </choose>
+		        ORDER BY 
+		        	<choose>
+			            <when test='positionNum == 0'>
+							b.branch_name ASC,
+			            </when>
+		            </choose>
+		        u.position_num ASC, u.user_name DESC
+		    ) ol
+		    ORDER BY rnum ASC
+		)
+	</select>
+</mapper>

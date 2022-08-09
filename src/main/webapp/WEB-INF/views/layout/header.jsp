@@ -62,6 +62,9 @@
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/invoice?curPage=1">Invoice</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/sales">Sales</a>
                 <a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/myProfile">My Profile</a>
+                <c:if test="${positionNum < 2 && positionNum ne null }">
+                	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/staff">Staff Management</a>
+                </c:if>
                 <c:if test="${ empty userNum ||  empty userEmail}">
                 	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/login">LogIn</a>
                 	<a class="list-group-item list-group-item-action list-group-item-light p-3" href="<%= request.getContextPath() %>/join">Sign Up</a>

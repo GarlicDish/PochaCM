@@ -791,7 +791,7 @@ $(document).ready(function() {
 						<!-- *****  Branch where user works at  ***** -->
 									<div class="form-group">
 										<label for="branchNum" class="col-sm-6 control-label">Branch</label>
-										<select class="form-select col-sm-6" id="branchNum">
+										<select class="form-select col-sm-6" id="branchNum" name="branchNum">
 											<option>---Branch Name ---</option>
 											<c:forEach items="${branchList }" var="i">
 												<option value="${i.BRANCH_NUM }">${i.BRANCH_NAME }</option>
@@ -802,7 +802,7 @@ $(document).ready(function() {
 						<!-- *****  Position of user  ***** -->
 									<div class="form-group">
 										<label for="positionNum" class="col-sm-6 control-label">Position</label>
-										<select class="form-select col-sm-6" id="positionNum">
+										<select class="form-select col-sm-6" id="positionNum" name="positionNum">
 											<option>---Position---</option>
 											<c:forEach items="${positionList }" var="i">
 												<option value="${i.POSITION_NUM }">${i.POSITION_NAME }</option>
