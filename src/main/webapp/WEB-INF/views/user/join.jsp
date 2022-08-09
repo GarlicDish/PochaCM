@@ -82,11 +82,6 @@ $(document).ready(function() {
             })
         })
 
-	// SHOW SELECTED VALUE.
-	$('#addressState').change(function () {
-	    $('#msg').text('Selected Item: ' + this.options[this.selectedIndex].text);
-	})
-
 	// Email validation and duplication test
 	var userEmailValidation = false; //set as false before checking
 	

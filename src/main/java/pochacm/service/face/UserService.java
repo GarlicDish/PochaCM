@@ -50,5 +50,7 @@ public interface UserService {
 
 	boolean checkValidation(User user);
 
+	void updateUserInfo(User user);
+
 
 }

@@ -130,9 +130,10 @@ public class UserServiceImpl implements UserService {
 		int idx = 0;
 		logger.info("#{}. Entering loginService - getUserByUserNum", idx++);
 
-		logger.info("#{}. userNum : {}", idx++, user.getUserNum());
+		logger.info("#{}. user : {}", idx++, user);
 		
 		Map<String,String> map = userDao.selectUserByUserNum(user);
+		logger.info("#{}. map : {}", idx++, map);
 		
 		return map;
 	}
@@ -155,6 +156,16 @@ public class UserServiceImpl implements UserService {
 			return false;
 		}
 		
+	}
+
+	@Override
+	public void updateUserInfo(User user) {
+		int idx = 0;
+		logger.info("#{}. Entering loginService - updateUserInfo", idx++);
+		logger.info("#{}. user : {}", idx++, user);
+
+		userDao.updateUserInfo(user);
+				
 	}
 
 

@@ -214,6 +214,8 @@ public class UserController {
 		model.addAttribute("userEmail",map.get("USER_EMAIL"));
 		model.addAttribute("branchName",map.get("BRANCH_NAME"));
 		model.addAttribute("positionName",map.get("POSITION_NAME"));
+		model.addAttribute("branchAddress",map.get("BRANCH_ADDRESS"));
+		model.addAttribute("branchPhone",map.get("BRANCH_PHONE"));
 		
 		return "user/myProfile";
 	}
@@ -224,20 +226,6 @@ public class UserController {
 		return "user/validationPopUp";
 	}
 	
-	@PostMapping("/myprofile/validation")
-	public String validationSubmission(HttpSession session, String password) {
-		User user = new User();
-		user.setUserNum((int)session.getAttribute("userNum"));
-		user.setUserPassword(password);
-		boolean isValidated = userService.checkValidation(user);
-		if (isValidated) {
-			
-			return "/myProfile/update";
-		} else {
-
-			return "redirect: /myProfile";
-		}
-	}
 	
 	@GetMapping("/myProfile/update")
 	public String updateMyProfile(HttpSession session, Model model) {
@@ -248,7 +236,72 @@ public class UserController {
 		return "user/myProfileUpdate";
 	}
 
+	@PostMapping("/myProfile/update")
+	public String validationSubmission(HttpSession session, Model model, String userPassword) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. /myProfile/update [POST]", idx++);
+		
+		User user = new User();
+		user.setUserNum((int)session.getAttribute("userNum"));
+		user.setUserPassword(userPassword);
+		logger.info("#{}. user : {}", idx++, user);
+		
+		//check userNum and password is matched or not
+		boolean isValidated = userService.checkValidation(user);
+		
+		logger.info("#{}. isValidated : {}", idx++, isValidated);
+		
+		if (isValidated) {
+			Map<String,String> map = userService.getUserByUserNum(user);
+			logger.info("#{}. map : {}", idx++, map);
+			
+
+			CSVReader csvReader = new CSVReader();
+			
+			List<List<String>> addressList = csvReader.readCSV();
+//			logger.info("#{}. csvReader.readCSV() : {}", idx++, addressList);
+			
+			//GET STATE LIST FROM CSV FILE
+			List<String> stateList1 = new ArrayList<>();
+			for(int i=0; i < addressList.size() ;i++) {
+				String state = addressList.get(i).get(3).toString();
+//						logger.info("#{}. state : {}", idx++, state);
+				stateList1.add(state);
+			}
+			Set<String> set = new HashSet<String>(stateList1);
+			List<String> stateList = new ArrayList<String>(set);
+			stateList.remove("state_code");
+			stateList.sort(null);
+			logger.info("#{}. stateList : {}", idx++, stateList);
+			
+			model.addAttribute("stateList", stateList);
+			model.addAttribute("branchList", userService.getAllBranch());
+			logger.info("#{}. model.getAttribute(\"branchList\") : {}", idx++, model.getAttribute("branchList"));
+			model.addAttribute("positionList", userService.getAllPosition());
+			logger.info("#{}. model.getAttribute(\"positionList\") : {}", idx++, model.getAttribute("positionList"));
+			
+			model.addAttribute("map", map);
+			
+			return "user/myProfileUpdate";
+		} else {
+			
+			return "redirect: /myProfile";
+		}
+	}
 	
+	@PostMapping("/myProfile/updateSubmit")
+	public String moveToUpdateProfile(HttpSession session, Model model, User user) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. /myProfile/updateSubmit [POST]", idx++);
+		logger.info("#{}. user : {}", idx++, user);
+		
+		userService.updateUserInfo(user);
+		
+		
+		return "redirect: /myProfile";
+	}
 	
 	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
 	
@@ -263,6 +316,7 @@ public class UserController {
 //	        return email;
 //	    }
 //	}
+	
 	//Check email duplication
 	@GetMapping("/join/emailCheck")
 	@ResponseBody

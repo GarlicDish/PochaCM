@@ -26,9 +26,9 @@ public class User {
 	private String emerName;
 	private String emerPhone;
 	private int taxFileCheck;
-	private int taxFileNum;
+	private long taxFileNum;
 	private int bsbNum;
-	private int bankAccountNum;
+	private long bankAccountNum;
 	private String saFundName;
 	private String saFundNum;
 	private int termsAgree;
@@ -157,10 +157,10 @@ public class User {
 	public void setTaxFileCheck(int taxFileCheck) {
 		this.taxFileCheck = taxFileCheck;
 	}
-	public int getTaxFileNum() {
+	public long getTaxFileNum() {
 		return taxFileNum;
 	}
-	public void setTaxFileNum(int taxFileNum) {
+	public void setTaxFileNum(long taxFileNum) {
 		this.taxFileNum = taxFileNum;
 	}
 	public int getBsbNum() {
@@ -169,10 +169,10 @@ public class User {
 	public void setBsbNum(int bsbNum) {
 		this.bsbNum = bsbNum;
 	}
-	public int getBankAccountNum() {
+	public long getBankAccountNum() {
 		return bankAccountNum;
 	}
-	public void setBankAccountNum(int bankAccountNum) {
+	public void setBankAccountNum(long bankAccountNum) {
 		this.bankAccountNum = bankAccountNum;
 	}
 	public String getSaFundName() {
@@ -211,7 +211,6 @@ public class User {
 	public void setUserActivate(int userActivate) {
 		this.userActivate = userActivate;
 	}
-	
 	
 	
 	

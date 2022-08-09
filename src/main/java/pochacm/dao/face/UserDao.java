@@ -41,6 +41,8 @@ public interface UserDao {
 
 	int selectUserByUserNumAndPW(User user);
 
+	void updateUserInfo(User user);
+
 //	Object getAllState();
 //
 //	Object getAllSuburb();

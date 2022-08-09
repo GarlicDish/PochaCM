@@ -11,6 +11,14 @@
     <link rel="icon" type="image/x-icon" href="../../resources/assets/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../../resources/css/styles.css" rel="stylesheet" />
+    
+    <script type="text/javascript">
+    	$(doucment).ready(function(){
+    		$("#submitBtn").click(function(){
+    			
+    		})
+    	})
+    </script>
 </head>
 <body>
 <!-- Page content wrapper-->
@@ -18,12 +26,9 @@
 	<!-- Page content-->
 	<div class="container-fluid">
 		<div class="row align-items-center">
-			<label for="password" class="col-form-label col-3" style="margin:150px 0px 5px 0px">Password</label>
-			<div class="col-9" style="margin:150px 0px 5px 0px">
-				<input class="form-control" type="text" id="password" name="password" placeholder="Enter the password">
-			</div>
-			<div style="text-align:center;" style="margin:5px 0px;">
-				<button type="button" class="btn btn-dark">Submit</button>
+			
+			<div style="text-align:center;margin:5px 0px;">
+				<button type="button" class="btn btn-dark" id="submitBtn">Submit</button>
 			</div>
 		</div>
 	</div>

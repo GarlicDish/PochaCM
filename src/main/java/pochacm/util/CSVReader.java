@@ -18,7 +18,7 @@ public class CSVReader {
 
 	    public List<List<String>> readCSV() {
 	        List<List<String>> csvList = new ArrayList<List<String>>();
-	        File csv = new File("C:\\Users\\ChanhuPark\\git\\pochacm\\src\\main\\webapp\\resources\\csv\\au_postcodes.csv");
+	        File csv = new File("C:\\Users\\home\\git\\pochacm\\src\\main\\webapp\\resources\\csv\\au_postcodes.csv");
 	        BufferedReader br = null;
 	        String line = "";
 

@@ -64,7 +64,7 @@
 	</select>
 	
 	<select id="selectUserByUserNum" parameterType="pochacm.dto.User" resultType="hashmap">
-		SELECT user_name,user_email,user_phone,branch_name,position_name 
+		SELECT u.*, b.*, p.*
 		FROM user_info u, branch b, position p
 		WHERE user_num = #{userNum}	
 			AND u.branch_num = b.branch_num (+)
@@ -75,4 +75,15 @@
 		WHERE user_num = #{userNum }
 			AND user_password = #{userPassword }
 	</select>
+	
+	<update id="updateUserInfo" parameterType="pochacm.dto.User">
+		UPDATE user_info
+		SET user_password = #{userPassword}, user_name = #{userName}, user_gender = #{userGender},
+			user_phone = #{userPhone}, date_of_birth = #{dateOfBirth}, branch_num = #{branchNum}, position_num=#{positionNum}, 
+			work_start_date =#{workStartDate}, emer_name = #{emerName}, emer_phone=#{emerPhone}, tax_file_check=#{taxFileCheck}, 
+			tax_file_num =#{taxFileNum}, bsb_num=#{bsbNum}, bank_account_num=#{bankAccountNum}, sa_fund_name=#{saFundName}, 
+			sa_fund_num =#{saFundNum}, address_l1=#{addressL1}, address_l2=#{addressL2}, address_state=#{addressState},
+			address_sub=#{addressSub}, address_postcode=#{addressPostCode}, sign_up_date=#{signUpDate}, validation_by_sup=#{validationBySup}
+		WHERE user_email = #{userEmail} 
+	</update>
 </mapper>
