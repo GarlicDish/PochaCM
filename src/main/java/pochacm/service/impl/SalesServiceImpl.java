@@ -77,8 +77,8 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.insertSales(sales);
 	}
 	@Override
-	public void deleteSalesBySalesNum(String salesNum) {
-		salesDao.deleteSalesBySalesNum(salesNum);
+	public void deleteSalesBySalesNum(Sales sales) {
+		salesDao.deleteSalesBySalesNum(sales);
 	}
 	
 	@Override
@@ -102,6 +102,18 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<Sales> getSalesListBySalesDate(String date) {
 		return salesDao.selectSalesListBySalesDate(date);
+	}
+	@Override
+	public int cntSalesBySalesDate(Sales sales) {
+		return salesDao.cntSalesBySalesDate(sales);
+	}
+	@Override
+	public Sales getSalesBySalesNum(Sales sales) {
+		return salesDao.getSalesBySalesNum(sales);
+	}
+	@Override
+	public List<Sales> getAllSalesBySalesDate(Sales sales) {
+		return salesDao.getAllSalesBySalesDate(sales);
 	}
 	
 	

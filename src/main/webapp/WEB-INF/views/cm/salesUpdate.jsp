@@ -198,20 +198,20 @@ function addItem(){
 }
 $(document).ready(function() {
 	$("#formSubBtn").click(function(){
-		console.log('form submit in');
+		console.log('form submit in')
 		$("form").submit();
 	})
 	$("#preBtn").click(function(){
 		console.log('previous');
 		history.go(-1);
 	})
-	
 })
 </script>
 <h1 class="mt-4">Sales Add</h1>
 <div class="row">
 <div id="formDiv">
 <form id="salesAddForm" name="salesAddForm" action="/sales/add" method="post">
+
 	<div class="col-10">
 		<div class="row">
 			<div class="form_group input-group" style="float:left;">
@@ -244,54 +244,56 @@ $(document).ready(function() {
 				</thead>
 				
 				<tbody>
-					<tr id="menu0">
+				<c:forEach items="${salesList }" var="i">
+					<tr id="menu${i }]">
 						<td>
 							<!-- Row Number -->
 							<div class="form_group" id="rowNumDiv0" style="width:40px;">
-								1
+								${i }
 							</div>
 						</td>
 						<td>
 							<!-- menu name -->
-							<div class="form_group input-group" id="menuDiv0">
-								<input type="text" class="form-control form-control" id="menuName0" name="menuName" placeholder="Enter the Menu" value="" onkeyup="search(this, 0);">
-								<div class="form_group input-group" id="suggestDiv0" class="suggest">
-									<div class="" id="suggestListDiv0" style="position:absolute;z-index:1;display:none"></div>
+							<div class="form_group input-group" id="menuDiv${i }">
+								<input type="text" class="form-control form-control" id="menuName${i }" name="menuName" placeholder="Enter the Menu" value="${i.RECIPE_NAME }" onkeyup="search(this, ${i });">
+								<div class="form_group input-group" id="suggestDiv${i }" class="suggest">
+									<div class="" id="suggestListDiv${i }" style="position:absolute;z-index:1;display:none"></div>
 								</div>
 							</div>
 						</td>
 						<td>
 							<!-- menu price -->
-							<div class='form_group input-group' id='menuPriceDiv0'>
+							<div class='form_group input-group' id='menuPriceDiv1'>
 								<span class="input-group-text">$</span>
-								<input type="text" class="form-control" id="menuPrice0" name="menuPrice">
+								<input type="text" class="form-control" id="menuPrice${i }" name="menuPrice" value="${i.RECIPE_PRICE }">
 							</div>
 						</td>
 						<td>
 							<!--  quantity -->				
-							<div class="form_group input-group" id='qtyDiv0' >
-								<input type="number" class="form-control" id="qty0" name="qty" min="1" value="1" style="width: 60px;text-align: center;" onchange="totalPriceCal(0);">
+							<div class="form_group input-group" id='qtyDiv1' >
+								<input type="number" class="form-control" id="qty${i }" value="${i.SALES_QTY }" name="qty" min="1" value="1" style="width: 60px;text-align: center;" onchange="totalPriceCal(${i });">
 							</div>
 						</td>
 						<td>
 							<!-- sales source name -->
-							<div class="form_group input-group" id="salesSourceDiv0" style="margin:0 auto;width:150px;">
-								<select id="salesSource0" name='salesSourceDiv' class="form-select">
+							<div class="form_group input-group" id="salesSourceDiv${i }" style="margin:0 auto;width:150px;">
+								<select id="salesSource${i }" name='salesSourceDiv' class="form-select">
 									<option>--- Select ---</option>
-									<c:forEach var="i" items="${salesSourceList }">
-										<option value="${i.SALES_SOURCE_NUM }">${i.SALES_SOURCE_NAME }</option>
+									<c:forEach var="j" items="${salesSourceList }">
+										<option value="${j.SALES_SOURCE_NUM }" <c:if test="${j.SALES_SOURCE_NUM == i.SALES_SOURCE_NUM}">selected</c:if>>${j.SALES_SOURCE_NAME }</option>
 									</c:forEach>
 								</select>
 							</div>
 						</td>
 						<td>
 							<!-- Total Price -->
-							<div class="form_group input-group" id="menuTotalPrice0">
+							<div class="form_group input-group" id="menuTotalPrice${i }">
 								<span class="input-group-text">$</span>
-								<input type="text" class="form-control" id="totalPrice0" name="totalPrice" readonly>
+								<input type="text" class="form-control" id="totalPrice${i }" name="totalPrice" value="${i.SALES_QTY * i.RECIPE_PRICE }" readonly>
 							</div>
 						</td>
 					</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>
@@ -301,8 +303,7 @@ $(document).ready(function() {
 </div>
 <div>
 	<button class="btn btn-secondary" type="button" id="preBtn" >previous</button>
-	<button class="btn btn-success" type="button" id="formSubBtn" >Submit</button>
+	<button class="btn btn-success btn-lg" type="button" id="formSubBtn" style="float:right;">Submit</button>
 </div>
-</div>
-	
+	</div>
 <%@ include file="../layout/footer.jsp" %>

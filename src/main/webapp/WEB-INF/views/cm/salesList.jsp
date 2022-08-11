@@ -21,15 +21,14 @@ $(document).ready(function() {
 })
 </script>
 <h1 class="mt-4">Sales</h1>
-<div class="" id="tableWrap" style="padding:10px;">
 	<table id="salesListTab" class="table table-light table-striped table-hover" style="text-align:center;">
 		<thead>
 			<tr class="table-dark">
 				<th rowspan="2">#</th>
 				<th rowspan="2">Sales Date</th>
+				<th rowspan="2">Writer</th>
 				<th colspan="8">Sales Source</th>
 				<th rowspan="2">Total</th>
-				<th rowspan="2">Writer</th>
 				<th rowspan="2">Remark</th>
 			</tr>
 			<tr class="table-dark">
@@ -46,8 +45,9 @@ $(document).ready(function() {
 		<tbody>
 			<c:forEach items="${salesList }"  var="i" >
 				<tr>
-					<td class="table-dark">${i.RNUM }</td>
-					<td class="table-dark"><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/> </td>
+					<td>${i.RNUM }</td>
+					<td><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/> </td>
+					<td>${i.USER_NAME }</td>
 					<td>
 						<c:if test="${i.NVL1 == null }">0</c:if>
 						<c:if test="${i.NVL1 != null }">${i.NVL1}</c:if>
@@ -80,25 +80,23 @@ $(document).ready(function() {
 						<c:if test="${i.NVL8 == null }">0</c:if>
 						<c:if test="${i.NVL8 != null }">${i.NVL8}</c:if>
 					</td>
-					<td class="table-dark">
+					<td class="table-secondary">
 						<c:if test="${i.TOTAL == null }">0</c:if>
 						<c:if test="${i.TOTAL != null }">${i.TOTAL}</c:if>
 					</td>
-					<td class="table-dark">${i.USER_NAME }</td>
-					<td class="table-dark">
-						<a href="/sales/view?salesDate=${i.SALES_DATE }"><button type="button" class="btn btn-success btn-sm" id="viewBtn">Detail</button></a>
+					<td>
+						<a href="/sales/view?salesDate=<fmt:formatDate value='${i.SALES_DATE }' pattern='yyyy-MM-dd'/>"><button type="button" class="btn btn-success btn-sm" id="viewBtn">Detail</button></a>
 					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+
+<div style="text-align:left;">
+	<button type="button" id="addBtn" name="addBtn" class="btn btn-primary">Add</button>
 </div>
 
-<div id="button">
-	<button type="button" id="addBtn" name="addBtn" class="btn btn-secondary">ADD</button>
-</div>
-
-<div class="text-center" id="searchPanel" style="padding:10px;">
+<%-- <div class="text-center" id="searchPanel" style="padding:10px;">
 	<form id="searchForm" name="searchForm" action="/sales?curPage=1&category='${category }'&keyword='${keyword }" method="get" >
 		<select id="category" name="category">
 			<option value="" selected>Category</option>
@@ -109,5 +107,6 @@ $(document).ready(function() {
 		<button type="button" id="searchBtn" class="btn btn-primary btn-primary:hover" >Search</button>
 	</form>
 </div>
-<%@ include file="../layout/salesPaging.jsp" %>
+ --%>
+ <%@ include file="../layout/salesPaging.jsp" %>
 <%@ include file="../layout/footer.jsp" %>

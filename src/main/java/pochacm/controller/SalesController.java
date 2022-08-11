@@ -1,27 +1,24 @@
 package pochacm.controller;
 
-import java.util.Date;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
-
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
-import pochacm.service.face.InvoiceService;
 import pochacm.service.face.SalesService;
 
 @Controller
@@ -34,7 +31,7 @@ public class SalesController {
 	@GetMapping("/sales")
 	public String salesList(
 			HttpSession session, HttpServletRequest request, 
-			ModelAndView mav, String curPage, Model model) {
+			 String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
@@ -49,33 +46,10 @@ public class SalesController {
 		if(curPage == null || curPage.equals("")) {
 			curPage = "1";
 		}
-		
-		//Parameter delivery
-		String category = request.getParameter("category");
-		String keyword = request.getParameter("keyword");
-		
-		logger.info("#{}. category : {}", idx++, category);
-		logger.info("#{}. keyWord : {}", idx++, keyword);
 		logger.info("#{}. curPage : {}", idx++, curPage);
-	    
-		//prevent to insert null value to Mapper
-		if(category == null || (!"subject".equals(category) && !"name".equals(category)) ) {
-	       category = "";
-	    }
-	    
-	    if(keyword == null || "".equals(keyword) || keyword.trim().isEmpty() ) {
-	       keyword = "";
-	    }
-	    
-	    Map<String, String> map = new HashMap<String, String>();
-	    
-	    map.put("category",category);
-	    map.put("keyword",keyword);
 	    
 	    Paging paging = new Paging();
 	    
-	    paging.setKeyword(keyword);
-	    paging.setCategory(category);
 	    paging.setCurPage(Integer.parseInt(curPage));
 		//create Paging dto with curPage & search 
 		paging = salesService.getSalesPaging(paging);
@@ -164,22 +138,52 @@ public class SalesController {
 		
 		List<Sales> salesList = salesService.getSalesListBySalesDate(date);
 		logger.info("#{}. salesList : {}", idx++, salesList);
-		
+		model.addAttribute("salesDate", salesDate);
 		model.addAttribute("salesList", salesList);
 		logger.info("#{}. model.addAttribute(\"salesList\", salesList) : {}", idx++, model.addAttribute("salesList", salesList));
 		
 		return "cm/salesView";
 	}
 	
-	@GetMapping("/sales/delete")
-	public String deleteSales(String salesNum, String salesDate) {
+	@PostMapping("/sales/delete")
+	public String deleteSales(Sales sales, @DateTimeFormat(pattern="yyyy-MM-dd") Date salesDate) {
 		//logger index
 		int idx = 0;
-		logger.info("#{}. /sales/delete [GET]", idx++);
-		logger.info("#{}. salesNum : {}", idx++, salesNum);
+		logger.info("#{}. /sales/delete [POST]", idx++);
+		logger.info("#{}. sales : {}", idx++, sales);
+		logger.info("#{}. salesDate : {}", idx++, salesDate);
+		sales.setSalesDate(salesDate);
+		logger.info("#{}. sales : {}", idx++, sales);
+
+		salesService.deleteSalesBySalesNum(sales);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		
-		salesService.deleteSalesBySalesNum(salesNum);
+		String date = sdf.format(salesDate);
+		logger.info("#{}. date : {}", idx++, date);
 		
-		return "redirect: /sales";
+		if (salesService.cntSalesBySalesDate(sales) > 0) {
+			return "redirect: /sales/view?salesDate="+date;
+		} else {
+			return "redirect: /sales";
+		}
+		
+	}
+	
+	@GetMapping("/sales/update")
+	public String updateSales(@DateTimeFormat(pattern="yyyy-MM-dd") Date salesDate, Model model) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /sales/update [GET]", idx++);
+		Sales sales = new Sales();
+		logger.info("#{}. salesDate : {}", idx++, salesDate);
+		sales.setSalesDate(salesDate);
+		logger.info("#{}. sales : {}", idx++, sales);
+		
+		List<Sales> salesList = salesService.getAllSalesBySalesDate(sales);
+		logger.info("#{}. salesList : {}", idx++, salesList);
+		
+		model.addAttribute("sales",salesList);
+		
+		return "cm/salesUpdate";
 	}
 }

@@ -7,21 +7,8 @@
 	
 <mapper namespace="pochacm.dao.face.SalesDao">
 
-<select id="selectCntAllSales" parameterType="pochacm.dto.Paging" resultType="int">
-		<choose>
-			<when test='keyword != null and (category == "Date")'>	
-				SELECT count(*) FROM sales s
-				WHERE s.sales_date LIKE '%'||#{keyword}||'%'
-			</when>
-			<when test='keyword != null and (category == "Writer")'>	
-				SELECT count(*) FROM sales s, user_info u
-				WHERE s.user_num = u.user_num (+)
-					AND u.user_name LIKE '%'||#{keyword}||'%'
-			</when>
-			<otherwise>
-				SELECT count(*) FROM sales s
-			</otherwise>
-		</choose>
+	<select id="selectCntAllSales" parameterType="pochacm.dto.Paging" resultType="int">
+		SELECT count(*) FROM sales s
 	</select>
 	
 	<insert id="insertSales" parameterType="pochacm.dto.Sales" >
@@ -53,15 +40,6 @@
 				        WHERE s.user_num = u.user_num (+)
 				            AND s.recipe_num = r.recipe_num(+)
 				        GROUP BY s.sales_date, s.sales_source_num, u.user_name
-						<choose>
-							<when test='category == "Date"'>
-								AND s.sales_date LIKE '%' || #{keyword} || '%'
-							</when>
-							<when test='category == "Writer"'>
-								AND u.user_name LIKE '%' || #{keyword} || '%'
-							</when>
-							<otherwise></otherwise>
-						</choose>	
 				    )
 				    PIVOT (
 				        SUM(TP) FOR sales_source_num IN (
@@ -74,6 +52,7 @@
 		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 		ORDER BY rnum
 	</select>
+	
 	<select id="selectSalesListBySalesDate" parameterType="String" resultType="hashmap">
 		SELECT * FROM (
 			SELECT rownum rnum, rsrs.* FROM (
@@ -88,8 +67,31 @@
 		)
 	</select>
 	
-	<delete id="deleteSalesBySalesNum" parameterType="String">
+	<delete id="deleteSalesBySalesNum" parameterType="pochacm.dto.Sales">
 		DELETE sales 
 		WHERE sales_num = #{salesNum}
 	</delete>
+	
+	<select id="cntSalesBySalesDate" parameterType="pochacm.dto.Sales" resultType="int">
+		SELECT count(*) FROM SALES
+		WHERE sales_date = #{salesDate}
+	</select>
+	
+	<select id="getSalesBySalesNum" parameterType="pochacm.dto.Sales" resultType="hashmap">
+		SELECT * FROM sales s, user_info u, recipe r, sales_source ss
+		WHERE sales_num = #{salesNum}
+			AND s.user_num = u.user_num (+)
+			AND s.recipe_num = r.recipe_num (+)
+			AND s.sales_source_num = ss.sales_source_num (+)
+	</select>
+	
+	<select id="getAllSalesBySalesDate" parameterType="pochacm.dto.Sales" resultType="hashmap">
+		SELECT * FROM sales s, user_info u, recipe r, sales_source ss
+		WHERE sales_date = #{salesDate}
+			AND s.user_num = u.user_num (+)
+			AND s.recipe_num = r.recipe_num (+)
+			AND s.sales_source_num = ss.sales_source_num (+)
+		ORDER BY s.sales_num
+	</select>
+	
 </mapper>

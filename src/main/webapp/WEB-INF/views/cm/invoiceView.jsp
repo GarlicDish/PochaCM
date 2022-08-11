@@ -25,7 +25,7 @@ $(document).ready(function(){
 		<td style="width:15%;" class="table-dark">Brand</td>
 		<td style="width:35%;">${itemList[0].BRAND_NAME }</td>
 		<td style="width:15%;" class="table-dark">Date</td>
-		<td style="width:35%;">${invoice.invoiceDate }
+		<td style="width:35%;"><fmt:formatDate value="${invoice.invoiceDate }" pattern="yyyy-MM-dd"/></td>
 	</tr>
 	<tr>
 		<td style="width:15%;" class="table-dark">Supplier</td>

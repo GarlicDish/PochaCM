@@ -247,6 +247,7 @@ public class InvoiceController {
 		
 		return resultList;
 	}
+	
 	@GetMapping("/menuPrice")
 	@ResponseBody
 	public Recipe getMenuPrice(String menuName){
@@ -264,17 +265,5 @@ public class InvoiceController {
 		
 		return recipe;
 	}
-	
-//	@GetMapping("/item/getCategory")
-//	@ResponseBody
-//	public List<String> getCategory(String keyword){
-//		//logger index
-//		int idx = 0;
-//		logger.info("#{}. /item/getCategory [AJAX] [GET]", idx++);
-//		logger.info("#{}. keyword : {}", idx++, keyword);
-//		
-//		return cmService.getCategoryByKeyword(keyword);
-//	}
-
 	
 }

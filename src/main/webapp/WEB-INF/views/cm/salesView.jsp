@@ -7,36 +7,42 @@
 
 <%@ include file="../layout/header.jsp" %>
 
-<h1 class="mt-4">Sales Detail (${sales_date })</h1>
+<h1 class="mt-4">Sales Detail</h1>
 <script type="text/javascript">
 $(document).ready(function(){
 	$("#goBack").click(function(){
 		history.go(-1);
 	})
 	$("#updateBtn").click(function(){
-		location.href='/item/update?itemNum=${itemInfo.ITEM_NUM }'
+		$("#updateForm").submit();
 	})
-	$("#delBtn").click(function(){
-		if(confirm("Are you sure to delete this Sales record?") == true) {
-			$("#deleteForm").submit();
+	$("#delAllBtn").click(function(){
+		if(confirm("Are you sure to delete ALL Sales record?") == true) {
+			$("#delAllForm").submit();
 		} else {
 			return false;
 		}
 	})
 })
+function alertMsg(x){
+	if( confirm("Are you sure to delete this Sales record?") == true){
+		$("#"+'delForm'+x).submit();
+	} else {
+		return false;
+	}
+}
 </script>
 <div id="salesViewTable">
-
-	<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
+	<table class="table table-hover" style="text-align:center;box-sizing:border-box;">
 		<thead>
 			<tr class="table-dark">
 				<th>#</th>
 				<th>Sales Date</th>
 				<th>Menu Name</th>
-				<th>Sales Source</th>
-				<th>Unit Price</th>
-				<th>Qty</th>
-				<th>Total Price</th>
+				<th style="width:150px;">Sales Source</th>
+				<th style="width:75px;white-space:pre-wrap;">Unit Price</th>
+				<th style="width:75px;white-space:pre-wrap;">Qty</th>
+				<th style="width:75px;white-space:pre-wrap;">Total Price</th>
 				<th>Writer</th>
 				<th>Remark</th>
 			</tr>			
@@ -44,23 +50,37 @@ $(document).ready(function(){
 		<tbody>
 		<c:forEach items="${salesList }" var="i">
 		<tr>
-			<td class="table-dark">${i.RNUM }</td>
-			<td class="table-dark"><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/></td>
+			<td>${i.RNUM }</td>
+			<td><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/></td>
 			<td>${i.RECIPE_NAME }</td>
 			<td>${i.SALES_SOURCE_NAME }</td>
 			<td>${i.RECIPE_PRICE }</td>
 			<td>${i.SALES_QTY }</td>
 			<td>${i.TP }</td>
 			<td>${i.USER_NAME }</td>
-			<td class="table-dark">
-				<a href="/sales/delete?salesNum=${i.SALES_NUM }">
-					<button type="button" class="btn btn-danger tn-sm" id="delBtn">Delete</button>
-				</a>
+			<td>
+				<c:if test="${positionNum < 2 }">
+					<form action="/sales/delete" method="post" id="delForm${i.RNUM }">
+						<input type="hidden" name="salesNum" value="${i.SALES_NUM }">
+						<input type="hidden" name="salesDate" value="${i.SALES_DATE }">
+						<button type="button" id="delBtn" class="btn btn-danger btn-sm" onclick="alertMsg(${i.RNUM})">Delete</button>
+					</form>
+				</c:if>
 			</td>
 		</tr>
 		</c:forEach>
 		</tbody>
 	</table>
-	<button type="button" class="btn btn-secondary" id="goBack">Back</button>
+	<div style="text-align:left;">
+			<form action="/sales/update?salesDate=encodeURIComponent(${salesDate }") method="get" id="updateForm"></form>
+			<form action="/sales/deleteAll" method="post" id="deleteAllForm">
+				<input type="hidden" name="salesDate" value='${salesDate}'>
+			</form>
+		<button type="button" class="btn btn-secondary" id="goBack">To List</button>
+		<c:if test="${positionNum < 2 }">
+				<button type="button" class="btn btn-success" id="updateBtn">Update</button>
+				<button type="button" id="delAllBtn" name="delAllBtn" class="btn btn-danger">Delete All</button>
+		</c:if>
+	</div>
 </div>
 <%@ include file="..//layout/footer.jsp" %>

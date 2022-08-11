@@ -17,9 +17,17 @@ public interface SalesService {
 	Recipe getRecipeByRecipeName(Recipe map);
 
 	int insertSales(Sales sales);
-	void deleteSalesBySalesNum(String salesNum);
+	
+	void deleteSalesBySalesNum(Sales sales);
+	
 	List<Sales> getSalesListBySalesDate(String date);
 
 	Sales getSalesFromMap(HashMap<String, Object> map);
+
+	int cntSalesBySalesDate(Sales sales);
+
+	Sales getSalesBySalesNum(Sales sales);
+
+	List<Sales> getAllSalesBySalesDate(Sales sales);
 
 }

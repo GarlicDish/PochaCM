@@ -2,10 +2,13 @@ package pochacm.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Sales {
 	private int salesNum;
 	private int userNum;
 	private int recipeNum;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date salesDate;
 	private int salesQty;
 	private int salesSourceNum;

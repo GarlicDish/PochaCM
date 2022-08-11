@@ -53,7 +53,6 @@
 		</div>
 	</div>
     <div class="d-flex" id="wrapper">
-    
         <!-- Sidebar-->
         <div class="border-end bg-white" id="sidebar-wrapper" style="min-height:70vh;">
 			<div class="sidebar-heading border-bottom bg-light">Menu</div>

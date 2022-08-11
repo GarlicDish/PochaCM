@@ -28,7 +28,7 @@ $(document).ready(function() {
 				<th data-type="number">Total Price</th>
 				<th data-type="date">Issued Date</th>
 				<th>Writer</th>
-				<th>Remove</th>
+				<th>Remark</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,7 +41,14 @@ $(document).ready(function() {
 					<td>${i.CNT }</td>
 					<td>${i.QQTY }</td>
 					<td><fmt:formatDate value="${i.INVOICE_DATE }" pattern="yyyy-MM-dd"/> </td>
-					<td><a>${i.USER_NAME }</a></td>
+					<td>${i.USER_NAME }</td>
+					<td>
+						<c:if test="${sessionScope.positionNum < 2 }">
+							<a href="/invoice/delete?invocieNum=${i.INVOICE_NUM }">
+								<button class="btn btn-danger btn-sm" type="button" id="delBtn" name="delBtn">DEL</button>
+							</a>
+						</c:if>
+					</td>
 				</tr>
 			</c:forEach>
 		</tbody>

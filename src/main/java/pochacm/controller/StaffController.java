@@ -1,6 +1,7 @@
 package pochacm.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,6 +24,9 @@ public class StaffController {
 	@Autowired
 	private StaffService staffService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/staff")
 	public String getStaffList(HttpSession session, Model model) {
 		
@@ -37,12 +41,28 @@ public class StaffController {
 		logger.info("#{}. user : {}", idx++, user);
 		
 		List<User> staffList = staffService.selectAllBranchStaffByUserNum(user);
+		logger.info("#{}. staffList : {}", idx++, staffList);
 		
 		model.addAttribute("staffList", staffList);
-		logger.info("#{}. staffList : {}", idx++, staffList);
 		
 		
 		return "staff/list";
+	}
+	
+	@GetMapping("/staff/detail")
+	public String viewStaffDetail(int userNum, Model model) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. /staff/detail [GET]", idx++);
+		
+		User user = new User();
+		user.setUserNum(userNum);
+		logger.info("#{}. user : {}", idx++, user);
+		Map<String,String> map = userService.getUserByUserNum(user);
+		logger.info("#{}. map : {}", idx++, map);
+		model.addAttribute("map", map);
+		
+		return "staff/view";
 	}
 	
 }

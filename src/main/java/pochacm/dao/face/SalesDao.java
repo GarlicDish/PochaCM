@@ -1,6 +1,5 @@
 package pochacm.dao.face;
 
-import java.util.HashMap;
 import java.util.List;
 
 import pochacm.dto.Paging;
@@ -22,6 +21,12 @@ public interface SalesDao {
 
 	List<Sales> selectSalesListBySalesDate(String date);
 
-	void deleteSalesBySalesNum(String salesNum);
+	void deleteSalesBySalesNum(Sales sales);
+
+	int cntSalesBySalesDate(Sales sales);
+
+	Sales getSalesBySalesNum(Sales sales);
+
+	List<Sales> getAllSalesBySalesDate(Sales sales);
 
 }
