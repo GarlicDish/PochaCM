@@ -2,6 +2,7 @@ package pochacm.service.face;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
@@ -28,6 +29,6 @@ public interface SalesService {
 
 	Sales getSalesBySalesNum(Sales sales);
 
-	List<Sales> getAllSalesBySalesDate(Sales sales);
+	List<Map<String, String>> getAllSalesBySalesDate(Sales sales);
 
 }

@@ -14,7 +14,7 @@ $(document).ready(function(){
 		history.go(-1);
 	})
 	$("#updateBtn").click(function(){
-		$("#updateForm").submit();
+		location.href='/sales/update?salesDate=${salesDate}'
 	})
 	$("#delAllBtn").click(function(){
 		if(confirm("Are you sure to delete ALL Sales record?") == true) {
@@ -72,7 +72,6 @@ function alertMsg(x){
 		</tbody>
 	</table>
 	<div style="text-align:left;">
-			<form action="/sales/update?salesDate=encodeURIComponent(${salesDate }") method="get" id="updateForm"></form>
 			<form action="/sales/deleteAll" method="post" id="deleteAllForm">
 				<input type="hidden" name="salesDate" value='${salesDate}'>
 			</form>

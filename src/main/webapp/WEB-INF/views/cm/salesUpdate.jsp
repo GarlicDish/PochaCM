@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <%@ include file="../layout/header.jsp" %>
 
 <script type="text/javascript">
@@ -75,6 +74,7 @@ function show(x){
 	
 	console.log('show() out')
 }
+
 function hide(x){
 	console.log('hide() in')
 	//parameter check
@@ -87,7 +87,6 @@ function hide(x){
 	
 	console.log('hide() out')
 }
-
 
 function select(selectKeyword,x) {
 	console.log('selectKeyword : ' + selectKeyword);
@@ -129,7 +128,6 @@ function totalPriceCal(x){
 	
 	$("#totalPrice"+x).val(totalPrice);
 }
-
 
 function deleteItem(){
 	var trCnt = $('#formTable tr').length - 1;
@@ -216,7 +214,7 @@ $(document).ready(function() {
 		<div class="row">
 			<div class="form_group input-group" style="float:left;">
 				<span class="input-group-text">Sales Date</span>
-				<input type="Date" class="form-control" id="salesDate" name="salesDate">
+				<input type="Date" class="form-control" id="salesDate" name="salesDate" value='<fmt:formatDate value="${salesDate }" pattern="yyyy-MM-dd"/>'>
 				
 				<div class="form_group col-8" style="float:right;">
 					<button type="button" id="btnAdd" name="btnAdd" class="btn btn-primary btn-sm" style="height:30px;" onclick="addItem();">
@@ -227,9 +225,7 @@ $(document).ready(function() {
 					</button>
 				</div>
 			</div>
-			
 		</div>
-		
 		<div>
 			<table id="formTable" class="table table-hover" style="text-align:center;margin:0 auto;float:left;">
 				<thead>
@@ -245,19 +241,19 @@ $(document).ready(function() {
 				
 				<tbody>
 				<c:forEach items="${salesList }" var="i">
-					<tr id="menu${i }]">
+					<tr id="menu${i.RNUM }">
 						<td>
 							<!-- Row Number -->
 							<div class="form_group" id="rowNumDiv0" style="width:40px;">
-								${i }
+								${i.RNUM }
 							</div>
 						</td>
 						<td>
 							<!-- menu name -->
-							<div class="form_group input-group" id="menuDiv${i }">
-								<input type="text" class="form-control form-control" id="menuName${i }" name="menuName" placeholder="Enter the Menu" value="${i.RECIPE_NAME }" onkeyup="search(this, ${i });">
-								<div class="form_group input-group" id="suggestDiv${i }" class="suggest">
-									<div class="" id="suggestListDiv${i }" style="position:absolute;z-index:1;display:none"></div>
+							<div class="form_group input-group" id="menuDiv${i.RNUM }">
+								<input type="text" class="form-control form-control" id="menuName${i.RNUM }" name="menuName" placeholder="Enter the Menu" value="${i.RECIPE_NAME }" onkeyup="search(this, ${i.RNUM });">
+								<div class="form_group input-group" id="suggestDiv${i.RNUM }" class="suggest">
+									<div class="" id="suggestListDiv${i.RNUM }" style="position:absolute;z-index:1;display:none"></div>
 								</div>
 							</div>
 						</td>
@@ -265,19 +261,19 @@ $(document).ready(function() {
 							<!-- menu price -->
 							<div class='form_group input-group' id='menuPriceDiv1'>
 								<span class="input-group-text">$</span>
-								<input type="text" class="form-control" id="menuPrice${i }" name="menuPrice" value="${i.RECIPE_PRICE }">
+								<input type="text" class="form-control" id="menuPrice${i.RNUM }" name="menuPrice" value="${i.RECIPE_PRICE }">
 							</div>
 						</td>
 						<td>
 							<!--  quantity -->				
 							<div class="form_group input-group" id='qtyDiv1' >
-								<input type="number" class="form-control" id="qty${i }" value="${i.SALES_QTY }" name="qty" min="1" value="1" style="width: 60px;text-align: center;" onchange="totalPriceCal(${i });">
+								<input type="number" class="form-control" id="qty${i.RNUM }" value="${i.SALES_QTY }" name="qty" min="1" value="1" style="width: 60px;text-align: center;" onchange="totalPriceCal(${i.RNUM });">
 							</div>
 						</td>
 						<td>
 							<!-- sales source name -->
-							<div class="form_group input-group" id="salesSourceDiv${i }" style="margin:0 auto;width:150px;">
-								<select id="salesSource${i }" name='salesSourceDiv' class="form-select">
+							<div class="form_group input-group" id="salesSourceDiv${i.RNUM }" style="margin:0 auto;width:150px;">
+								<select id="salesSource${i.RNUM }" name='salesSourceDiv' class="form-select">
 									<option>--- Select ---</option>
 									<c:forEach var="j" items="${salesSourceList }">
 										<option value="${j.SALES_SOURCE_NUM }" <c:if test="${j.SALES_SOURCE_NUM == i.SALES_SOURCE_NUM}">selected</c:if>>${j.SALES_SOURCE_NAME }</option>
@@ -287,9 +283,9 @@ $(document).ready(function() {
 						</td>
 						<td>
 							<!-- Total Price -->
-							<div class="form_group input-group" id="menuTotalPrice${i }">
+							<div class="form_group input-group" id="menuTotalPrice${i.RNUM }">
 								<span class="input-group-text">$</span>
-								<input type="text" class="form-control" id="totalPrice${i }" name="totalPrice" value="${i.SALES_QTY * i.RECIPE_PRICE }" readonly>
+								<input type="text" class="form-control" id="totalPrice${i.RNUM }" name="totalPrice" value="${i.SALES_QTY * i.RECIPE_PRICE }" readonly>
 							</div>
 						</td>
 					</tr>
@@ -303,7 +299,7 @@ $(document).ready(function() {
 </div>
 <div>
 	<button class="btn btn-secondary" type="button" id="preBtn" >previous</button>
-	<button class="btn btn-success btn-lg" type="button" id="formSubBtn" style="float:right;">Submit</button>
+	<button class="btn btn-success" type="button" id="formSubBtn">Submit</button>
 </div>
 	</div>
 <%@ include file="../layout/footer.jsp" %>

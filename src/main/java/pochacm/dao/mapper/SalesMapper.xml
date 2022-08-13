@@ -86,12 +86,18 @@
 	</select>
 	
 	<select id="getAllSalesBySalesDate" parameterType="pochacm.dto.Sales" resultType="hashmap">
-		SELECT * FROM sales s, user_info u, recipe r, sales_source ss
-		WHERE sales_date = #{salesDate}
-			AND s.user_num = u.user_num (+)
-			AND s.recipe_num = r.recipe_num (+)
-			AND s.sales_source_num = ss.sales_source_num (+)
-		ORDER BY s.sales_num
+		SELECT * FROM(
+			SELECT rownum rnum, sss.*
+			FROM (
+				SELECT s.sales_num, s.sales_date, s.sales_qty, u.user_name, r.*, ss.* 
+				FROM sales s, user_info u, recipe r, sales_source ss
+				WHERE sales_date = #{salesDate}
+					AND s.user_num = u.user_num (+)
+					AND s.recipe_num = r.recipe_num (+)
+					AND s.sales_source_num = ss.sales_source_num (+)
+				ORDER BY s.sales_num ) sss
+		)
+		ORDER BY rnum ASC
 	</select>
 	
 </mapper>

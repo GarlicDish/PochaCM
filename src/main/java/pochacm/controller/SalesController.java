@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -179,10 +181,12 @@ public class SalesController {
 		sales.setSalesDate(salesDate);
 		logger.info("#{}. sales : {}", idx++, sales);
 		
-		List<Sales> salesList = salesService.getAllSalesBySalesDate(sales);
+		List<Map<String,String>> salesList = salesService.getAllSalesBySalesDate(sales);
 		logger.info("#{}. salesList : {}", idx++, salesList);
 		
-		model.addAttribute("sales",salesList);
+		model.addAttribute("salesSourceList",salesService.getSalesSourceList());
+		model.addAttribute("salesDate", salesDate);
+		model.addAttribute("salesList",salesList);
 		
 		return "cm/salesUpdate";
 	}

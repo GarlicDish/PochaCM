@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +113,7 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.getSalesBySalesNum(sales);
 	}
 	@Override
-	public List<Sales> getAllSalesBySalesDate(Sales sales) {
+	public List<Map<String, String>> getAllSalesBySalesDate(Sales sales) {
 		return salesDao.getAllSalesBySalesDate(sales);
 	}
 	
