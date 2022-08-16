@@ -26,7 +26,6 @@ $(document).ready(function() {
 			<tr class="table-dark">
 				<th rowspan="2">#</th>
 				<th rowspan="2">Sales Date</th>
-				<th rowspan="2">Writer</th>
 				<th colspan="8">Sales Source</th>
 				<th rowspan="2">Total</th>
 				<th rowspan="2">Remark</th>
@@ -47,7 +46,6 @@ $(document).ready(function() {
 				<tr>
 					<td>${i.RNUM }</td>
 					<td><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/> </td>
-					<td>${i.USER_NAME }</td>
 					<td>
 						<c:if test="${i.NVL1 == null }">0</c:if>
 						<c:if test="${i.NVL1 != null }">${i.NVL1}</c:if>

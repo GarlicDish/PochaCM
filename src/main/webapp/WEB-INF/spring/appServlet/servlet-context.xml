@@ -23,6 +23,29 @@
 	<!-- @Transactional 어노테이션을 이용한 트랜잭션 관리 활성화 -->
 	<tx:annotation-driven/>
 
+	<!-- interceptor -->
+	<interceptors>
+	
+		<interceptor>
+		
+			<!-- URL to adopt interceptro -->
+			<mapping path="/user/**"/>
+			<mapping path="/summary/**"/>
+			<mapping path="/sales/**"/>
+			<mapping path="/staff/**"/>
+			<mapping path="/invoice/**"/>
+		<!--<exclude-mapping path="/board/list"/>  -->			
+			<!-- exception URL -->
+			<exclude-mapping path="/interceptor/admin/fail"/>
+			
+			<!-- interceptor class -->
+			<beans:bean class="pochacm.interceptor.UserInterceptor"/>
+			
+		</interceptor>
+		
+	</interceptors>
+
+
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 

@@ -26,7 +26,6 @@ button {
 <div id="itemViewTable">
 
 	<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
-	<caption-top>Item Image</caption-top>
 		<tr style="">
 			<td rowspan="10" colspan="2" style="width:200px"><img src="../../resources/images/imagePrepare.png" class="img-fluid table-dark"/></td>
 			<th style="min-width:150px;" class="table-dark">Item Name</th>
@@ -38,7 +37,7 @@ button {
 		</tr>
 		<tr>
 			<th class="table-dark">Item Category</th>
-			<td>${itemInfo.ITEM_CATE_NAME }</td>
+			<td>${itemInfo.CATE_NAME }</td>
 		</tr>
 		<tr>
 			<th class="table-dark">Order Unit</th>
@@ -46,15 +45,26 @@ button {
 		</tr>
 		<tr>
 			<th class="table-dark">Unit Price</th>
-			<td>${itemInfo.ITEM_ORDER_UNIT_PRICE }</td>
+			<td>${itemInfo.UNIT_PRICE }</td>
 		</tr>
 		<tr>
 			<th class="table-dark">Primary Unit Price</th>
-			<td>${itemInfo.ITEM_ORDER_UNIT_PRICE / itemInfo.PRIMARY_UNIT_QTY}/${itemInfo.PRIMARY_UNIT }</td>
+				
+			<td>
+				<c:if test="${itemInfo.PRIMARY_UNIT_QTY eq null || itemInfo.PRIMARY_UNIT_QTY eq 0}">-</c:if>
+				<c:if test="${itemInfo.PRIMARY_UNIT_QTY ne null && itemInfo.PRIMARY_UNIT_QTY ne 0}">
+					${itemInfo.UNIT_PRICE / itemInfo.PRIMARY_UNIT_QTY} / ${itemInfo.PRIMARY_UNIT }
+				</c:if>
+			</td>
 		</tr>
 		<tr>
 			<th class="table-dark">Secondary Unit Price</th>
-			<td>${(itemInfo.ITEM_ORDER_UNIT_PRICE / itemInfo.PRIMARY_UNIT_QTY) / itemInfo.SECONDARY_UNIT_QTY}/${itemInfo.SECONDARY_UNIT }</td>
+			<td>
+				<c:if test="${itemInfo.SECONDARY_UNIT_QTY eq null || itemInfo.SECONDARY_UNIT_QTY eq 0}">-</c:if>
+				<c:if test="${itemInfo.SECONDARY_UNIT_QTY ne null && itemInfo.SECONDARY_UNIT_QTY ne 0}">
+					${(itemInfo.UNIT_PRICE / itemInfo.PRIMARY_UNIT_QTY) / itemInfo.SECONDARY_UNIT_QTY} / ${itemInfo.SECONDARY_UNIT }
+				</c:if>
+			</td>
 		</tr>
 		<tr>
 			<th class="table-dark">Brand Name</th>
@@ -66,13 +76,13 @@ button {
 		</tr>
 		<tr>
 			<th class="table-dark">Target Waste (%)</th>
-			<td>${itemInfo.ITEM_TARGET_WASTE_PERCENT }</td>
+			<td>${itemInfo.TARGET_WASTE_PERCENTAGE }</td>
 		</tr>
 		<tr>
 			<th class="table-dark">Last Update</th>
-			<td><fmt:formatDate value="${itemInfo.ITEM_LAST_UPDATE }" pattern="yyyy-mm-dd"/></td>
+			<td><fmt:formatDate value="${itemInfo.LAST_UPDATE_DATE }" pattern="yyyy-mm-dd"/></td>
 			<th class="table-dark">Expiry Date</th>
-			<td><fmt:formatDate value="${itemInfo.ITEM_EXPIRY_DATE }" pattern="yyyy-mm-dd"/></td>
+			<td><fmt:formatDate value="${itemInfo.EXPIRY_DATE }" pattern="yyyy-mm-dd"/></td>
 		</tr>
 		<tr>
 			<th class="table-dark">Update By</th>
@@ -84,6 +94,6 @@ button {
 <c:if test="${sessionScope.positionNum ne 2 }">
 	<button type="button" id="updateBtn" class="btn btn-secondary">Update</button>
 </c:if>
-<button type="button" id="toInvoiceBtn" class="btn btn-secondary">To Invoice</button>
+<button type="button" id="toInvoiceBtn" class="btn btn-secondary">Back</button>
 </div>
 <%@ include file="..//layout/footer.jsp" %>

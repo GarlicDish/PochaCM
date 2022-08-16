@@ -168,6 +168,11 @@ public class UserServiceImpl implements UserService {
 				
 	}
 
+	@Override
+	public void withdrawUserByUserNum(User user) {
+		userDao.withdrawUserByUserNum(user);
+	}
+
 
 //	@Override
 //	public Object getAllState() {

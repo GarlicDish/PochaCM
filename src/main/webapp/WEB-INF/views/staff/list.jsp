@@ -5,13 +5,23 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-
 <%@ include file="../layout/header.jsp" %>
 
+<script type="text/javascript">
+
+$(document).ready(function(){
+	$("#validateUserBtn").click(function(){
+		if(confirm("Validate this user?") == true) {
+		$("#validateForm").submit();
+		} else {
+			return false;
+		}
+	})
+})
+</script>
 
 <h1 class="mt-4">Staff List</h1>
-	
-	
+
 <table class="table table-hover text-center">
 	<thead>
 		<tr>
@@ -23,6 +33,7 @@
 			<th>Work Start Date</th>
 			<th>Date of Birth</th>
 			<th>Activation</th>
+			<th>Remark</th>
 		</tr>
 	</thead>
 <tbody>
@@ -44,6 +55,14 @@
 		<c:if test="${i.USER_ACTIVATE == 1}">
 			<td>O</td>
 		</c:if>
+		<td>
+			<c:if test="${i.VALIDATION_BY_SUP == 0}">
+			<form id="validateForm" action="/staff/valid" method="post">
+				<input type="hidden" id="userNum" name="userNum" value="${i.USER_NUM }">
+				<button class="btn btn-primary btn-sm" id="validateUserBtn" name="validateUserBtn" type="button">Val</button>
+			</form>
+			</c:if>
+		</td>
 	</tr>
 </c:forEach>
 </tbody>

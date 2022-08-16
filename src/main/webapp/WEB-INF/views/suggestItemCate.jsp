@@ -6,7 +6,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- get the String List to compare with keyword --%>
-<% List<ItemCategory> ictList = (List) request.getAttribute("ictList"); %>
+<%
+	List<Category> ictList = (List) request.getAttribute("ictList");
+%>
 
 <% for (int i = 0; i < ictList.size(); i++) { %>
 <div ><span  value="<%=ictList.get(i).getItemCateNum()%>"><%=ictList.get(i).getItemCateName()%></span></div>
@@ -14,7 +16,7 @@
 <%
 
 // make a list of String including keyword
-public List<String> search(String keyword) {
+public List<String> search ( String keyword ) {
 	
 	if(str == null || str.equals("")) {
 		return null;

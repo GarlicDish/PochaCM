@@ -1,4 +1,4 @@
-package pochacm.util;
+package pochacm.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,18 +13,16 @@ import pochacm.controller.UserController;
 
 public class UserInterceptor implements HandlerInterceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static final Logger logger = LoggerFactory.getLogger(UserInterceptor.class);
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-		//logger index
-		int idx = 0;
-		logger.info("#{}. Entering login page [GET]", idx++);
+		logger.info("= = = = = = = UserInterceptor START = = = = = = = ");
 				
 		HttpSession session = request.getSession();
-		if( session.getAttribute("login") == null || session.getAttribute("login") == "false" ) { //비로그인 상태
+		if( session.getAttribute("login") == null || session.getAttribute("login") == "False" ) { //Check Login status
 			response.sendRedirect("/login");
 			
 			return false;
@@ -37,7 +35,7 @@ public class UserInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
 		
-		logger.info(" + + + 인터셉터 끝 + + +");
+		logger.info("= = = = = = =  UserInterceptor END = = = = = = = ");
 		
 		HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
 	}

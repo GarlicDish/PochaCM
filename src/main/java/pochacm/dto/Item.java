@@ -2,29 +2,31 @@ package pochacm.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class Item {
 	private int itemNum;
 	private int brandNum;
-	private int supplierNum;
-	private int itemCateNum;
+	private int cateNum;
 	private String itemName;
 	private String itemCode;
 	private int orderUnitNum;
-	private int itemOrderUnitPrice;
+	private int unitPrice;
 	private int primaryUnitNum;
 	private int secondaryUnitNum;
-	private int itemTargetWastePercent;
-	private Date itemExpiryDate;
-	private Date itemLastUpdate;
+	private int targetWastePercentage;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date expiryDate;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date lastUpdateDate;
 	private int userNum;
 	@Override
 	public String toString() {
-		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", supplierNum=" + supplierNum + ", itemCateNum="
-				+ itemCateNum + ", itemName=" + itemName + ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum
-				+ ", itemOrderUnitPrice=" + itemOrderUnitPrice + ", primaryUnitNum=" + primaryUnitNum
-				+ ", secondaryUnitNum=" + secondaryUnitNum + ", itemTargetWastePercent=" + itemTargetWastePercent
-				+ ", itemExpiryDate=" + itemExpiryDate + ", itemLastUpdate=" + itemLastUpdate + ", userNum=" + userNum
-				+ "]";
+		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", cateNum=" + cateNum + ", itemName=" + itemName
+				+ ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum + ", unitPrice=" + unitPrice
+				+ ", primaryUnitNum=" + primaryUnitNum + ", secondaryUnitNum=" + secondaryUnitNum
+				+ ", targetWastePercentage=" + targetWastePercentage + ", expiryDate=" + expiryDate
+				+ ", lastUpdateDate=" + lastUpdateDate + ", userNum=" + userNum + "]";
 	}
 	public int getItemNum() {
 		return itemNum;
@@ -38,17 +40,11 @@ public class Item {
 	public void setBrandNum(int brandNum) {
 		this.brandNum = brandNum;
 	}
-	public int getSupplierNum() {
-		return supplierNum;
+	public int getCateNum() {
+		return cateNum;
 	}
-	public void setSupplierNum(int supplierNum) {
-		this.supplierNum = supplierNum;
-	}
-	public int getItemCateNum() {
-		return itemCateNum;
-	}
-	public void setItemCateNum(int itemCateNum) {
-		this.itemCateNum = itemCateNum;
+	public void setCateNum(int cateNum) {
+		this.cateNum = cateNum;
 	}
 	public String getItemName() {
 		return itemName;
@@ -68,11 +64,11 @@ public class Item {
 	public void setOrderUnitNum(int orderUnitNum) {
 		this.orderUnitNum = orderUnitNum;
 	}
-	public int getItemOrderUnitPrice() {
-		return itemOrderUnitPrice;
+	public int getUnitPrice() {
+		return unitPrice;
 	}
-	public void setItemOrderUnitPrice(int itemOrderUnitPrice) {
-		this.itemOrderUnitPrice = itemOrderUnitPrice;
+	public void setUnitPrice(int unitPrice) {
+		this.unitPrice = unitPrice;
 	}
 	public int getPrimaryUnitNum() {
 		return primaryUnitNum;
@@ -86,23 +82,23 @@ public class Item {
 	public void setSecondaryUnitNum(int secondaryUnitNum) {
 		this.secondaryUnitNum = secondaryUnitNum;
 	}
-	public int getItemTargetWastePercent() {
-		return itemTargetWastePercent;
+	public int getTargetWastePercentage() {
+		return targetWastePercentage;
 	}
-	public void setItemTargetWastePercent(int itemTargetWastePercent) {
-		this.itemTargetWastePercent = itemTargetWastePercent;
+	public void setTargetWastePercentage(int targetWastePercentage) {
+		this.targetWastePercentage = targetWastePercentage;
 	}
-	public Date getItemExpiryDate() {
-		return itemExpiryDate;
+	public Date getExpiryDate() {
+		return expiryDate;
 	}
-	public void setItemExpiryDate(Date itemExpiryDate) {
-		this.itemExpiryDate = itemExpiryDate;
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
-	public Date getItemLastUpdate() {
-		return itemLastUpdate;
+	public Date getLastUpdateDate() {
+		return lastUpdateDate;
 	}
-	public void setItemLastUpdate(Date itemLastUpdate) {
-		this.itemLastUpdate = itemLastUpdate;
+	public void setLastUpdateDate(Date lastUpdateDate) {
+		this.lastUpdateDate = lastUpdateDate;
 	}
 	public int getUserNum() {
 		return userNum;
@@ -110,4 +106,8 @@ public class Item {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
+	
+	
+	
+	
 }

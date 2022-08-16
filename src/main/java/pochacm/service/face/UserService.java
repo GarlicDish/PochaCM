@@ -52,5 +52,7 @@ public interface UserService {
 
 	void updateUserInfo(User user);
 
+	void withdrawUserByUserNum(User user);
+
 
 }

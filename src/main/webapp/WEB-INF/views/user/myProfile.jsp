@@ -57,7 +57,7 @@ td {
 			</figure>
 		</div>
 		<div class="col-5" style="margin:0 auto;">
-			<form id="pwValForm" action="/myProfile/update" method="post">
+			<form id="pwValForm" action="/user/myProfile/update" method="post">
 				<div class="input-group">
 					<span class="input-group-text">Password</span>
 					<input class="form-control col-6" type="password" id="userPassword" name="userPassword" placeholder="Enter the password">

@@ -43,6 +43,8 @@ public interface UserDao {
 
 	void updateUserInfo(User user);
 
+	void withdrawUserByUserNum(User user);
+
 //	Object getAllState();
 //
 //	Object getAllSuburb();

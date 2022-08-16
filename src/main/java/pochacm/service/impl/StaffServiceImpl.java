@@ -29,4 +29,9 @@ private static final Logger logger = LoggerFactory.getLogger(StaffServiceImpl.cl
 		
 		return staffDao.selectAllBranchStaffByUserNum(user);
 	}
+
+	@Override
+	public void validateStaffByUser(User user) {
+		staffDao.validateStaffByUser(user);
+	}
 }

@@ -11,12 +11,13 @@ public class MainController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 	
-	@RequestMapping(value = "/main", method = RequestMethod.GET)
-	public void main() {
+	@RequestMapping(value = {"/main","/"}, method = RequestMethod.GET)
+	public String main() {
 
 		int idx = 0;
 		
 		logger.info("#{}. 메인 페이지 [GET]", idx++);
 	
+		return "redirect:/login";
 	}
 }

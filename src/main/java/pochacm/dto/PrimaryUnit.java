@@ -4,6 +4,7 @@ public class PrimaryUnit {
 	private int primaryUnitNum;
 	private String primaryUnit;
 	private int primaryUnitQty;
+	
 	public int getPrimaryUnitNum() {
 		return primaryUnitNum;
 	}

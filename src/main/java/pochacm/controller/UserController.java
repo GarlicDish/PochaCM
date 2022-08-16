@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import pochacm.dto.User;
 import pochacm.service.face.UserService;
 import pochacm.util.CSVReader;
@@ -48,7 +47,6 @@ public class UserController {
 
 		//Save the URL path in session
 		request.getSession().setAttribute("redirectURL", referer);
-
 		logger.info("#{}. Saving the referer = {}", idx++, request.getSession().getAttribute("redirectURL"));
 
 		return "user/login";
@@ -56,7 +54,7 @@ public class UserController {
 
 	//Login check and move the page
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public String loginProcess(User user, HttpSession session) {
+	public String loginProcess(User user, HttpSession session, HttpServletRequest req) {
 
 		// logger index
 		int idx = 0;
@@ -64,6 +62,8 @@ public class UserController {
 		logger.info("#{}. Entering login page [POST]", idx++);
 
 		boolean loginResult = userService.loginResult(user);
+		
+		String msg = "";
 		
 		if (loginResult) {
 			// login success
@@ -73,6 +73,11 @@ public class UserController {
 			boolean isValid = userService.getUserValidationByEmail(user);
 			
 			if( !isValid ) {
+				//Alert with Error Message
+				msg = "Non valid E-mail and/or Password";
+				req.setAttribute("msg", msg);
+				logger.info("#{}. msg = {}", idx++, req.getAttribute("msg"));
+				
 				session.invalidate();
 				return "redirect:/login";
 			}
@@ -83,6 +88,10 @@ public class UserController {
 			session.setAttribute("positionNum", userService.getUserPositionByEmail(user));
 			session.setAttribute("invalidation", isValid);
 
+			msg = "Welcome!";
+			req.setAttribute("msg", msg);
+			
+			logger.info("#{}. msg = {}", idx++, req);
 			logger.info("#{}. session login = {}", idx++, session.getAttribute("login"));
 			logger.info("#{}. session userNum = {}", idx++, session.getAttribute("userNum"));
 			logger.info("#{}. session userEmail = {}", idx++, session.getAttribute("userEmail"));
@@ -99,7 +108,7 @@ public class UserController {
 //					return "redirect:" + session.getAttribute("redirectURL");
 //				}
 //			}
-			return "redirect:/main";
+			return "redirect:/summary";
 
 		} else {
 			// login fail
@@ -107,6 +116,11 @@ public class UserController {
 			logger.info("login failure");
 			
 			session.invalidate();
+			
+			//Alert with Error Message
+			msg = "Non valid E-mail and/or Password";
+			req.setAttribute("msg", msg);
+			logger.info("#{}. msg = {}", idx++, req.getAttribute("msg"));
 
 			return "redirect:/login";
 		}
@@ -126,8 +140,6 @@ public class UserController {
 		// after logout, move to main page
 		return "redirect: /main";
 	}
-
-	 
 	 
 	// move to join page
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
@@ -196,11 +208,17 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/myProfile")
+	@GetMapping("/user/myProfile")
 	public String viewMyProfile(HttpSession session, Model model) {
 		// logger index
 		int idx = 0;
 		logger.info("#{}. /myProfile [GET]", idx++);
+		
+		//if he/she does not login, back to login page
+		if(session.getAttribute("userNum") == null) {
+			logger.info("#{}. Not Logined", idx++);
+			return "redirect:/login";
+		}
 		
 		User user = new User();
 		user.setUserNum((int) session.getAttribute("userNum"));
@@ -220,23 +238,23 @@ public class UserController {
 		return "user/myProfile";
 	}
 	
-	@GetMapping("/myprofile/validation")
+	@GetMapping("/user/myprofile/validation")
 	public String validationForUpdateMyProfile() {
 		
 		return "user/validationPopUp";
 	}
 	
 	
-	@GetMapping("/myProfile/update")
+	@GetMapping("/user/myProfile/update")
 	public String updateMyProfile(HttpSession session, Model model) {
 		// logger index
 		int idx = 0;
-		logger.info("#{}. /myProfile/update [GET]", idx++);
+		logger.info("#{}. /user/myProfile/update [GET]", idx++);
 		
 		return "user/myProfileUpdate";
 	}
 
-	@PostMapping("/myProfile/update")
+	@PostMapping("/user/myProfile/update")
 	public String validationSubmission(HttpSession session, Model model, String userPassword) {
 		// logger index
 		int idx = 0;
@@ -286,11 +304,11 @@ public class UserController {
 			return "user/myProfileUpdate";
 		} else {
 			
-			return "redirect: /myProfile";
+			return "redirect: /user/myProfile";
 		}
 	}
 	
-	@PostMapping("/myProfile/updateSubmit")
+	@PostMapping("/user/myProfile/updateSubmit")
 	public String moveToUpdateProfile(HttpSession session, Model model, User user) {
 		// logger index
 		int idx = 0;
@@ -300,8 +318,23 @@ public class UserController {
 		userService.updateUserInfo(user);
 		
 		
-		return "redirect: /myProfile";
+		return "redirect: /user/myProfile";
 	}
+	
+	@PostMapping("/user/withdraw")
+	public String withdraw(User user, HttpSession session) {
+		// logger index
+		int idx = 0;
+		logger.info("#{}. /user/withdraw", idx++);
+		logger.info("#{}. user = {}", idx++, user);
+		
+		userService.withdrawUserByUserNum(user);
+		session.invalidate();
+		
+		
+		return "redirect: /main";
+	}
+	
 	
 	//++++++++++++++++++++++++++ AJAX AREA +++++++++++++++++++++++++++++++++++
 	
@@ -360,6 +393,7 @@ public class UserController {
 			return 1;
 		}
 	}
+	
 	
 	
 }

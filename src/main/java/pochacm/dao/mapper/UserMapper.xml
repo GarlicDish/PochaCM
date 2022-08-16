@@ -84,6 +84,12 @@
 			tax_file_num =#{taxFileNum}, bsb_num=#{bsbNum}, bank_account_num=#{bankAccountNum}, sa_fund_name=#{saFundName}, 
 			sa_fund_num =#{saFundNum}, address_l1=#{addressL1}, address_l2=#{addressL2}, address_state=#{addressState},
 			address_sub=#{addressSub}, address_postcode=#{addressPostCode}, sign_up_date=#{signUpDate}, validation_by_sup=#{validationBySup}
-		WHERE user_email = #{userEmail} 
+		WHERE user_email = #{userEmail}
+	</update>
+	
+	<update id="withdrawUserByUserNum" parameterType="pochacm.dto.User">
+		UPDATE user_info
+		user_activate = 0
+		WHERE USER_NUM = #{userNum}
 	</update>
 </mapper>

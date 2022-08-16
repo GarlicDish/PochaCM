@@ -12,6 +12,24 @@ $(document).ready(function() {
 	$("#searchBtn").click(function() {
 		$("#searchForm").submit();
 	});
+	
+	$(".delBtn").click(function() {
+		if(confirm("Delete this invoice? (cannot return)") == true) {
+			var trNum = $(this).closest('tr').prevAll().length;
+            console.log('trNum : ' + trNum);
+            
+            var form = 'delForm' + trNum;
+            console.log('form : ' + form);
+            
+			$("#"+form).submit();
+		} else {
+			return false;
+		}
+	});
+	
+	$("#addBtn").click(function(){
+		location.href='/invoice/add';
+	})
 	 
 })
 </script>
@@ -22,9 +40,6 @@ $(document).ready(function() {
 			<tr class="table-dark">
 				<th data-type="number">#</th>
 				<th>Serial No.</th>
-				<th>Brand</th>
-				<th>Supplier</th>
-				<th data-type="number">Item Qty</th>
 				<th data-type="number">Total Price</th>
 				<th data-type="date">Issued Date</th>
 				<th>Writer</th>
@@ -35,24 +50,29 @@ $(document).ready(function() {
 			<c:forEach items="${invoiceList }"  var="i" >
 				<tr>
 					<td>${i.RNUM }</td>
-					<td><a href="<%= request.getContextPath() %>/invoice/view?invoiceNum=${i.INVOICE_NUM }&category=${category }&keyword=${keyword }">${i.INVOICE_SERIAL }</a></td>
-					<td><a>${i.BRAND_NAME }</a></td>
-					<td><a>${i.SUPPLIER_NAME }</a></td>
-					<td>${i.CNT }</td>
-					<td>${i.QQTY }</td>
+					<td>${i.INVOICE_SERIAL }</td>
+					<td>${i.TP }</td>
 					<td><fmt:formatDate value="${i.INVOICE_DATE }" pattern="yyyy-MM-dd"/> </td>
 					<td>${i.USER_NAME }</td>
 					<td>
+						<form action="/invoice/delete" id="delForm<fmt:formatNumber value="${i.RNUM%15-1 }" minFractionDigits="0" maxFractionDigits="0"/>" method="post">
+							<input type="hidden" id="invoiceNum" name="invoiceNum" value="${i.INVOICE_NUM }">
+							<input type="hidden" id="curPage" name="curPage" value="${paging.curPage }">
+						</form>
+						<a href="/invoice/view?invoiceNum=${i.INVOICE_NUM }"><button class="btn btn-success btn-sm" type="button" id="detailBtn" name="detailBtn">Detail</button></a>
 						<c:if test="${sessionScope.positionNum < 2 }">
-							<a href="/invoice/delete?invocieNum=${i.INVOICE_NUM }">
-								<button class="btn btn-danger btn-sm" type="button" id="delBtn" name="delBtn">DEL</button>
-							</a>
+							<button type="button" class="btn btn-danger btn-sm delBtn" id="delBtn" name="delBtn">DEL</button>
 						</c:if>
 					</td>
 				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+
+</div>
+	
+<div>
+	<button type="button" class="btn btn-primary btn-sm" id="addBtn" name="addBtn">ADD</button>
 </div>
 
 <div class="">

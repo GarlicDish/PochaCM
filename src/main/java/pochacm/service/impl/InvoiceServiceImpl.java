@@ -1,22 +1,25 @@
 package pochacm.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import pochacm.dao.face.InvoiceDao;
 import pochacm.dto.Invoice;
+import pochacm.dto.InvoiceItem;
 import pochacm.dto.Item;
-import pochacm.dto.ItemCategory;
+import pochacm.dto.Brand;
+import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
 import pochacm.dto.SecondaryUnit;
+import pochacm.dto.Supplier;
 import pochacm.service.face.InvoiceService;
 
 @Service
@@ -32,6 +35,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. getInvoicePaging", idx++);
+		logger.info("#{}. paging : {}", idx++, paging);
 		
 		int page = 0;
 		
@@ -63,29 +67,21 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	//Get invoice list
 	@Override
-	public List<Invoice> getInvoiceList(Paging paging) {
+	public List<Map<String, String>> getInvoiceList(Paging paging) {
 		return invoiceDao.selectAllInvoice(paging);
 	}
 
 	//view invoice detail
 	@Override
-	public List<Item> selectItemsByInvoiceNum(Invoice invoice) {
+	public List<Map<String, String>> selectItemsByInvoiceNum(Invoice invoice) {
 		return invoiceDao.selectItemsByInvoiceNum(invoice);
 	}	
 
-	@Override
-	public Invoice getInvoiceByInvoiceNum(Invoice invoice) {
-		return invoiceDao.getInvoiceByInvoiceNum(invoice);
-	}
-	
 	@Override
 	public Object getItemInfoByItem(Item item) {
 		return invoiceDao.selectItemInfoByItemNum(item);
 	}
 	
-
-	
-
 	@Override
 	public List<OrderUnit> getOrderUnitList() {
 		return invoiceDao.getOrderUnitList();
@@ -102,16 +98,9 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public List<ItemCategory> getItemCategoryList() {
+	public List<Category> getItemCategoryList() {
 		return invoiceDao.getItemCategoryList();
 	}
-
-	@Override
-	public List<String> getCategoryByKeyword(String keyword) {
-		return invoiceDao.getCategoryByKeyword();
-	}
-
-	
 
 	@Override
 	public Recipe getRecipeDtoWithRecipeName(String menuName) {
@@ -132,26 +121,54 @@ public class InvoiceServiceImpl implements InvoiceService {
 		return invoiceDao.selectMenuSearchList(recipe);
 	}
 
-	
-
-	@Override
-	public List<Recipe> makeRecipeListFromParams(Model model) {
-		
-		return null;
-	}
-
 	@Override
 	public void updateItemInformation(Item item) {
 		invoiceDao.updateItemInformation(item);
 	}
 
-	
+	@Override
+	public void deleteInvoice(Invoice invoice) {
+		invoiceDao.deleteInvoice(invoice);
+	}
 
-	
+	@Override
+	public List<Brand> selectAllBrand() {
+		return invoiceDao.selectAllBrand();
+	}
 
+	@Override
+	public List<Supplier> selectAllSupplier() {
+		return invoiceDao.selectAllSupplier();
+	}
 
+	@Override
+	public List<OrderUnit> selectAllOrderUnit() {
+		return invoiceDao.selectAllOrderUnit();
+	}
 
+	@Override
+	public List<Category> selectAllCategory() {
+		return invoiceDao.selectAllCategory();
+	}
 
+	@Override
+	public List<Item> getItemListBySearch(Item item) {
+		return invoiceDao.selectItemSearchList(item);
+	}
 
+	@Override
+	public Map<String, String> getInvoiceInfoByInvoiceNum(Invoice invoice) {
+		return invoiceDao.selectInvoiceInfoByInvoiceNum(invoice);
+	}
+
+	@Override
+	public void deleteInvoiceItemByNum(InvoiceItem invoiceItem) {
+		invoiceDao.deleteInvoiceItemByNum(invoiceItem);
+	}
+
+	@Override
+	public int countInvoiceItemByInvoiceNum(InvoiceItem invoiceItem) {
+		return invoiceDao.selectInvoiceItemByInvoiceNum(invoiceItem);
+	}
 
 }

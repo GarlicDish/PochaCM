@@ -13,8 +13,13 @@ $(document).ready(function(){
 		history.go(-1);
 	})
 	
-	$("#updateBtn").click(function(){
-		$("#myProfileUpdateForm").submit();
+	//withdrawal
+	$("#withdrawBtn").click(function(){
+		if(confirm("Are you sure to withdraw? After withdarwal, you cannot join with same E-mail.") == true) {
+			$("#withdrawForm").submit();
+		} else {
+			return false;
+		}
 	})
 	
 	//when state is changed, suburb list will be updated
@@ -214,13 +219,13 @@ $(document).ready(function(){
 			$("#userPhoneCheck").html("");
 			$.ajax({
 			url : "/join/phoneCheck?userPhone="+userPhone
-		   ,type : "GET"
-		   ,dataType : "html"
-		   ,data: userPhone
-		   ,contentType : "application/json; charset=UTF-8"
-		   ,success : function(data) {
+			,type : "GET"
+			,dataType : "html"
+			,data: userPhone
+			,contentType : "application/json; charset=UTF-8"
+			,success : function(data) {
 			   
-			   if (data == 0 || data == ${map.USER_PHONE}) {
+				if (data == 0 || data == ${map.USER_PHONE}) {
 				   
 					$("#userPhoneCheck").html("Available.");
 					$("#userPhoneCheck").attr("class", "check text-success");
@@ -234,10 +239,10 @@ $(document).ready(function(){
 					
 					userPhoneValidation = false;
 					
-					}	
-				}		
-			})
-		}		
+				} //if-else end
+			} //success function end
+		}) //ajax end
+		} //if-else end
 		console.log(userPhoneValidation);
 	});
 	
@@ -523,50 +528,62 @@ $(document).ready(function(){
      	}
 		console.log(branchValidation);
 	})
-		
+	
 	// onsubmit condition
-	$("#updateBtn").click(function() {
-		if ( userPwValidation && userPwDoubleValidation && userNameValidation && 
-			userPhoneValidation && userBirthDayValidation && userTFCValidation &&
-			userTFNValidation && userBSBNumValidation && userBANValidation && 
-			userSANameValidation && userSANumValidation && userAddr1Validation && 
-			userStateValidation && userSuburbanValidation && userPCValidation && 
-			branchValidation && positionValidation && wSDValidation
-		) {
+	$("#updateBtn").click(function(){
+		console.log('userPwValidation : '+userPwValidation ); 
+		console.log('userPwDoubleValidation : '+userPwDoubleValidation ); 
+		console.log('userNameValidation : '+userNameValidation ); 
+		console.log('userGenderValidation : '+userGenderValidation );
+		console.log('userPhoneValidation : '+userPhoneValidation ); 
+		console.log('userBirthDayValidation : '+userBirthDayValidation );
+		console.log('userTFCValidation : '+userTFCValidation );
+		console.log('userTFNValidation : '+userTFNValidation );
+		console.log('userBSBNumValidation : '+userBSBNumValidation );
+		console.log('userBANValidation : '+userBANValidation );
+		console.log('userSANameValidation : '+userSANameValidation );
+		console.log('userSANumValidation : '+userSANumValidation );
+		console.log('userAddr1Validation : '+userAddr1Validation ); 
+		console.log('userStateValidation : '+userStateValidation );
+		console.log('userSuburbanValidation : '+userSuburbanValidation );
+		console.log('userPCValidation : '+userPCValidation );
+		console.log('branchValidation : '+branchValidation );
+		console.log('positionValidation : '+positionValidation );
+		console.log('wSDValidation : '+wSDValidation );
+		
+		//Password check
+		if( !(userPwValidation && userPwDoubleValidation) ){
+			
+			$("#buttonCheck").html("Please enter the NEW or existing in password and its double check cell")
+			$("#buttonCheck").attr("class", "text-danger");
+			
+			return false;
+		}
+		
+		//other cell check
+		if ( userNameValidation && userPhoneValidation 
+				&& userBirthDayValidation && userTFCValidation && userTFNValidation && userBSBNumValidation 
+				&& userBANValidation && userSANameValidation && userSANumValidation && userAddr1Validation 
+				&& userStateValidation && userSuburbanValidation && userPCValidation && branchValidation 
+				&& positionValidation && wSDValidation	) {
+			
+			
 			$("#taxFileNum").attr("disabled", false);
 			
-			if($("#taxFileNum").val() == null || $("#taxFileNum").val() == ""){
+			if($("#taxFileNum").val() == null && $("#taxFileNum").val() == ""){
 				$("#taxFileNum").attr("value", 0);
 			}
-			$("#joinForm").submit();
 			
+			$("#myProfileUpdateForm").submit();
+				
 		} else {
-			console.log('userPwValidation : '+userPwValidation ); 
-			console.log('userPwDoubleValidation : '+userPwDoubleValidation ); 
-			console.log('userNameValidation : '+userNameValidation ); 
-			console.log('userGenderValidation : '+userGenderValidation );
-			console.log('userPhoneValidation : '+userPhoneValidation ); 
-			console.log('userBirthDayValidation : '+userBirthDayValidation );
-			console.log('userTFCValidation : '+userTFCValidation );
-			console.log('userTFNValidation : '+userTFNValidation );
-			console.log('userBSBNumValidation : '+userBSBNumValidation );
-			console.log('userBANValidation : '+userBANValidation );
-			console.log('userSANameValidation : '+userSANameValidation );
-			console.log('userSANumValidation : '+userSANumValidation );
-			console.log('userAddr1Validation : '+userAddr1Validation ); 
-			console.log('userStateValidation : '+userStateValidation );
-			console.log('userSuburbanValidation : '+userSuburbanValidation );
-			console.log('userPCValidation : '+userPCValidation );
-			console.log('branchValidation : '+branchValidation );
-			console.log('positionValidation : '+positionValidation );
-			console.log('wSDValidation : '+wSDValidation );
 			
 			$("#buttonCheck").html("There is/are blank cell in the form")
 			$("#buttonCheck").attr("class", "text-danger");
-			$("#form").attr("onsubmit","return false");
+			
+			return false;
 		}
-	})
-	
+	}) //update submit function end
 	
 })
 </script>
@@ -576,7 +593,7 @@ $(document).ready(function(){
 			<!-- form for informations to join -->
 			
 			<!-- taxFileNum's disabled attribution will be false when submit. -->
-			<form id="myProfileUpdateForm" class="form-inline" action="/myProfile/updateSubmit" method="post" style="display:flex;">
+			<form id="myProfileUpdateForm" class="form-inline" action="/user/myProfile/updateSubmit" method="post" style="display:flex;">
 				<div class="col-6">
 					<div id="personalInfo" class="form-group " style="padding: 10px;">
 						<h4>Personal Information</h4>
@@ -824,12 +841,17 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</form>
+			<form action="/user/withdraw" method="post" id="withdrawForm">
+				<input type="hidden" id="userNum" name="userNum" value="<%=session.getAttribute("userNum")%>">
+			</form>
 		</div>
+		
 <div class="row">
 	<div id="buttonCheck"></div>
 	<div id="button" style="padding:30px;text-align:center;">
-		<button class="btn btn-secondary btn-lg" type="button" id="cancelBtn" name="cancelBtn">Cancel</button>
-		<button class="btn btn-secondary btn-lg" type="button" id="updateBtn" name="updateBtn">Update</button>
+		<button class="btn btn-secondary btn" type="button" id="cancelBtn" name="cancelBtn">Cancel</button>
+		<button class="btn btn-success btn" type="button" id="updateBtn" name="updateBtn">Update</button>
+		<button class="btn btn-danger btn" type="button" id="withdrawBtn" name="withdrawBtn">Withdrawal</button>
 	</div>
 </div>
 	

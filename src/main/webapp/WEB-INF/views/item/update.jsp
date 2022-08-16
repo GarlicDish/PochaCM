@@ -26,9 +26,9 @@ $(document).ready(function(){
 	
 	//get the item expiry date which originally saved
 	window.onload = function(){
-		date = "${itemInfo.ITEM_EXPIRY_DATE }";
+		date = "${itemInfo.EXPIRY_DATE }";
 		//$("#expiryDate").val(new Date(date).toISOString().substr(0, 10));
-		$('#expiryDate').val('${itemInfo.ITEM_EXPIRY_DATE}'.slice(0, 10));
+		$('#expiryDate').val('${itemInfo.EXPIRY_DATE}'.slice(0, 10));
 	}
 	
 })
@@ -58,16 +58,16 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="itemCateNum" class="col-sm-8 control-label">Item Category</label>
+					<label for="cateNum" class="col-sm-8 control-label">Item Category</label>
 				</th>
 				<!-- <input type="text" id="itemCateNum" name ="itemCateNum" onkeyup="itemCateNumKeyword()"/>
 					<div id="suggestDiv" class="suggest">
 						<div id="suggestListDiv"></div>
 					</div> -->
 				<td>
-					<select class="form-select" id="itemCateNum" >
+					<select class="form-select" id="cateNum" name="cateNum">
 						<c:forEach items="${icList }" var="i">
-							<option value="${i.ITEM_CATE_NUM }" <c:if test="${itemInfo.ITEM_CATE_NUM eq i.ITEM_CATE_NUM }"> selected </c:if>>${i.ITEM_CATE_NAME }</option>
+							<option value="${i.CATE_NUM }" <c:if test="${itemInfo.CATE_NUM eq i.CATE_NUM }">selected</c:if>>${i.CATE_NAME }</option>
 						</c:forEach>
 					</select> 
 					
@@ -78,7 +78,7 @@ $(document).ready(function(){
 					<label for="orderUnitNum" class="col-sm-8 control-label">Order Unit</label>
 				</th>
 				<td>
-					<select class="form-select" id="orderUnitNum">
+					<select class="form-select" id="orderUnitNum" name="orderUnitNum">
 						<c:forEach items="${ouList }" var="i">
 							<option value="${i.ORDER_UNIT_NUM }" <c:if test="${itemInfo.ORDER_UNIT_NUM eq i.ORDER_UNIT_NUM }"> selected </c:if>>${i.ORDER_UNIT }</option>
 						</c:forEach>
@@ -90,7 +90,7 @@ $(document).ready(function(){
 					<label for="orderUnitPrice" class="col-sm-8 control-label">Order Unit Price</label>
 				</th>
 				<td>
-					<input type="text" class="form-control input-sm" id="orderUnitPrice"	name="orderUnitPrice"  value="${itemInfo.ITEM_ORDER_UNIT_PRICE }">
+					<input type="text" class="form-control input-sm" id="unitPrice"	name="unitPrice"  value="${itemInfo.UNIT_PRICE }">
 				</td>
 			</tr>
 			<tr>
@@ -98,7 +98,7 @@ $(document).ready(function(){
 					<label for="primaryUnitNum" class="col-sm-8 control-label">Primary Unit</label>
 				</th>
 				<td>
-					<select class="form-select" id="primaryUnitNum">
+					<select class="form-select" id="primaryUnitNum" name="primaryUnitNum">
 						<c:forEach items="${puList }" var="i">
 							<option value="${i.PRIMARY_UNIT_NUM }" <c:if test="${itemInfo.PRIMARY_UNIT_NUM eq i.PRIMARY_UNIT_NUM }">selected</c:if>>${i.PRIMARY_UNIT }</option>
 						</c:forEach>
@@ -110,10 +110,11 @@ $(document).ready(function(){
 					<label for="secondaryUnitNum" class="col-sm-8 control-label">Secondary Unit</label>
 				</th>
 				<td>
-					<select class="form-select" id="secondaryUnitNum">
+					<select class="form-select" id="secondaryUnitNum" name="secondaryUnitNum">
 						<c:forEach items="${suList }" var="i">
 							<option value="${i.SECONDARY_UNIT_NUM }" <c:if test="${itemInfo.SECONDARY_UNIT_NUM eq i.SECONDARY_UNIT_NUM }">selected</c:if>>${i.SECONDARY_UNIT }</option>
 						</c:forEach>
+							<option value="">None</option>
 					</select>
 				</td>
 			</tr>
@@ -137,10 +138,10 @@ $(document).ready(function(){
 			</tr>
 			<tr>
 				<th class="table-dark">
-					<label for="targetWastePercent" class="col-sm-8 control-label">Target Waste (%)</label>
+					<label for="targetWastePercentage" class="col-sm-8 control-label">Target Waste (%)</label>
 				</th>
 				<td>
-					<input type="text" class="form-control input-sm" id="targetWastePercent"	name="targetWastePercent"  value="${itemInfo.ITEM_TARGET_WASTE_PERCENT }">
+					<input type="text" class="form-control input-sm" id="targetWastePercentage" name="targetWastePercentage"  value="${itemInfo.TARGET_WASTE_PERCENTAGE }">
 				</td>
 				<th class="table-dark">
 					<label for="expiryDate" class="col-sm-8 control-label">Expiry Date</label>
@@ -150,6 +151,7 @@ $(document).ready(function(){
 				</td>
 			</tr>
 		</table>
+		<input type="hidden" id="userNum" name="userNum" value="<%=session.getAttribute("userNum") %>">
 	</form>
 </div>
 <div style="text-align:center;">

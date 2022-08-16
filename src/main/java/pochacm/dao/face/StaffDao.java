@@ -8,4 +8,6 @@ public interface StaffDao {
 
 	List<User> selectAllBranchStaffByUserNum(User user);
 
+	void validateStaffByUser(User user);
+
 }

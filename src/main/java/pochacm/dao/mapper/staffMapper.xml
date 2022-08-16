@@ -31,4 +31,9 @@
 		    ORDER BY rnum ASC
 		)
 	</select>
+	
+	<update id="validateStaffByUser" parameterType="pochacm.dto.User">
+		UPDATE user_info set validation_by_sup = 1
+		WHERE user_num = #{userNum}
+	</update>
 </mapper>

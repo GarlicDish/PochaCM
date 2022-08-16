@@ -201,11 +201,11 @@ $(document).ready(function() {
 		console.log('form submit in');
 		$("form").submit();
 	})
+	
 	$("#preBtn").click(function(){
 		console.log('previous');
 		history.go(-1);
 	})
-	
 })
 </script>
 <h1 class="mt-4">Sales Add</h1>
@@ -217,7 +217,6 @@ $(document).ready(function() {
 			<div class="form_group input-group" style="float:left;">
 				<span class="input-group-text">Sales Date</span>
 				<input type="Date" class="form-control" id="salesDate" name="salesDate">
-				
 				<div class="form_group col-8" style="float:right;">
 					<button type="button" id="btnAdd" name="btnAdd" class="btn btn-primary btn-sm" style="height:30px;" onclick="addItem();">
 						ADD 1 Row
@@ -227,7 +226,6 @@ $(document).ready(function() {
 					</button>
 				</div>
 			</div>
-			
 		</div>
 		
 		<div>
