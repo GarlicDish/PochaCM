@@ -10,8 +10,8 @@ $(document).ready(function(){
 		history.go(-1);
 	});
 	
-	$("#submitBtn").click(function(){
-		$("#invoiceForm").submit();
+	$("#updateBtn").click(function(){
+		$("#updateForm").submit();
 	});
 	
 })
@@ -205,18 +205,23 @@ function getTotalPrice(x){
 
 <h1 class="mt-4">Invoice Add</h1>
 
-<form action="/invoice/add" method="post" id="invoiceForm">
+<form action="/invoice/update" method="post" id="updateForm">
+<input type="hidden" name="invoiceNum" value="${invInfo.INVOICE_NUM}">
+<input type="hidden" name="userNum" id="userNum" value="${sessionScope.userNum}">
 <div class="row" style="position:relative;">
 	<div class="col-8">
-		<input type="hidden" name="userNum" id="userNum" value="${sessionScope.userNum }">
 		<table id="general-info" class="table table-bordered" style="text-align:center;">
 			<tr>
 				<td style="width:15%;" class="table-dark">Serial No.</td>
-				<td colspan="3" style="width:85%;"><input class="form_group input-group" type="text" id="invoiceSerial" name="invoiceSerial" placeholder="If there is no Serial No., then let this cell blank." ></td>
+				<td colspan="3" style="width:85%;">
+					<input class="form_group input-group" type="text" id="invoiceSerial" name="invoiceSerial" value="${invInfo.INVOICE_SERIAL }" >
+				</td>
 			</tr>
 			<tr>
 				<td style="width:15%;" class="table-dark">Date</td>
-				<td style="width:35%;"><input class="form_group input-group" type="Date" id="invoiceDate" name="invoiceDate"></td>
+				<td style="width:35%;">
+					<input class="form_group input-group" type="Date" id="invoiceDate" name="invoiceDate" value="<fmt:formatDate pattern="yyyy-MM-dd" value="${invInfo.INVOICE_DATE }"/>">
+				</td>
 			</tr>
 			<tr>
 				<td style="width:15%;" class="table-dark">Supplier</td>
@@ -224,7 +229,7 @@ function getTotalPrice(x){
 					<select class="form_group input-group" id="supplierNum" name="supplierNum">
 						<option>--Select--</option>
 						<c:forEach items="${supplierList }" var="i">
-							<option value="${i.supplierNum }">${i.supplierName }</option>
+							<option value="${i.supplierNum }"<c:if test='${i.supplierNum == invInfo.SUPPLIER_NUM}'>selected</c:if>>${i.supplierName }</option>
 						</c:forEach>
 					</select>
 				</td>
@@ -240,102 +245,102 @@ function getTotalPrice(x){
 	</div>
 </div>
 <div>
-	<table id="item-info" class="table table-bordered" style="text-align:center;">
-		<thead>
-			<tr class="table-dark">
-				<td>Item Code</td>
-				<td>Category</td>
-				<td>Brand</td>
-				<td>Item</td>
-				<td style="width:15%;">Order Unit</td>
-				<td style="width:10%;">Unit Price</td>
-				<td style="width:10%;">Qty</td>
-				<td style="width:10%;">Total Price</td>
-				<td></td>
-			</tr>
-			</thead>
-		<tbody>
-			<tr id="tr1">
-				<!-- Item Code-->
-				<td>
-					<div class="form_group input-group" id="itemCodeDiv1">
-						<input type="text" class="form-control form-control" id="itemCode1" name="itemCode" placeholder="Item Code" value="" onkeyup="searchCode(this, 1);">
-						<div class="form_group input-group suggest" id="itemCodeSuggestDiv1">
-							<div class="" id="itemCodeSuggestListDiv1" style="position:absolute;z-index:1;display:none"></div>
-						</div>
+<table id="item-info" class="table table-bordered" style="text-align:center;">
+	<thead>
+		<tr class="table-dark">
+			<td>Item Code</td>
+			<td>Category</td>
+			<td>Brand</td>
+			<td>Item</td>
+			<td style="width:15%;">Order Unit</td>
+			<td style="width:10%;">Unit Price</td>
+			<td style="width:10%;">Qty</td>
+			<td style="width:10%;">Total Price</td>
+			<td></td>
+		</tr>
+		</thead>
+	<tbody>
+	<c:forEach var="j" items="${itemList}">
+		<tr id="tr${j.RNUM}">
+			<!-- Item Code-->
+			<td>
+				<div class="form_group input-group" id="itemCodeDiv${j.RNUM }">
+					<input type="text" class="form-control form-control" id="itemCode${j.RNUM }" name="itemCode" placeholder="Item Code" value="${j.ITEM_CODE }" onkeyup="searchCode(this, ${j.RNUM });">
+					<input type="hidden" name="invoiceItemNum" <c:if test="${j.INVOICE_ITEM_NUM ne null}">value="${j.INVOICE_ITEM_NUM}"</c:if><c:if test="${j.INVOICE_ITEM_NUM eq null || j.INVOICE_ITEM_NUM == ''}">value="0"</c:if>>
+					<div class="form_group input-group suggest" id="itemCodeSuggestDiv${j.RNUM }">
+						<div id="itemCodeSuggestListDiv${j.RNUM }" style="position:absolute;z-index:1;display:none"></div>
 					</div>
-				</td>
-				<!-- Category -->
-				<td>
-					<div class="form_group" id="cateDiv1" >
-						<select id="category1" name="category" class="form-select">
-							<option>--Select--</option>
-							<c:forEach items="${categoryList }" var="i">
-							<option value="${i.cateNum }">${i.cateName }</option>
-							</c:forEach>
-						</select>
-					</div>
-				</td>
-				<!-- Brand -->
-				<td>
-					<select class="form-select" id="brandNum1" name="brandNum">
+				</div>
+			</td>
+			<!-- Category -->
+			<td>
+				<div class="form_group" id="cateDiv${j.RNUM }" >
+					<select id="category${j.RNUM }" name="category" class="form-select">
 						<option>--Select--</option>
-						<c:forEach items="${brandList }" var="i">
-						<option value="${i.brandNum }">${i.brandName }</option>
+						<c:forEach items="${categoryList }" var="i">
+							<option value="${i.cateNum }" <c:if test='${i.cateNum == j.CATE_NUM}'>selected</c:if>>${i.cateName }</option>
 						</c:forEach>
 					</select>
-				</td>
-				<!-- Item -->
-				<td>
-					<div class="form_group input-group" id="itemDiv1">
-						<input type="text" class="form-control form-control" id="itemName1" name="itemName" placeholder="Enter the Item" value="">
-						<input type='hidden' id='itemNum1' name="itemNum" value="0">
-						<div class="form_group input-group" id="itemSuggestDiv1" class="suggest">
-							<div class="" id="itemSuggestListDiv1" style="position:absolute;z-index:1;display:none"></div>
-						</div>
-					</div>
-				</td>
-				<!-- order Unit -->
-				<td>
-					<div class="form_group" id="orderUnitDiv1" >
-					<select id="orderUnit1" name="orderUnit" class="form-select">
-						<option>--Select--</option>
-						<c:forEach items="${orderUnitList }" var="i">
-						<option value="${i.orderUnitNum }">${i.orderUnit }</option>
-						</c:forEach>
-					</select>
-					</div>
-				</td>
-				<!-- unit price -->
-				<td>
-					<div class="form_group input-group" id="unitPriceDiv1" >
-						<span class="input-group-text">$</span>
-						<input type="number" class="form-control form-control" id="unitPrice1" name="unitPrice">
-					</div>
-				</td>
-				<!-- qty -->
-				<td>
-					<div class="form_group input-group" id="qtyDiv1" >
-						<input type="number" min="1" value="1" class="form-control form-control" id="qty1" name="qty" onchange="getTotalPrice(1);">
-					</div>
-				</td>
-				<!-- total price -->
-				<td>
-					<div class="form_group input-group" id="totalPriceDiv1" >
+				</div>
+			</td>
+			<!-- Brand -->
+			<td>
+				<select class="form-select" id="brandNum${j.RNUM }" name="brandNum">
+					<option>--Select--</option>
+					<c:forEach items="${brandList }" var="i">
+					<option value="${i.brandNum }" <c:if test='${i.brandNum == j.BRAND_NUM}'>selected</c:if>>${i.brandName }</option>
+					</c:forEach>
+				</select>
+			</td>
+			<!-- Item -->
+			<td>
+				<div class="form_group input-group" id="itemDiv${j.RNUM }">
+					<input type="text" class="form-control form-control" id="itemName${j.RNUM }" name="itemName" placeholder="Enter the Item" value="${j.ITEM_NAME }">
+					<input type='hidden' id='itemNum${j.RNUM }' name="itemNum" value="${j.ITEM_NUM }">
+				</div>
+			</td>
+			<!-- order Unit -->
+			<td>
+				<div class="form_group" id="orderUnitDiv${j.RNUM }" >
+				<select id="orderUnit${j.RNUM }" name="orderUnit" class="form-select">
+					<option>--Select--</option>
+					<c:forEach items="${orderUnitList }" var="i">
+					<option value="${i.orderUnitNum }" <c:if test='${i.orderUnitNum == j.ORDER_UNIT_NUM}'>selected</c:if>>${i.orderUnit }</option>
+					</c:forEach>
+				</select>
+				</div>
+			</td>
+			<!-- unit price -->
+			<td>
+				<div class="form_group input-group" id="unitPriceDiv${j.RNUM }" >
 					<span class="input-group-text">$</span>
-						<input type="number" class="form-control form-control" id="totalPrice1" name="totalPrice" disabled>
-					</div>
-				</td>
-				<td>
-					<button class="btn btn-danger delBtn" type="button" style="margin:0 auto;padding:0;" id="delBtn1" name="delBtn" onclick="delRow(1);">DEL</button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+					<input type="number" class="form-control form-control" id="unitPrice${j.RNUM }" name="unitPrice" value="${j.UNIT_PRICE}">
+				</div>
+			</td>
+			<!-- qty -->
+			<td>
+				<div class="form_group input-group" id="qtyDiv${j.RNUM }" >
+					<input type="number" min="1" class="form-control form-control" id="qty${j.RNUM }" name="qty" value="${j.QTY}" onchange="getTotalPrice(${j.RNUM });">
+				</div>
+			</td>
+			<!-- total price -->
+			<td>
+				<div class="form_group input-group" id="totalPriceDiv${j.RNUM }" >
+				<span class="input-group-text">$</span>
+					<input type="number" class="form-control form-control" id="totalPrice${j.RNUM }" name="totalPrice" value="${j.QTY*j.UNIT_PRICE}" disabled>
+				</div>
+			</td>
+			<td>
+				<button class="btn btn-danger delBtn" type="button" style="margin:0 auto;padding:0;" id="delBtn${j.RNUM }" name="delBtn" onclick="delRow(${j.RNUM });">DEL</button>
+			</td>
+		</tr>
+		</c:forEach>
+	</tbody>
+</table>
 </div>
 </form>
 <button type="button" class="btn btn-secondary" id="goBack">Cancel</button>
-<button type="button" class="btn btn-success" id="submitBtn">Submit</button>
+<button type="button" class="btn btn-success" id="updateBtn">Update</button>
 
 
 

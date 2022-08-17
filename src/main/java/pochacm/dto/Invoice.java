@@ -11,12 +11,12 @@ public class Invoice {
 	private int userNum;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date invoiceDate;
-	private int qty;
 	private int supplierNum;
+	
 	@Override
 	public String toString() {
 		return "Invoice [invoiceNum=" + invoiceNum + ", invoiceSerial=" + invoiceSerial + ", userNum=" + userNum
-				+ ", invoiceDate=" + invoiceDate + ", qty=" + qty + ", supplierNum=" + supplierNum + "]";
+				+ ", invoiceDate=" + invoiceDate + ", supplierNum=" + supplierNum + "]";
 	}
 	public int getInvoiceNum() {
 		return invoiceNum;
@@ -42,18 +42,14 @@ public class Invoice {
 	public void setInvoiceDate(Date invoiceDate) {
 		this.invoiceDate = invoiceDate;
 	}
-	public int getQty() {
-		return qty;
-	}
-	public void setQty(int qty) {
-		this.qty = qty;
-	}
 	public int getSupplierNum() {
 		return supplierNum;
 	}
 	public void setSupplierNum(int supplierNum) {
 		this.supplierNum = supplierNum;
 	}
+	
+	
 	
 	
 	

@@ -33,7 +33,7 @@ public interface InvoiceService {
 	 */
 	List<Map<String, String>> getInvoiceList(Paging paging);
 	
-	List<Map<String, String>> selectItemsByInvoiceNum(Invoice invoice);
+	List<Map<String, String>> selectItemsByInvoiceSerial(Invoice invoice);
 
 	Object getItemInfoByItem(Item item);
 
@@ -63,11 +63,31 @@ public interface InvoiceService {
 
 	List<Item> getItemListBySearch(Item item);
 
-	Map<String, String> getInvoiceInfoByInvoiceNum(Invoice invoice);
+	Map<String, String> getInvoiceInfoByInvoiceSerial(Invoice invoice);
 
 	void deleteInvoiceItemByNum(InvoiceItem invoiceItem);
 
 	int countInvoiceItemByInvoiceNum(InvoiceItem invoiceItem);
+
+	List<Item> getItemCodeListBySearch(Item itemName);
+
+	void insertItemInfo(Item item);
+
+	void insertInvoiceInfo(Invoice invoice);
+
+	void insertInvoiceAndItemInfo(InvoiceItem invoiceItem);
+
+	String getSupplierName(Invoice invoice);
+
+	List<Map<String, String>> getItemListByInvoiceSerial(Invoice invoice);
+
+	void updateInvoiceInfo(Invoice invoice);
+
+	void insertInvoiceItemInfo(InvoiceItem invoiceItem);
+
+	void updateInvoiceItemInfo(InvoiceItem invoiceItem);
+
+	int selectInvoiceItem(InvoiceItem iin);
 
 	
 }

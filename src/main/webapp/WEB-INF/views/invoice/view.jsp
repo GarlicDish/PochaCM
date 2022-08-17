@@ -8,8 +8,11 @@
 <script type="text/javascript">
 
 $(document).ready(function(){
-	$("#goBack").click(function(){
-		history.go(-1);
+	$("#toListBtn").click(function(){
+		location.href = '/invoice';
+	});
+	$("#updateBtn").click(function(){
+		location.href = '/invoice/update?invoiceSerial=${invInfo.INVOICE_SERIAL }';
 	});
 	
 	$(".delBtn").click(function() {
@@ -51,7 +54,7 @@ $(document).ready(function(){
 
 <table id="menu-info" class="table table-bordered" style="text-align:center;width:80%;">
 	<tr class="table-dark">
-		<td style="width:5%;">#</td>
+		<td style="width:5%;">Item Code</td>
 		<td style="width:25%;">Category</td>
 		<td style="width:15%;" class="table-dark">Brand</td>
 		<td style="width:35%;">Item</td>
@@ -63,7 +66,7 @@ $(document).ready(function(){
 	</tr>
 	<c:forEach var="i" items="${itemList }">
 		<tr>
-			<td>${i.RNUM }</td>
+			<td>${i.ITEM_CODE }</td>
 			<td>${i.CATE_NAME }</td>
 			<td style="width:35%;">${i.BRAND_NAME }</td>
 			<td><a href="<%= request.getContextPath() %>/item/view?itemNum=${i.ITEM_NUM }">${i.ITEM_NAME }</a></td>
@@ -83,6 +86,6 @@ $(document).ready(function(){
 		</tr>
 	</c:forEach>
 </table>
-<button type="button" class="btn btn-secondary" id="goBack">Back</button>
+<button type="button" class="btn btn-secondary" id="toListBtn">To List</button>
 <button type="button" id="updateBtn" class="btn btn-success" >Update</button>
 <%@ include file="../layout/footer.jsp" %>

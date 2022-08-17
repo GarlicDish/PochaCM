@@ -38,39 +38,27 @@ $(document).ready(function(){
 		<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
 			<!-- Item Name and Number -->
 			<tr>
-				<td rowspan="9" colspan="2" style="width:200px"><img src="../../resources/images/imagePrepare.png" class="img-fluid table-dark"/></td>
+				<th class="table-dark">
+					<label for="itemCode" class="col-sm-8 control-label">Item Code</label>
+				</th>
+				<td colspan="3">
+					<input type="text" class="form-control input-sm" id="itemCode"	name="itemCode"  value="${itemInfo.ITEM_CODE }">
+				</td>
+			</tr>
+			<tr>
+				<th class="table-dark">
+					<label for="brandName" class="col-sm-8 control-label">Brand Name</label>
+					<input type="hidden" id="brandNum" name="brandNum" value="${itemInfo.BRAND_NUM }">
+				</th>
+				<td>
+					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }">
+				</td>
 				<th style="min-width:150px;" class="table-dark">
 					<label for="itemName" class="col-sm-8 control-label">Item Name</label>
 					<input type="hidden" id="itemNum" name="itemNum" value="${itemInfo.ITEM_NUM }">
 				</th>
 				<td>
 					<input type="text" class="form-control input-sm" id="itemName"	name="itemName"  value="${itemInfo.ITEM_NAME }" autofocus>
-				</td>
-			</tr>
-			<!-- item code  -->
-			<tr>
-				<th class="table-dark">
-					<label for="itemCode" class="col-sm-8 control-label">Item Code</label>
-				</th>
-				<td>
-					<input type="text" class="form-control input-sm" id="itemCode"	name="itemCode"  value="${itemInfo.ITEM_CODE }">
-				</td>
-			</tr>
-			<tr>
-				<th class="table-dark">
-					<label for="cateNum" class="col-sm-8 control-label">Item Category</label>
-				</th>
-				<!-- <input type="text" id="itemCateNum" name ="itemCateNum" onkeyup="itemCateNumKeyword()"/>
-					<div id="suggestDiv" class="suggest">
-						<div id="suggestListDiv"></div>
-					</div> -->
-				<td>
-					<select class="form-select" id="cateNum" name="cateNum">
-						<c:forEach items="${icList }" var="i">
-							<option value="${i.CATE_NUM }" <c:if test="${itemInfo.CATE_NUM eq i.CATE_NUM }">selected</c:if>>${i.CATE_NAME }</option>
-						</c:forEach>
-					</select> 
-					
 				</td>
 			</tr>
 			<tr>
@@ -84,8 +72,6 @@ $(document).ready(function(){
 						</c:forEach>
 					</select>
 				</td>
-			</tr>
-			<tr>
 				<th class="table-dark">
 					<label for="orderUnitPrice" class="col-sm-8 control-label">Order Unit Price</label>
 				</th>
@@ -100,12 +86,10 @@ $(document).ready(function(){
 				<td>
 					<select class="form-select" id="primaryUnitNum" name="primaryUnitNum">
 						<c:forEach items="${puList }" var="i">
-							<option value="${i.PRIMARY_UNIT_NUM }" <c:if test="${itemInfo.PRIMARY_UNIT_NUM eq i.PRIMARY_UNIT_NUM }">selected</c:if>>${i.PRIMARY_UNIT }</option>
+							<option value="${i.PRIMARY_UNIT_NUM }" <c:if test="${itemInfo.PRIMARY_UNIT_NUM eq i.PRIMARY_UNIT_NUM }">selected</c:if>>${i.PRIMARY_UNIT }/ (${i.PRIMARY_UNIT_QTY }) </option>
 						</c:forEach>
 					</select>
 				</td>
-			</tr>
-			<tr>
 				<th class="table-dark">
 					<label for="secondaryUnitNum" class="col-sm-8 control-label">Secondary Unit</label>
 				</th>
@@ -119,22 +103,7 @@ $(document).ready(function(){
 				</td>
 			</tr>
 			<tr>
-				<th class="table-dark">
-					<label for="brandName" class="col-sm-8 control-label">Brand Name</label>
-					<input type="hidden" id="brandNum" name="brandNum" value="${itemInfo.BRAND_NUM }">
-				</th>
-				<td>
-					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }">
-				</td>
-			</tr>
-			<tr>
-				<th class="table-dark">
-					<label for="supplierName" class="col-sm-8 control-label">Supplier Name</label>
-				</th>
-				<td>
-					<input type="text" class="form-control input-sm" id="supplierName"	name="supplierName"  value="${itemInfo.SUPPLIER_NAME }">
-					<input type="hidden" id="supplierNum" name="supplierNum" value="${itemInfo.SUPPLIER_NUM }">
-				</td>
+				
 			</tr>
 			<tr>
 				<th class="table-dark">

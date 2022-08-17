@@ -21,7 +21,7 @@ public interface InvoiceDao {
 
 	List<Map<String, String>> selectAllInvoice(Paging paging);
 
-	List<Map<String, String>> selectItemsByInvoiceNum(Invoice invoice);
+	List<Map<String, String>> selectItemsByInvoiceSerial(Invoice invoice);
 
 	int selectCntAllInvoice(Paging paging);
 
@@ -51,10 +51,30 @@ public interface InvoiceDao {
 
 	List<Item> selectItemSearchList(Item item);
 
-	Map<String, String> selectInvoiceInfoByInvoiceNum(Invoice invoice);
+	Map<String, String> selectInvoiceInfoByInvoiceSerial(Invoice invoice);
 
 	void deleteInvoiceItemByNum(InvoiceItem invoiceItem);
 
 	int selectInvoiceItemByInvoiceNum(InvoiceItem invoiceItem);
+
+	List<Item> selectItemCodeSearchList(Item item);
+
+	void insertItemInfo(Item item);
+
+	void insertInvoiceInfo(Invoice invoice);
+
+	void insertInvoiceAndItemInfo(InvoiceItem invoiceItem);
+
+	String selectSupplierNameBySupplierNum(Invoice invoice);
+
+	List<Map<String, String>> selectItemListByInvoiceSerial(Invoice invoice);
+
+	void updateInvoiceInfo(Invoice invoice);
+
+	void insertInvoiceItemInfo(InvoiceItem invoiceItem);
+
+	void updateInvoiceItemInfo(InvoiceItem invoiceItem);
+
+	int selectInvoiceItem(InvoiceItem iin);
 
 }

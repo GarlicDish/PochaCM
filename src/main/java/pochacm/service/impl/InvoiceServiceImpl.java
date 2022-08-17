@@ -73,8 +73,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	//view invoice detail
 	@Override
-	public List<Map<String, String>> selectItemsByInvoiceNum(Invoice invoice) {
-		return invoiceDao.selectItemsByInvoiceNum(invoice);
+	public List<Map<String, String>> selectItemsByInvoiceSerial(Invoice invoice) {
+		return invoiceDao.selectItemsByInvoiceSerial(invoice);
 	}	
 
 	@Override
@@ -157,8 +157,8 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public Map<String, String> getInvoiceInfoByInvoiceNum(Invoice invoice) {
-		return invoiceDao.selectInvoiceInfoByInvoiceNum(invoice);
+	public Map<String, String> getInvoiceInfoByInvoiceSerial(Invoice invoice) {
+		return invoiceDao.selectInvoiceInfoByInvoiceSerial(invoice);
 	}
 
 	@Override
@@ -169,6 +169,56 @@ public class InvoiceServiceImpl implements InvoiceService {
 	@Override
 	public int countInvoiceItemByInvoiceNum(InvoiceItem invoiceItem) {
 		return invoiceDao.selectInvoiceItemByInvoiceNum(invoiceItem);
+	}
+
+	@Override
+	public List<Item> getItemCodeListBySearch(Item item) {
+		return invoiceDao.selectItemCodeSearchList(item);
+	}
+
+	@Override
+	public void insertItemInfo(Item item) {
+		invoiceDao.insertItemInfo(item);
+	}
+
+	@Override
+	public void insertInvoiceInfo(Invoice invoice) {
+		invoiceDao.insertInvoiceInfo(invoice);
+	}
+
+	@Override
+	public void insertInvoiceAndItemInfo(InvoiceItem invoiceItem) {
+		invoiceDao.insertInvoiceAndItemInfo(invoiceItem);
+	}
+
+	@Override
+	public String getSupplierName(Invoice invoice) {
+		return invoiceDao.selectSupplierNameBySupplierNum(invoice);
+	}
+
+	@Override
+	public List<Map<String, String>> getItemListByInvoiceSerial(Invoice invoice) {
+		return invoiceDao.selectItemListByInvoiceSerial(invoice);
+	}
+
+	@Override
+	public void updateInvoiceInfo(Invoice invoice) {
+		invoiceDao.updateInvoiceInfo(invoice);
+	}
+
+	@Override
+	public void insertInvoiceItemInfo(InvoiceItem invoiceItem) {
+		invoiceDao.insertInvoiceItemInfo(invoiceItem);
+	}
+
+	@Override
+	public void updateInvoiceItemInfo(InvoiceItem invoiceItem) {
+		invoiceDao.updateInvoiceItemInfo(invoiceItem);
+	}
+
+	@Override
+	public int selectInvoiceItem(InvoiceItem iin) {
+		return invoiceDao.selectInvoiceItem(iin);
 	}
 
 }

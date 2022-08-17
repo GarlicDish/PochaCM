@@ -20,9 +20,8 @@
 					AND b.brand_name LIKE '%'||#{keyword}||'%'
 			</when>
 			<when test='keyword != null and (category == "Supplier")'>	
-				SELECT count(*) FROM invoice i, supplier sup, item it
-				WHERE i.item_num = it.item_num (+)
-                          AND it.supplier_num = sup.supplier_num (+)
+				SELECT count(*) FROM invoice i, supplier sup
+				WHERE i.supplier_num = sup.supplier_num (+)
 					AND sup.supplier_name LIKE '%'||#{keyword}||'%'
 			</when>
 			<when test='keyword != null and (category == "Date")'>	
@@ -60,36 +59,36 @@
 		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
-	<select id="selectItemsByInvoiceNum" parameterType="pochacm.dto.Invoice" resultType="hashmap">
+	<select id="selectItemsByInvoiceSerial" parameterType="pochacm.dto.Invoice" resultType="hashmap">
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, iii.*
 		    FROM(
 		        SELECT it.*,ii.invoice_num,ii.qty,ii.invoice_item_num,ou.order_unit, pu.primary_unit, pu.primary_unit_qty
-		            , su.secondary_unit, su.secondary_unit_qty, b.brand_name, c.cate_name
-		        FROM item it, invoice_item ii, order_unit ou, primary_unit pu, secondary_unit su, brand b, category c
-		        WHERE ii.invoice_num = #{invoiceNum}
+		            , su.secondary_unit, su.secondary_unit_qty, b.brand_name, c.cate_name,inv.invoice_serial
+		        FROM item it, invoice_item ii, order_unit ou, primary_unit pu, secondary_unit su, brand b, category c, invoice inv
+		        WHERE ii.invoice_num = inv.invoice_num (+)
+		        	AND inv.invoice_serial = #{invoiceSerial}
 		            AND ii.item_num =  it.item_num (+)
 		            AND it.order_unit_num = ou.order_unit_num (+)
 		            AND it.primary_unit_num = pu.primary_unit_num (+)
 		            AND it.secondary_unit_num = su.secondary_unit_num (+)
 		            AND it.brand_num = b.brand_num (+)
 		            AND it.cate_num = c.cate_num (+)
-		        ORDER BY it.item_name asc
+		        ORDER BY ii.invoice_item_num asc
 		    )iii
 		    ORDER BY rnum
 		)
 	</select>
 	
 	<select id="selectItemInfoByItemNum" parameterType="pochacm.dto.Item" resultType="hashmap">
-		SELECT it.*, pu.*, su.*, b.*, sup.*, ou.*, ic.*, sup.*, ui.user_name
-		FROM item it, primary_unit pu, secondary_unit su, order_unit ou, brand b, supplier sup, user_info ui, category ic
+		SELECT it.*, pu.*, su.*, b.*, ou.*, ic.*, ui.user_name
+		FROM item it, primary_unit pu, secondary_unit su, order_unit ou, brand b, user_info ui, category ic
 		WHERE it.item_num = #{itemNum }
 			AND it.primary_unit_num = pu.primary_unit_num (+)
 			AND it.secondary_unit_num = su.secondary_unit_num (+)
 			AND it.order_unit_num = ou.order_unit_num (+)
 			AND it.brand_num = b.brand_num (+)
 			AND it.user_num = ui.user_num (+)
-			AND it.supplier_num = sup.supplier_num (+)
 			AND it.cate_num = ic.cate_num (+)
 	</select>
 	
@@ -122,16 +121,20 @@
 	<update id="updateItemInformation" parameterType="pochacm.dto.Item">
 		UPDATE item
 		SET BRAND_NUM = #{brandNum},
-			SUPPLIER_NUM = #{supplierNum},
 			cate_NUM = #{cateNum},
 			ITEM_NAME = #{itemName},
 			ITEM_CODE = #{itemCode},
+			<choose>
+				<when test="#{primaryUnitNum} != null and #{secondaryUnitNum} != null and #{targetWastePercentage} != null and #{expiryDate} != null">
+					PRIMARY_UNIT_NUM = #{primaryUnitNum},
+					SECONDARY_UNIT_NUM = #{secondaryUnitNum},
+					TARGET_WASTE_PERCENTAGE = #{targetWastePercentage},
+					EXPIRY_DATE = #{expiryDate},
+				</when>
+			</choose>
 			ORDER_UNIT_NUM = #{orderUnitNum},
 			unit_price = #{unitPrice},
-			PRIMARY_UNIT_NUM = #{primaryUnitNum},
-			SECONDARY_UNIT_NUM = #{secondaryUnitNum},
-			TARGET_WASTE_PERCENTAGE = #{targetWastePercentage},
-			EXPIRY_DATE = #{expiryDate},
+			
 			LAST_UPDATE_DATE = SYSDATE,
 			USER_NUM = #{userNum}
 		WHERE ITEM_NUM = #{itemNum}
@@ -168,19 +171,89 @@
 		ORDER BY ITEM_NUM
 	</select>
 	
-	<select id="selectInvoiceInfoByInvoiceNum" resultType="hashmap">
+	<select id="selectItemCodeSearchList" resultType="pochacm.dto.Item">
+		SELECT * FROM ITEM
+		WHERE ITEM_CODE LIKE '%' || #{itemCode}  || '%'
+		ORDER BY ITEM_NUM
+	</select>
+	
+	<select id="selectInvoiceInfoByInvoiceSerial" resultType="hashmap">
 		SELECT inv.*, ui.user_name ,sup.supplier_name
 		FROM invoice inv, user_info ui, supplier sup
-		WHERE invoice_num= #{invoiceNum}
+		WHERE inv.invoice_serial= #{invoiceSerial}
 			AND inv.user_num = ui.user_num (+)
 			AND inv.supplier_num = sup.supplier_num (+)
 	</select>
+	
 	<delete id="deleteInvoiceItemByNum" parameterType="pochacm.dto.InvoiceItem">
 		DELETE invoice_item
 		WHERE invoice_item_num = #{invoiceItemNum}
 	</delete>
+	
 	<select id="selectInvoiceItemByInvoiceNum" parameterType="pochacm.dto.InvoiceItem" resultType="int">
 		SELECT count(*) cnt FROM invoice_item
 		where invoice_num = #{invoiceNum}
+	</select>
+	
+	<insert id="insertItemInfo" parameterType="pochacm.dto.Item" useGeneratedKeys="true" keyProperty="itemNum" keyColumn="ITEM_NUM">
+		INSERT INTO item ( ITEM_NUM, ITEM_CODE, ITEM_NAME, BRAND_NUM, CATE_NUM, ORDER_UNIT_NUM, UNIT_PRICE, USER_NUM, LAST_UPDATE_DATE )
+		VALUES (item_num_seq.nextval, #{itemCode},#{itemName},#{brandNum},#{cateNum},#{orderUnitNum},#{unitPrice},#{userNum}, SYSDATE)
+	</insert>
+	
+	<insert id="insertInvoiceInfo" parameterType="pochacm.dto.Invoice" useGeneratedKeys="true" keyProperty="invoiceNum" keyColumn="INVOICE_NUM">
+		INSERT INTO INVOICE ( INVOICE_NUM, INVOICE_SERIAL, USER_NUM, INVOICE_DATE, SUPPLIER_NUM)
+		VALUES ( INVOICE_NUM_SEQ.nextval, #{invoiceSerial},#{userNum},#{invoiceDate},#{supplierNum} )
+	</insert>
+	
+	<insert id="insertInvoiceAndItemInfo" parameterType="pochacm.dto.InvoiceItem">
+		INSERT INTO INVOICE_ITEM ( INVOICE_ITEM_NUM, INVOICE_NUM, ITEM_NUM, QTY)
+		VALUES ( INVOICE_ITEM_NUM_SEQ.nextval, #{invoiceNum}, #{itemNum},#{qty} )
+	</insert>
+	
+	<select id="selectSupplierNameBySupplierNum" parameterType="pochacm.dto.Invoice" resultType="String">
+		SELECT supplier_name
+		FROM supplier
+		where supplier_num = #{supplierNum}
+	</select>
+	
+	<select id="selectItemListByInvoiceSerial" parameterType="pochacm.dto.Invoice" resultType="hashmap">
+		SELECT * FROM (
+			SELECT rownum rnum, iiii.*
+			FROM (
+				SELECT i.* , ii.qty, ii.invoice_item_num
+				FROM ITEM i, INVOICE_ITEM ii, INVOICE inv
+				WHERE ii.INVOICE_NUM = inv.INVOICE_NUM (+)
+					AND ii.ITEM_NUM = i.ITEM_NUM (+)
+					AND inv.INVOICE_SERIAL = #{invoiceSerial}
+				ORDER BY i.ITEM_NUM asc
+			) iiii
+			ORDER BY rnum
+		)
+	</select>
+	<update id="updateInvoiceInfo" parameterType="pochacm.dto.Invoice">
+		UPDATE invoice
+		SET INVOICE_SERIAL=#{invoiceSerial}, 
+			USER_NUM=#{userNum}, 
+			INVOICE_DATE=#{invoiceDate}, 
+			SUPPLIER_NUM=#{supplierNum}
+		where invoice_num = #{invoiceNum}
+	</update>
+	
+	<insert id="insertInvoiceItemInfo" parameterType="pochacm.dto.InvoiceItem" useGeneratedKeys="true" keyProperty="invoiceItemNum" keyColumn="INVOICE_ITEM_NUM">
+		INSERT INTO invoice_item (INVOICE_ITEM_NUM, INVOICE_NUM, ITEM_NUM, QTY)
+		VALUES (invoice_item_num_seq.nextval,#{invoiceNum},#{itemNum},#{qty})
+	</insert>
+	
+	<update id="updateInvoiceItemInfo" parameterType="pochacm.dto.InvoiceItem">
+		UPDATE invoice_item
+		SET QTY = #{qty}
+		where INVOICE_NUM = #{invoiceNum}
+			AND ITEM_NUM = #{itemNum}
+	</update>
+	
+	<select id="selectInvoiceItem" parameterType="pochacm.dto.InvoiceItem" resultType="int">
+		SELECT count(*) cnt FROM invoice_item
+		WHERE INVOICE_NUM = #{invoiceNum}
+			AND ITEM_NUM = #{itemNum}
 	</select>
 </mapper>

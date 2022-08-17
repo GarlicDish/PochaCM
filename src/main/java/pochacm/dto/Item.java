@@ -11,7 +11,7 @@ public class Item {
 	private String itemName;
 	private String itemCode;
 	private int orderUnitNum;
-	private int unitPrice;
+	private float unitPrice;
 	private int primaryUnitNum;
 	private int secondaryUnitNum;
 	private int targetWastePercentage;
@@ -64,10 +64,10 @@ public class Item {
 	public void setOrderUnitNum(int orderUnitNum) {
 		this.orderUnitNum = orderUnitNum;
 	}
-	public int getUnitPrice() {
+	public float getUnitPrice() {
 		return unitPrice;
 	}
-	public void setUnitPrice(int unitPrice) {
+	public void setUnitPrice(float unitPrice) {
 		this.unitPrice = unitPrice;
 	}
 	public int getPrimaryUnitNum() {
@@ -106,7 +106,8 @@ public class Item {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	
+
+
 	
 	
 	

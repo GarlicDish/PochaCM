@@ -59,7 +59,7 @@ $(document).ready(function() {
 							<input type="hidden" id="invoiceNum" name="invoiceNum" value="${i.INVOICE_NUM }">
 							<input type="hidden" id="curPage" name="curPage" value="${paging.curPage }">
 						</form>
-						<a href="/invoice/view?invoiceNum=${i.INVOICE_NUM }"><button class="btn btn-success btn-sm" type="button" id="detailBtn" name="detailBtn">Detail</button></a>
+						<a href="/invoice/view?invoiceSerial=${i.INVOICE_SERIAL }"><button class="btn btn-success btn-sm" type="button" id="detailBtn" name="detailBtn">Detail</button></a>
 						<c:if test="${sessionScope.positionNum < 2 }">
 							<button type="button" class="btn btn-danger btn-sm delBtn" id="delBtn" name="delBtn">DEL</button>
 						</c:if>
