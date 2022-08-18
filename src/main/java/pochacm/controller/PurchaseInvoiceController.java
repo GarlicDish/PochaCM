@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import pochacm.dto.Invoice;
+import pochacm.dto.PurchaseInvoice;
 import pochacm.dto.Item;
 import pochacm.dto.Brand;
 import pochacm.dto.Category;
@@ -31,15 +31,15 @@ import pochacm.dto.Recipe;
 import pochacm.dto.SecondaryUnit;
 import pochacm.dto.Supplier;
 import pochacm.dto.InvoiceItem;
-import pochacm.service.face.InvoiceService;
+import pochacm.service.face.PurchaseInvoiceService;
 import pochacm.service.face.SalesService;
 
 @Controller
-public class InvoiceController {
+public class PurchaseInvoiceController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(InvoiceController.class);
+	private static final Logger logger = LoggerFactory.getLogger(PurchaseInvoiceController.class);
 	
-	@Autowired InvoiceService invoiceService;
+	@Autowired PurchaseInvoiceService invoiceService;
 	@Autowired SalesService salesService;
 	
 	
@@ -77,7 +77,7 @@ public class InvoiceController {
 	}
 	
 	@GetMapping("/invoice/view")
-	public String invoiceView(HttpSession session, Invoice invoice, Model model) {
+	public String invoiceView(HttpSession session, PurchaseInvoice invoice, Model model) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /invoiceView [POST]", idx++);
@@ -119,7 +119,7 @@ public class InvoiceController {
 	}
 	
 	@PostMapping("/invoice/add")
-	public String invoiceItemAdd(Invoice invoice, InvoiceItem invoiceItem, HttpSession session
+	public String invoiceItemAdd(PurchaseInvoice invoice, InvoiceItem invoiceItem, HttpSession session
 			, @RequestParam(value="category") int[] cateArr
 			, @RequestParam(value="brandNum") int[] brandArr
 			, @RequestParam(value="itemName") String[] itemNameArr
@@ -196,7 +196,7 @@ public class InvoiceController {
 	}
 	
 	@PostMapping("/invoice/delete")
-	public String deleteInvoice(Invoice invoice, Paging paging) {
+	public String deleteInvoice(PurchaseInvoice invoice, Paging paging) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /item/delete [POST]", idx++);
@@ -227,7 +227,7 @@ public class InvoiceController {
 	}
 	
 	@GetMapping("/invoice/update")
-	public String updateInvoice(Invoice invoice, Model model) {
+	public String updateInvoice(PurchaseInvoice invoice, Model model) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /item/update [POST]", idx++);
@@ -261,7 +261,7 @@ public class InvoiceController {
 	}
 	
 	@PostMapping("/invoice/update")
-	public String invoiceUpdateProc(Invoice invoice, HttpSession session
+	public String invoiceUpdateProc(PurchaseInvoice invoice, HttpSession session
 			, @RequestParam(value="itemNum") int[] itemNumArr
 			, @RequestParam(value="qty") int[] qtyArr
 			, @RequestParam(value="category") int[] cateArr

@@ -1,5 +1,13 @@
 package pochacm.service.impl;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -12,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import pochacm.dao.face.SalesDao;
 import pochacm.dto.Paging;
@@ -24,6 +33,12 @@ import pochacm.service.face.SalesService;
 public class SalesServiceImpl implements SalesService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SalesServiceImpl.class);
+	
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private final String apiKEY = "ApiKey 9746d308-027a-4774-aedd-66ac56bc3b95";
+    private final String apiURL = "https://api.abacus.co/invoices";
+	
 	@Autowired SalesDao salesDao;
 
 	@SuppressWarnings("unlikely-arg-type")
@@ -115,6 +130,55 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<Map<String, String>> getAllSalesBySalesDate(Sales sales) {
 		return salesDao.getAllSalesBySalesDate(sales);
+	}
+	@Override
+	public void getAPI(int limit, int page, String lastUpdated) {
+			
+			URL url = null;
+			HttpURLConnection conn = null;
+			String param = "?limit="+limit+"&page="+page+"&lastUpdated="+lastUpdated;
+			String responseData = "";	    	   
+			BufferedReader br = null;
+			StringBuffer sb = null;
+			String returnData = "";
+			
+		try {
+			url = new URL(apiURL+param);
+			
+			conn = (HttpURLConnection)url.openConnection();
+		
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Authorization",apiKEY);
+			conn.setRequestProperty("Content-Type","application/json");
+			conn.setRequestProperty("Accept","application/json");
+			conn.setConnectTimeout(5000);
+			conn.setDoOutput(true);
+
+			conn.connect();
+
+			System.out.println(conn.getResponseMessage());
+			
+			br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));	
+			sb = new StringBuffer();	       
+			while ((responseData = br.readLine()) != null) {
+				sb.append(responseData); //StringBuffer에 응답받은 데이터 순차적으로 저장 실시
+			}
+			
+			returnData = sb.toString();
+			
+			String responseCode = String.valueOf(conn.getResponseCode());
+			
+			System.out.println("http 응답 코드 : "+responseCode);
+			System.out.println("http 응답 데이터 : "+returnData);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	

@@ -2,6 +2,10 @@ package pochacm.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
+import pochacm.dto.SalesAPI;
 import pochacm.service.face.SalesService;
 
 @Controller
@@ -31,13 +37,17 @@ public class SalesController {
 	@Autowired SalesService salesService;
 	
 	@GetMapping("/sales")
-	public String salesList(
-			HttpSession session, HttpServletRequest request, 
-			 String curPage, Model model) {
+	public String salesList(HttpSession session, HttpServletRequest req, String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /sales [GET]", idx++);
+		int limit = 15;
+		int page = 10;
+		String lastUpdated = LocalDateTime.now().toString();
+		logger.info("#{}. lastUpdated : {}", idx++, lastUpdated);
+		
+		salesService.getAPI(limit, page, lastUpdated);
 		
 		//if he/she does not login, back to login page
 		if(session.getAttribute("userNum") == null) {

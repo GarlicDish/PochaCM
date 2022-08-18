@@ -3,7 +3,7 @@ package pochacm.service.face;
 import java.util.List;
 import java.util.Map;
 
-import pochacm.dto.Invoice;
+import pochacm.dto.PurchaseInvoice;
 import pochacm.dto.InvoiceItem;
 import pochacm.dto.Item;
 import pochacm.dto.Brand;
@@ -15,7 +15,7 @@ import pochacm.dto.Recipe;
 import pochacm.dto.SecondaryUnit;
 import pochacm.dto.Supplier;
 
-public interface InvoiceService {
+public interface PurchaseInvoiceService {
 
 	/**
 	 * Get Paging information based on category and keyword
@@ -33,7 +33,7 @@ public interface InvoiceService {
 	 */
 	List<Map<String, String>> getInvoiceList(Paging paging);
 	
-	List<Map<String, String>> selectItemsByInvoiceSerial(Invoice invoice);
+	List<Map<String, String>> selectItemsByInvoiceSerial(PurchaseInvoice invoice);
 
 	Object getItemInfoByItem(Item item);
 
@@ -51,7 +51,7 @@ public interface InvoiceService {
 
 	void updateItemInformation(Item item);
 
-	void deleteInvoice(Invoice invoice);
+	void deleteInvoice(PurchaseInvoice invoice);
 
 	List<Brand> selectAllBrand();
 
@@ -63,7 +63,7 @@ public interface InvoiceService {
 
 	List<Item> getItemListBySearch(Item item);
 
-	Map<String, String> getInvoiceInfoByInvoiceSerial(Invoice invoice);
+	Map<String, String> getInvoiceInfoByInvoiceSerial(PurchaseInvoice invoice);
 
 	void deleteInvoiceItemByNum(InvoiceItem invoiceItem);
 
@@ -73,15 +73,15 @@ public interface InvoiceService {
 
 	void insertItemInfo(Item item);
 
-	void insertInvoiceInfo(Invoice invoice);
+	void insertInvoiceInfo(PurchaseInvoice invoice);
 
 	void insertInvoiceAndItemInfo(InvoiceItem invoiceItem);
 
-	String getSupplierName(Invoice invoice);
+	String getSupplierName(PurchaseInvoice invoice);
 
-	List<Map<String, String>> getItemListByInvoiceSerial(Invoice invoice);
+	List<Map<String, String>> getItemListByInvoiceSerial(PurchaseInvoice invoice);
 
-	void updateInvoiceInfo(Invoice invoice);
+	void updateInvoiceInfo(PurchaseInvoice invoice);
 
 	void insertInvoiceItemInfo(InvoiceItem invoiceItem);
 

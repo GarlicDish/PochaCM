@@ -13,7 +13,7 @@
 		<org.aspectj-version>1.6.10</org.aspectj-version>
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 	</properties>
-	
+	 
 	<!-- dependencies 태그와 properties 태그 사이에 작성 -->
 	<repositories>
 		<repository>
@@ -24,12 +24,6 @@
 	
 	<dependencies>
 	
-	<!-- json simple (make a list from json file -->
-	<dependency>
-		<groupId>com.googlecode.json-simple</groupId>
-		<artifactId>json-simple</artifactId>
-		<version>1.1</version>
-	</dependency>
 	<!--  log4jdbc-remix  -->
 		<!-- https://mvnrepository.com/artifact/org.lazyluke/log4jdbc-remix -->
 		<dependency>
@@ -51,17 +45,7 @@
 			<artifactId>mybatis-spring</artifactId>
 			<version>2.0.7</version>
 		</dependency>
-		<!-- jackson -->
-		<dependency>
-	  		<groupId>org.codehaus.jackson</groupId>
-		  	<artifactId>jackson-mapper-asl</artifactId>
-		  	<version>1.9.13</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>2.9.9</version>
-		</dependency>
+
 		<!-- mybatis -->
 		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
 		<dependency>
@@ -69,7 +53,21 @@
 			<artifactId>mybatis</artifactId>
 			<version>3.5.9</version>
 		</dependency>
-
+		
+		<!-- https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple -->
+		<dependency>
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		
+		<!-- Jackson Databind -->
+      <dependency>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+          <version>2.13.2.2</version>
+      </dependency>
+		
 		<!-- spring - jdbc -->
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
 		<dependency>

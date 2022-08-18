@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import pochacm.dao.face.InvoiceDao;
-import pochacm.dto.Invoice;
+import pochacm.dao.face.PurchaseInvoiceDao;
+import pochacm.dto.PurchaseInvoice;
 import pochacm.dto.InvoiceItem;
 import pochacm.dto.Item;
 import pochacm.dto.Brand;
@@ -20,13 +20,13 @@ import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
 import pochacm.dto.SecondaryUnit;
 import pochacm.dto.Supplier;
-import pochacm.service.face.InvoiceService;
+import pochacm.service.face.PurchaseInvoiceService;
 
 @Service
-public class InvoiceServiceImpl implements InvoiceService {
-	private static final Logger logger = LoggerFactory.getLogger(InvoiceServiceImpl.class);
+public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
+	private static final Logger logger = LoggerFactory.getLogger(PurchaseInvoiceServiceImpl.class);
 
-	@Autowired InvoiceDao invoiceDao;
+	@Autowired PurchaseInvoiceDao invoiceDao;
 	
 	//invoice Paging
 	@SuppressWarnings("unlikely-arg-type")
@@ -73,7 +73,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 
 	//view invoice detail
 	@Override
-	public List<Map<String, String>> selectItemsByInvoiceSerial(Invoice invoice) {
+	public List<Map<String, String>> selectItemsByInvoiceSerial(PurchaseInvoice invoice) {
 		return invoiceDao.selectItemsByInvoiceSerial(invoice);
 	}	
 
@@ -127,7 +127,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public void deleteInvoice(Invoice invoice) {
+	public void deleteInvoice(PurchaseInvoice invoice) {
 		invoiceDao.deleteInvoice(invoice);
 	}
 
@@ -157,7 +157,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public Map<String, String> getInvoiceInfoByInvoiceSerial(Invoice invoice) {
+	public Map<String, String> getInvoiceInfoByInvoiceSerial(PurchaseInvoice invoice) {
 		return invoiceDao.selectInvoiceInfoByInvoiceSerial(invoice);
 	}
 
@@ -182,7 +182,7 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public void insertInvoiceInfo(Invoice invoice) {
+	public void insertInvoiceInfo(PurchaseInvoice invoice) {
 		invoiceDao.insertInvoiceInfo(invoice);
 	}
 
@@ -192,17 +192,17 @@ public class InvoiceServiceImpl implements InvoiceService {
 	}
 
 	@Override
-	public String getSupplierName(Invoice invoice) {
+	public String getSupplierName(PurchaseInvoice invoice) {
 		return invoiceDao.selectSupplierNameBySupplierNum(invoice);
 	}
 
 	@Override
-	public List<Map<String, String>> getItemListByInvoiceSerial(Invoice invoice) {
+	public List<Map<String, String>> getItemListByInvoiceSerial(PurchaseInvoice invoice) {
 		return invoiceDao.selectItemListByInvoiceSerial(invoice);
 	}
 
 	@Override
-	public void updateInvoiceInfo(Invoice invoice) {
+	public void updateInvoiceInfo(PurchaseInvoice invoice) {
 		invoiceDao.updateInvoiceInfo(invoice);
 	}
 

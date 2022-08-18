@@ -59,7 +59,7 @@
 		WHERE rnum BETWEEN #{startNo } AND #{endNo }
 	</select>
 	
-	<select id="selectItemsByInvoiceSerial" parameterType="pochacm.dto.Invoice" resultType="hashmap">
+	<select id="selectItemsByInvoiceSerial" parameterType="pochacm.dto.PurchaseInvoice" resultType="hashmap">
 		SELECT * FROM (
 		    SELECT ROWNUM rnum, iii.*
 		    FROM(
@@ -140,7 +140,7 @@
 		WHERE ITEM_NUM = #{itemNum}
 	</update>
 	
-	<delete id="deleteInvoice" parameterType="pochacm.dto.Invoice">
+	<delete id="deleteInvoice" parameterType="pochacm.dto.PurchaseInvoice">
 		DELETE invoice
 		WHERE invoice_num = #{invoiceNum}
 	</delete>
@@ -200,7 +200,7 @@
 		VALUES (item_num_seq.nextval, #{itemCode},#{itemName},#{brandNum},#{cateNum},#{orderUnitNum},#{unitPrice},#{userNum}, SYSDATE)
 	</insert>
 	
-	<insert id="insertInvoiceInfo" parameterType="pochacm.dto.Invoice" useGeneratedKeys="true" keyProperty="invoiceNum" keyColumn="INVOICE_NUM">
+	<insert id="insertInvoiceInfo" parameterType="pochacm.dto.PurchaseInvoice" useGeneratedKeys="true" keyProperty="invoiceNum" keyColumn="INVOICE_NUM">
 		INSERT INTO INVOICE ( INVOICE_NUM, INVOICE_SERIAL, USER_NUM, INVOICE_DATE, SUPPLIER_NUM)
 		VALUES ( INVOICE_NUM_SEQ.nextval, #{invoiceSerial},#{userNum},#{invoiceDate},#{supplierNum} )
 	</insert>
@@ -210,13 +210,13 @@
 		VALUES ( INVOICE_ITEM_NUM_SEQ.nextval, #{invoiceNum}, #{itemNum},#{qty} )
 	</insert>
 	
-	<select id="selectSupplierNameBySupplierNum" parameterType="pochacm.dto.Invoice" resultType="String">
+	<select id="selectSupplierNameBySupplierNum" parameterType="pochacm.dto.PurchaseInvoice" resultType="String">
 		SELECT supplier_name
 		FROM supplier
 		where supplier_num = #{supplierNum}
 	</select>
 	
-	<select id="selectItemListByInvoiceSerial" parameterType="pochacm.dto.Invoice" resultType="hashmap">
+	<select id="selectItemListByInvoiceSerial" parameterType="pochacm.dto.PurchaseInvoice" resultType="hashmap">
 		SELECT * FROM (
 			SELECT rownum rnum, iiii.*
 			FROM (
@@ -230,7 +230,7 @@
 			ORDER BY rnum
 		)
 	</select>
-	<update id="updateInvoiceInfo" parameterType="pochacm.dto.Invoice">
+	<update id="updateInvoiceInfo" parameterType="pochacm.dto.PurchaseInvoice">
 		UPDATE invoice
 		SET INVOICE_SERIAL=#{invoiceSerial}, 
 			USER_NUM=#{userNum}, 
