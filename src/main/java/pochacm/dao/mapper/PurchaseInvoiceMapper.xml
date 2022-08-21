@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--  마이바티스 3 Mapper DOCTYPE -->
-<!DOCTYPE mapper
-	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 	    
-<mapper namespace="pochacm.dao.face.InvoiceDao">
+<mapper namespace="pochacm.dao.face.PurchaseInvoiceDao">
 
 	<select id="selectCntAllInvoice" parameterType="pochacm.dto.Paging" resultType="int">
 		<choose>
@@ -80,7 +78,7 @@
 		)
 	</select>
 	
-	<select id="selectItemInfoByItemNum" parameterType="pochacm.dto.Item" resultType="hashmap">
+	<select id="selectItemInfoByItemNum" parameterType="pochacm.dto.Items" resultType="hashmap">
 		SELECT it.*, pu.*, su.*, b.*, ou.*, ic.*, ui.user_name
 		FROM item it, primary_unit pu, secondary_unit su, order_unit ou, brand b, user_info ui, category ic
 		WHERE it.item_num = #{itemNum }
@@ -118,7 +116,7 @@
 		ORDER BY recipe_name
 	</select>
 	
-	<update id="updateItemInformation" parameterType="pochacm.dto.Item">
+	<update id="updateItemInformation" parameterType="pochacm.dto.Items">
 		UPDATE item
 		SET BRAND_NUM = #{brandNum},
 			cate_NUM = #{cateNum},
@@ -165,13 +163,13 @@
 		ORDER BY CATE_NUM
 	</select>
 	
-	<select id="selectItemSearchList" resultType="pochacm.dto.Item">
+	<select id="selectItemSearchList" resultType="pochacm.dto.Items">
 		SELECT * FROM ITEM
 		WHERE ITEM_NAME LIKE '%' || #{itemName}  || '%'
 		ORDER BY ITEM_NUM
 	</select>
 	
-	<select id="selectItemCodeSearchList" resultType="pochacm.dto.Item">
+	<select id="selectItemCodeSearchList" resultType="pochacm.dto.Items">
 		SELECT * FROM ITEM
 		WHERE ITEM_CODE LIKE '%' || #{itemCode}  || '%'
 		ORDER BY ITEM_NUM
@@ -195,7 +193,7 @@
 		where invoice_num = #{invoiceNum}
 	</select>
 	
-	<insert id="insertItemInfo" parameterType="pochacm.dto.Item" useGeneratedKeys="true" keyProperty="itemNum" keyColumn="ITEM_NUM">
+	<insert id="insertItemInfo" parameterType="pochacm.dto.Items" useGeneratedKeys="true" keyProperty="itemNum" keyColumn="ITEM_NUM">
 		INSERT INTO item ( ITEM_NUM, ITEM_CODE, ITEM_NAME, BRAND_NUM, CATE_NUM, ORDER_UNIT_NUM, UNIT_PRICE, USER_NUM, LAST_UPDATE_DATE )
 		VALUES (item_num_seq.nextval, #{itemCode},#{itemName},#{brandNum},#{cateNum},#{orderUnitNum},#{unitPrice},#{userNum}, SYSDATE)
 	</insert>

@@ -1,16 +1,13 @@
 package pochacm.controller;
 
+import java.io.IOException;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -18,15 +15,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
 import pochacm.dto.SalesAPI;
+import pochacm.dto.SalesShowAPI;
 import pochacm.service.face.SalesService;
 
 @Controller
@@ -37,48 +45,41 @@ public class SalesController {
 	@Autowired SalesService salesService;
 	
 	@GetMapping("/sales")
-	public String salesList(HttpSession session, HttpServletRequest req, String curPage, Model model) {
+	public String salesList(HttpSession session, String dateParam, String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /sales [GET]", idx++);
-		int limit = 15;
-		int page = 10;
-		String lastUpdated = LocalDateTime.now().toString();
-		logger.info("#{}. lastUpdated : {}", idx++, lastUpdated);
 		
-		salesService.getAPI(limit, page, lastUpdated);
-		
-		//if he/she does not login, back to login page
-		if(session.getAttribute("userNum") == null) {
-			logger.info("#{}. Not Logined", idx++);
-			return "redirect:/login";
-		}
-		
+		//adjust curPage
 		if(curPage == null || curPage.equals("")) {
 			curPage = "1";
 		}
 		logger.info("#{}. curPage : {}", idx++, curPage);
-	    
-	    Paging paging = new Paging();
-	    
-	    paging.setCurPage(Integer.parseInt(curPage));
-		//create Paging dto with curPage & search 
-		paging = salesService.getSalesPaging(paging);
-		logger.info("#{}. SalesList : {}", idx++, paging);
-				
-		//make a model with Sales list
-		List<Sales> salesList = salesService.getSalesList(paging);
 		
-		logger.info("#{}. SalesList : {}", idx++, salesList);
+		//make paging
+		Paging paging = new Paging();
 		
-		model.addAttribute("salesList", salesList);
-		logger.info("#{}. model.getAttribute(\"salesList\") : {}", idx++, model.getAttribute("salesList"));
+		logger.info("#{}. paging : {}", idx++, paging);
+		paging.setCurPage(Integer.parseInt(curPage));
+		paging.setListCount(15);
+		logger.info("#{}. paging : {}", idx++, paging);
+		
+		//get API with paging info & date
+		SalesAPI salesAPI = salesService.getAPI(paging, dateParam);
+		paging.setTotalCount(salesAPI.getPagination().getTotal());
+		paging = new Paging(paging.getTotalCount(),paging.getCurPage());
+		logger.info("#{}. paging : {}", idx++, paging);
+		
+		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
+		
+		model.addAttribute("salesAPI", salesAPI);
+//		logger.info("#{}. model.getAttribute(\"salesList\") : {}", idx++, model.getAttribute("salesList"));
 		
 		model.addAttribute("paging", paging);
-		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
+//		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
 		
-		return "cm/salesList";
+		return "sales/salesList";
 	}
 	
 	@GetMapping("/sales/add")
@@ -89,7 +90,7 @@ public class SalesController {
 		
 		model.addAttribute("salesSourceList",salesService.getSalesSourceList());
 		
-		return "cm/salesAdd";
+		return "sales/salesAdd";
 	}
 	
 	@PostMapping("/sales/add")
@@ -140,21 +141,52 @@ public class SalesController {
 	}
 	
 	@GetMapping("/sales/view")
-	public String viewSales(String salesDate, Model model) {
+	public String viewSales(String invoiceNumber, Model model) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /sales/view [GET]", idx++);
-		logger.info("#{}. salesDate : {}", idx++, salesDate);
-		String date = salesDate.substring(0, 10);
-		logger.info("#{}. date : {}", idx++, date);
-		
-		List<Sales> salesList = salesService.getSalesListBySalesDate(date);
-		logger.info("#{}. salesList : {}", idx++, salesList);
-		model.addAttribute("salesDate", salesDate);
-		model.addAttribute("salesList", salesList);
-		logger.info("#{}. model.addAttribute(\"salesList\", salesList) : {}", idx++, model.addAttribute("salesList", salesList));
-		
-		return "cm/salesView";
+		logger.info("#{}. invoiceNumber : {}", idx++, invoiceNumber);
+
+	    String apiURL = "https://api.abacus.co/invoices";
+	    String apiKEY = "ApiKey 9746d308-027a-4774-aedd-66ac56bc3b95";
+	    
+		// uri addresss
+        URI uri = UriComponentsBuilder
+                .fromUriString(apiURL)
+                .path("/"+invoiceNumber)
+                .encode()
+                .build()
+                .toUri();
+
+        logger.info("#{}. uri : {}", idx++, uri);
+        
+        HttpHeaders headers  = new HttpHeaders(); // 담아줄 header
+        headers.add("Authorization", apiKEY);
+        logger.info("#{}. headers : {}", idx++, headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
+        ResponseEntity<SalesShowAPI> result = restTemplate.exchange(uri, HttpMethod.GET, entity, SalesShowAPI.class);
+        
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+        	public boolean hasError(ClientHttpResponse response) throws IOException {
+        		HttpStatus statusCode = response.getStatusCode();
+        		return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+        	}
+        });
+        logger.info("#{}. result.getStatusCode() : {}", idx++, result.getStatusCode());
+        logger.info("#{}. result.getBody() : {}", idx++, result.getBody());
+        logger.info("#{}. result.getBody(). : {}", idx++, result.getBody());
+        
+//		List<Sales> salesList = salesService.getSalesListBySalesDate(date);
+//		logger.info("#{}. salesList : {}", idx++, salesList);
+//		model.addAttribute("salesDate", salesDate);
+//		model.addAttribute("salesList", salesList);
+//		logger.info("#{}. model.addAttribute(\"salesList\", salesList) : {}", idx++, model.addAttribute("salesList", salesList));
+//		
+		return "sales/salesView";
 	}
 	
 	@PostMapping("/sales/delete")
@@ -198,6 +230,6 @@ public class SalesController {
 		model.addAttribute("salesDate", salesDate);
 		model.addAttribute("salesList",salesList);
 		
-		return "cm/salesUpdate";
+		return "sales/salesUpdate";
 	}
 }

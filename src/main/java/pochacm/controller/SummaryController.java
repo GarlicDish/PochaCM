@@ -25,6 +25,6 @@ public class SummaryController {
 			return "redirect:/login";
 		}
 		
-		return "cm/summary";
+		return "/summary/summary";
 	}
 }

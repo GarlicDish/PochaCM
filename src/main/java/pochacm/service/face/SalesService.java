@@ -1,9 +1,11 @@
 package pochacm.service.face;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.simple.JSONArray;
 import org.springframework.http.ResponseEntity;
 
 import pochacm.dto.Paging;
@@ -34,6 +36,6 @@ public interface SalesService {
 
 	List<Map<String, String>> getAllSalesBySalesDate(Sales sales);
 
-	void getAPI(int limit, int page, String lastUpdated);
+	SalesAPI getAPI(Paging paging, String dateParam);
 
 }

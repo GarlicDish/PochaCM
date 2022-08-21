@@ -5,7 +5,7 @@ import java.util.Map;
 
 import pochacm.dto.PurchaseInvoice;
 import pochacm.dto.InvoiceItem;
-import pochacm.dto.Item;
+import pochacm.dto.Items;
 import pochacm.dto.Brand;
 import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
@@ -25,7 +25,7 @@ public interface PurchaseInvoiceDao {
 
 	int selectCntAllInvoice(Paging paging);
 
-	Object selectItemInfoByItemNum(Item item);
+	Object selectItemInfoByItemNum(Items item);
 
 	List<OrderUnit> getOrderUnitList();
 
@@ -37,7 +37,7 @@ public interface PurchaseInvoiceDao {
 
 	List<Recipe> selectMenuSearchList(Recipe recipe);
 
-	void updateItemInformation(Item item);
+	void updateItemInformation(Items item);
 
 	void deleteInvoice(PurchaseInvoice invoice);
 
@@ -49,7 +49,7 @@ public interface PurchaseInvoiceDao {
 
 	List<Category> selectAllCategory();
 
-	List<Item> selectItemSearchList(Item item);
+	List<Items> selectItemSearchList(Items item);
 
 	Map<String, String> selectInvoiceInfoByInvoiceSerial(PurchaseInvoice invoice);
 
@@ -57,9 +57,9 @@ public interface PurchaseInvoiceDao {
 
 	int selectInvoiceItemByInvoiceNum(InvoiceItem invoiceItem);
 
-	List<Item> selectItemCodeSearchList(Item item);
+	List<Items> selectItemCodeSearchList(Items item);
 
-	void insertItemInfo(Item item);
+	void insertItemInfo(Items item);
 
 	void insertInvoiceInfo(PurchaseInvoice invoice);
 

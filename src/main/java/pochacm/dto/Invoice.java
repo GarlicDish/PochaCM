@@ -2,41 +2,42 @@ package pochacm.dto;
 
 import java.util.ArrayList;
 
-public class Invoice {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	private ArrayList<Item> items = new ArrayList<Item>();
-	private String updatedAt;
-	private String refundReason;
-	private String referenceId;	
-	private String invoiceNumber;
-	private int type;
-	private int status;
-	private String source;
-	private String location;
-	private String table;
-	private int guest;
-	private String createdAt;
-	private float surcharge;
-	private float tips;
-	private int rounding;
-	private float totalExcludeTax;
-	private float total;
-	private float discountExcludeTax;
-	private float discountTax;
-	private float shippingCost;
-	private String shippingDate;
-	private float tax;
-	private float taxRate;
-	private boolean isPaid;
-	private boolean isLiability;
-	private String memberCode;
-	private String firstName;
-	private String lastName;
-	private String email;
-	private String uniqueCode;
-	private ShippingAddress shippingAddress;
-	private BillingAddress billingAddress;
-	private ArrayList<Payment> payment = new ArrayList<Payment>();
+public class Invoice{
+    public ArrayList<Item> items;
+    public String updatedAt;
+    public String refundReason;
+    public String referenceId;
+    public String invoiceNumber;
+    public int type;
+    public int status;
+    public String source;
+    public String location;
+    public String table;
+    public int guest;
+    public String createdAt;
+    public float surcharge;
+    public float tips;
+    public int rounding;
+    public float totalExcludeTax;
+    public float total;
+    public float discountExcludeTax;
+    public float discountTax;
+    public float shippingCost;
+    public String shippingDate;
+    public float tax;
+    public float taxRate;
+    public boolean isPaid;
+    public boolean isLiability;
+    public String memberCode;
+    public String firstName;
+    public String lastName;
+    public String email;
+    public String uniqueCode;
+    public ShippingAddress shippingAddress;
+    public BillingAddress billingAddress;
+    public ArrayList<Payment> payments;
 	@Override
 	public String toString() {
 		return "Invoice [items=" + items + ", updatedAt=" + updatedAt + ", refundReason=" + refundReason
@@ -49,7 +50,7 @@ public class Invoice {
 				+ ", isPaid=" + isPaid + ", isLiability=" + isLiability + ", memberCode=" + memberCode
 				+ ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", uniqueCode="
 				+ uniqueCode + ", shippingAddress=" + shippingAddress + ", billingAddress=" + billingAddress
-				+ ", payment=" + payment + "]";
+				+ ", payments=" + payments + "]";
 	}
 	public ArrayList<Item> getItems() {
 		return items;
@@ -243,319 +244,12 @@ public class Invoice {
 	public void setBillingAddress(BillingAddress billingAddress) {
 		this.billingAddress = billingAddress;
 	}
-	public ArrayList<Payment> getPayment() {
-		return payment;
+	public ArrayList<Payment> getPayments() {
+		return payments;
 	}
-	public void setPayment(ArrayList<Payment> payment) {
-		this.payment = payment;
+	public void setPayments(ArrayList<Payment> payments) {
+		this.payments = payments;
 	}
-	static class ShippingAddress {
-		private String firstName;
-		private String lastName;
-		private String email;
-		private String phone;
-		private String address;
-		private String suburb;
-		private String postcode;
-		private String state;
-		private String country;
-		private String companyName;
-		@Override
-		public String toString() {
-			return "ShippingAddress [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-					+ ", phone=" + phone + ", address=" + address + ", suburb=" + suburb + ", postcode=" + postcode
-					+ ", state=" + state + ", country=" + country + ", companyName=" + companyName + "]";
-		}
-		public String getFirstName() {
-			return firstName;
-		}
-		public void setFirstName(String firstName) {
-			this.firstName = firstName;
-		}
-		public String getLastName() {
-			return lastName;
-		}
-		public void setLastName(String lastName) {
-			this.lastName = lastName;
-		}
-		public String getEmail() {
-			return email;
-		}
-		public void setEmail(String email) {
-			this.email = email;
-		}
-		public String getPhone() {
-			return phone;
-		}
-		public void setPhone(String phone) {
-			this.phone = phone;
-		}
-		public String getAddress() {
-			return address;
-		}
-		public void setAddress(String address) {
-			this.address = address;
-		}
-		public String getSuburb() {
-			return suburb;
-		}
-		public void setSuburb(String suburb) {
-			this.suburb = suburb;
-		}
-		public String getPostcode() {
-			return postcode;
-		}
-		public void setPostcode(String postcode) {
-			this.postcode = postcode;
-		}
-		public String getState() {
-			return state;
-		}
-		public void setState(String state) {
-			this.state = state;
-		}
-		public String getCountry() {
-			return country;
-		}
-		public void setCountry(String country) {
-			this.country = country;
-		}
-		public String getCompanyName() {
-			return companyName;
-		}
-		public void setCompanyName(String companyName) {
-			this.companyName = companyName;
-		}
-		
-		
-	}
-	
-	static class BillingAddress{
-		
-		private String firstName;
-		private String lastName;
-		private String email;
-		private String phone;
-		private String address;
-		private String suburb;
-		private String postcode;
-		private String state;
-		private String country;
-		private String companyName;
-		@Override
-		public String toString() {
-			return "BillingAddress [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", phone="
-					+ phone + ", address=" + address + ", suburb=" + suburb + ", postcode=" + postcode + ", state="
-					+ state + ", country=" + country + ", companyName=" + companyName + "]";
-		}
-		public String getFirstName() {
-			return firstName;
-		}
-		public void setFirstName(String firstName) {
-			this.firstName = firstName;
-		}
-		public String getLastName() {
-			return lastName;
-		}
-		public void setLastName(String lastName) {
-			this.lastName = lastName;
-		}
-		public String getEmail() {
-			return email;
-		}
-		public void setEmail(String email) {
-			this.email = email;
-		}
-		public String getPhone() {
-			return phone;
-		}
-		public void setPhone(String phone) {
-			this.phone = phone;
-		}
-		public String getAddress() {
-			return address;
-		}
-		public void setAddress(String address) {
-			this.address = address;
-		}
-		public String getSuburb() {
-			return suburb;
-		}
-		public void setSuburb(String suburb) {
-			this.suburb = suburb;
-		}
-		public String getPostcode() {
-			return postcode;
-		}
-		public void setPostcode(String postcode) {
-			this.postcode = postcode;
-		}
-		public String getState() {
-			return state;
-		}
-		public void setState(String state) {
-			this.state = state;
-		}
-		public String getCountry() {
-			return country;
-		}
-		public void setCountry(String country) {
-			this.country = country;
-		}
-		public String getCompanyName() {
-			return companyName;
-		}
-		public void setCompanyName(String companyName) {
-			this.companyName = companyName;
-		}
-      
-	}
-	static class Payment{
-		private String paymentMethod;
-		private float amount;
-        private String transactionNumber;
-        private String transactionReference;
-        private String merchantCopy;
-		@Override
-		public String toString() {
-			return "Payment [paymentMethod=" + paymentMethod + ", amount=" + amount + ", transactionNumber="
-					+ transactionNumber + ", transactionReference=" + transactionReference + ", merchantCopy="
-					+ merchantCopy + "]";
-		}
-		public String getPaymentMethod() {
-			return paymentMethod;
-		}
-		public void setPaymentMethod(String paymentMethod) {
-			this.paymentMethod = paymentMethod;
-		}
-		public float getAmount() {
-			return amount;
-		}
-		public void setAmount(float amount) {
-			this.amount = amount;
-		}
-		public String getTransactionNumber() {
-			return transactionNumber;
-		}
-		public void setTransactionNumber(String transactionNumber) {
-			this.transactionNumber = transactionNumber;
-		}
-		public String getTransactionReference() {
-			return transactionReference;
-		}
-		public void setTransactionReference(String transactionReference) {
-			this.transactionReference = transactionReference;
-		}
-		public String getMerchantCopy() {
-			return merchantCopy;
-		}
-		public void setMerchantCopy(String merchantCopy) {
-			this.merchantCopy = merchantCopy;
-		}
-        
-	}
-	     
-	static class Item{
-		private String refundOn;
-		private String refundReason;
-		private boolean isRefund;
-		private String description;
-		private String pictureURL;
-		private String itemName;
-		private int quantity;
-		private float price;
-		private float tax;
-		private int productId;
-		private float discount;
-		private boolean isGiftCard;
-		private int productVariant;
-		@Override
-		public String toString() {
-			return "Item [refundOn=" + refundOn + ", refundReason=" + refundReason + ", isRefund=" + isRefund
-					+ ", description=" + description + ", pictureURL=" + pictureURL + ", itemName=" + itemName
-					+ ", quantity=" + quantity + ", price=" + price + ", tax=" + tax + ", productId=" + productId
-					+ ", discount=" + discount + ", isGiftCard=" + isGiftCard + ", productVariant=" + productVariant
-					+ "]";
-		}
-		public String getRefundOn() {
-			return refundOn;
-		}
-		public void setRefundOn(String refundOn) {
-			this.refundOn = refundOn;
-		}
-		public String getRefundReason() {
-			return refundReason;
-		}
-		public void setRefundReason(String refundReason) {
-			this.refundReason = refundReason;
-		}
-		public boolean isRefund() {
-			return isRefund;
-		}
-		public void setRefund(boolean isRefund) {
-			this.isRefund = isRefund;
-		}
-		public String getDescription() {
-			return description;
-		}
-		public void setDescription(String description) {
-			this.description = description;
-		}
-		public String getPictureURL() {
-			return pictureURL;
-		}
-		public void setPictureURL(String pictureURL) {
-			this.pictureURL = pictureURL;
-		}
-		public String getItemName() {
-			return itemName;
-		}
-		public void setItemName(String itemName) {
-			this.itemName = itemName;
-		}
-		public int getQuantity() {
-			return quantity;
-		}
-		public void setQuantity(int quantity) {
-			this.quantity = quantity;
-		}
-		public float getPrice() {
-			return price;
-		}
-		public void setPrice(float price) {
-			this.price = price;
-		}
-		public float getTax() {
-			return tax;
-		}
-		public void setTax(float tax) {
-			this.tax = tax;
-		}
-		public int getProductId() {
-			return productId;
-		}
-		public void setProductId(int productId) {
-			this.productId = productId;
-		}
-		public float getDiscount() {
-			return discount;
-		}
-		public void setDiscount(float discount) {
-			this.discount = discount;
-		}
-		public boolean isGiftCard() {
-			return isGiftCard;
-		}
-		public void setGiftCard(boolean isGiftCard) {
-			this.isGiftCard = isGiftCard;
-		}
-		public int getProductVariant() {
-			return productVariant;
-		}
-		public void setProductVariant(int productVariant) {
-			this.productVariant = productVariant;
-		}
-		
-		
-	}
+    
+    
 }

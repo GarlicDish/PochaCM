@@ -59,7 +59,7 @@ public class Paging {
 			//기본값 설정
 			if( curPage == 0 )		setCurPage(1); //첫 페이지를 기본 페이지로 설정한다
 			if( curPage < 0 )		setCurPage(1);
-			if( listCount == 0 )	setListCount(15); //화면에 보여질 게시글 수를 10개로 설정한다
+			if( listCount == 0 )	setListCount(15); //화면에 보여질 게시글 수를 15개로 설정한다
 			if( pageCount == 0 )	setPageCount(10); //화면에 보여질 페이징 수를 10개로 설정한다
 			
 			//----------------------------------------

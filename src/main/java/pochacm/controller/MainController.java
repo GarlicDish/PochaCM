@@ -18,6 +18,6 @@ public class MainController {
 		
 		logger.info("#{}. 메인 페이지 [GET]", idx++);
 	
-		return "redirect:/login";
+		return "main";
 	}
 }

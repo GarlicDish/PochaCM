@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import pochacm.dao.face.PurchaseInvoiceDao;
 import pochacm.dto.PurchaseInvoice;
 import pochacm.dto.InvoiceItem;
-import pochacm.dto.Item;
+import pochacm.dto.Items;
 import pochacm.dto.Brand;
 import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
@@ -78,7 +78,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 	}	
 
 	@Override
-	public Object getItemInfoByItem(Item item) {
+	public Object getItemInfoByItem(Items item) {
 		return invoiceDao.selectItemInfoByItemNum(item);
 	}
 	
@@ -122,7 +122,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 	}
 
 	@Override
-	public void updateItemInformation(Item item) {
+	public void updateItemInformation(Items item) {
 		invoiceDao.updateItemInformation(item);
 	}
 
@@ -152,7 +152,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 	}
 
 	@Override
-	public List<Item> getItemListBySearch(Item item) {
+	public List<Items> getItemListBySearch(Items item) {
 		return invoiceDao.selectItemSearchList(item);
 	}
 
@@ -172,12 +172,12 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 	}
 
 	@Override
-	public List<Item> getItemCodeListBySearch(Item item) {
+	public List<Items> getItemCodeListBySearch(Items item) {
 		return invoiceDao.selectItemCodeSearchList(item);
 	}
 
 	@Override
-	public void insertItemInfo(Item item) {
+	public void insertItemInfo(Items item) {
 		invoiceDao.insertItemInfo(item);
 	}
 

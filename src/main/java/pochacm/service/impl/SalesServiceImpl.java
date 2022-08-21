@@ -1,13 +1,7 @@
 package pochacm.service.impl;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
+import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,17 +9,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import pochacm.dao.face.SalesDao;
+import pochacm.dto.Invoice;
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.Sales;
+import pochacm.dto.SalesAPI;
+import pochacm.dto.SalesShowAPI;
 import pochacm.dto.SalesSource;
 import pochacm.service.face.SalesService;
 
@@ -34,8 +42,6 @@ public class SalesServiceImpl implements SalesService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(SalesServiceImpl.class);
 	
-    private final RestTemplate restTemplate = new RestTemplate();
-
     private final String apiKEY = "ApiKey 9746d308-027a-4774-aedd-66ac56bc3b95";
     private final String apiURL = "https://api.abacus.co/invoices";
 	
@@ -110,7 +116,6 @@ public class SalesServiceImpl implements SalesService {
 		
 		return sales;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null;
 		}  
@@ -131,56 +136,122 @@ public class SalesServiceImpl implements SalesService {
 	public List<Map<String, String>> getAllSalesBySalesDate(Sales sales) {
 		return salesDao.getAllSalesBySalesDate(sales);
 	}
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
-	public void getAPI(int limit, int page, String lastUpdated) {
-			
-			URL url = null;
-			HttpURLConnection conn = null;
-			String param = "?limit="+limit+"&page="+page+"&lastUpdated="+lastUpdated;
-			String responseData = "";	    	   
-			BufferedReader br = null;
-			StringBuffer sb = null;
-			String returnData = "";
-			
-		try {
-			url = new URL(apiURL+param);
-			
-			conn = (HttpURLConnection)url.openConnection();
+	public SalesAPI getAPI(Paging paging, String dateParam) {
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getAPI", idx++);
 		
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Authorization",apiKEY);
-			conn.setRequestProperty("Content-Type","application/json");
-			conn.setRequestProperty("Accept","application/json");
-			conn.setConnectTimeout(5000);
-			conn.setDoOutput(true);
+		logger.info("#{}. paging : {}", idx++, paging);
+		logger.info("#{}. date : {}", idx++, dateParam);
+		
+		
+		//Making parameter based on paging dto & today info
+		// number of invoices per 1 page
+		int limit = paging.getListCount();
+		logger.info("#{}. limit : {}", idx++, limit);
 
-			conn.connect();
-
-			System.out.println(conn.getResponseMessage());
+		// current page
+		int page = paging.getCurPage();
+		logger.info("#{}. page : {}", idx++, page);
+		
+		String resultDate = "";
+		
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
+		formatter.setTimeZone(TimeZone.getTimeZone("CET"));
+		
+		//adjust date
+		if (dateParam == null || dateParam.equals("")) {
 			
-			br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));	
-			sb = new StringBuffer();	       
-			while ((responseData = br.readLine()) != null) {
-				sb.append(responseData); //StringBuffer에 응답받은 데이터 순차적으로 저장 실시
-			}
+			// put today's date
+			Date date = new Date(System.currentTimeMillis());
+			resultDate = formatter.format(date);
 			
-			returnData = sb.toString();
+		} else {
 			
-			String responseCode = String.valueOf(conn.getResponseCode());
+			// put designated date
+			resultDate = formatter.format(dateParam);
 			
-			System.out.println("http 응답 코드 : "+responseCode);
-			System.out.println("http 응답 데이터 : "+returnData);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
+		logger.info("#{}. resultDate : {}", idx++, resultDate);
+		
+		// uri addresss
+        URI uri = UriComponentsBuilder
+                .fromUriString(apiURL)
+                .queryParam("limit", limit)
+                .queryParam("page", page)
+                .queryParam("lastUpdated", resultDate)
+                .encode()
+                .build()
+                .toUri();
+        logger.info("#{}. uri : {}", idx++, uri);
+        
+        
+        //header
+        HttpHeaders headers  = new HttpHeaders(); 
+        headers.add("Authorization", apiKEY);
+        logger.info("#{}. headers : {}", idx++, headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
+        ResponseEntity<SalesAPI> result = restTemplate.exchange(uri, HttpMethod.GET, entity, SalesAPI.class);
+        
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+        	public boolean hasError(ClientHttpResponse response) throws IOException {
+        		HttpStatus statusCode = response.getStatusCode();
+        		return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+        	}
+        });
+        
+        //change date format from ISO 8601 to Australian Time Format
+        for(Invoice i : result.getBody().getInvoices()) {
+        	
+        	String invoiceNumber = i.getInvoiceNumber();
+        	// uri addresss
+        	URI uri2 = UriComponentsBuilder
+        			.fromUriString(apiURL)
+        			.path("/"+invoiceNumber)
+        			.encode()
+        			.build()
+        			.toUri();
+        	logger.info("#{}. uri : {}", idx++, uri2);
+        	
+        	HttpHeaders headers2  = new HttpHeaders(); // 담아줄 header
+        	headers2.add("Authorization", apiKEY);
+        	logger.info("#{}. headers : {}", idx++, headers2);
+        	
+        	restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        	
+        	HttpEntity<Object> ett2 = new HttpEntity<>(headers2);
+        	ResponseEntity<SalesShowAPI> result2 = restTemplate.exchange(uri2, HttpMethod.GET, ett2, SalesShowAPI.class);
+        	
+        	restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+        		public boolean hasError(ClientHttpResponse response) throws IOException {
+        			HttpStatus statusCode = response.getStatusCode();
+        			response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        			return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+        		}
+        	});
+        	i.setPayments(result2.getBody().getInvoice().getPayments());
+        	logger.info("#{}. result2.getBody().getInvoice() : {}", idx++, result2.getBody().getInvoice());
+        	
+        	String changedDate = i.getCreatedAt().substring(8,10)+ "-"+i.getCreatedAt().substring(5,7)+ "-"+i.getCreatedAt().substring(0,4)+" " +i.getCreatedAt().substring(11,19);
+        	
+        	logger.info("#{}. changedDate : {}", idx++, changedDate); //check for the date format
+        	
+        	i.setCreatedAt(changedDate);
+        }
+        
+        
+//      logger.info("#{}. 테스트 : {}", idx++, result.getBody().getInvoices().get(0).getCreatedAt());
+//        logger.info("#{}. result.getStatusCode() : {}", idx++, result.getStatusCode());
+//        logger.info("#{}. ###### result.getBody() : {}", idx++, result.getBody());
+
+        return result.getBody();
+
 	}
-	
-	
 	
 }

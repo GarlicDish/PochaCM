@@ -1,50 +1,56 @@
 package pochacm.dto;
 
-import java.util.Date;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
-public class Item {
-	private int itemNum;
-	private int brandNum;
-	private int cateNum;
-	private String itemName;
-	private String itemCode;
-	private int orderUnitNum;
-	private float unitPrice;
-	private int primaryUnitNum;
-	private int secondaryUnitNum;
-	private int targetWastePercentage;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date expiryDate;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date lastUpdateDate;
-	private int userNum;
+public class Item{
+    public String refundOn;
+    public String refundReason;
+    public boolean isRefund;
+    public String description;
+    public String pictureURL;
+    public String itemName;
+    public int quantity;
+    public float price;
+    public float tax;
+    public int productId;
+    public float discount;
+    public boolean isGiftCard;
+    public int productVariant;
 	@Override
 	public String toString() {
-		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", cateNum=" + cateNum + ", itemName=" + itemName
-				+ ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum + ", unitPrice=" + unitPrice
-				+ ", primaryUnitNum=" + primaryUnitNum + ", secondaryUnitNum=" + secondaryUnitNum
-				+ ", targetWastePercentage=" + targetWastePercentage + ", expiryDate=" + expiryDate
-				+ ", lastUpdateDate=" + lastUpdateDate + ", userNum=" + userNum + "]";
+		return "Item [refundOn=" + refundOn + ", refundReason=" + refundReason + ", isRefund=" + isRefund
+				+ ", description=" + description + ", pictureURL=" + pictureURL + ", itemName=" + itemName
+				+ ", quantity=" + quantity + ", price=" + price + ", tax=" + tax + ", productId=" + productId
+				+ ", discount=" + discount + ", isGiftCard=" + isGiftCard + ", productVariant=" + productVariant
+				+ "]";
 	}
-	public int getItemNum() {
-		return itemNum;
+	public String getRefundOn() {
+		return refundOn;
 	}
-	public void setItemNum(int itemNum) {
-		this.itemNum = itemNum;
+	public void setRefundOn(String refundOn) {
+		this.refundOn = refundOn;
 	}
-	public int getBrandNum() {
-		return brandNum;
+	public String getRefundReason() {
+		return refundReason;
 	}
-	public void setBrandNum(int brandNum) {
-		this.brandNum = brandNum;
+	public void setRefundReason(String refundReason) {
+		this.refundReason = refundReason;
 	}
-	public int getCateNum() {
-		return cateNum;
+	public boolean isRefund() {
+		return isRefund;
 	}
-	public void setCateNum(int cateNum) {
-		this.cateNum = cateNum;
+	public void setRefund(boolean isRefund) {
+		this.isRefund = isRefund;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getPictureURL() {
+		return pictureURL;
+	}
+	public void setPictureURL(String pictureURL) {
+		this.pictureURL = pictureURL;
 	}
 	public String getItemName() {
 		return itemName;
@@ -52,63 +58,48 @@ public class Item {
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
-	public String getItemCode() {
-		return itemCode;
+	public int getQuantity() {
+		return quantity;
 	}
-	public void setItemCode(String itemCode) {
-		this.itemCode = itemCode;
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
-	public int getOrderUnitNum() {
-		return orderUnitNum;
+	public float getPrice() {
+		return price;
 	}
-	public void setOrderUnitNum(int orderUnitNum) {
-		this.orderUnitNum = orderUnitNum;
+	public void setPrice(float price) {
+		this.price = price;
 	}
-	public float getUnitPrice() {
-		return unitPrice;
+	public float getTax() {
+		return tax;
 	}
-	public void setUnitPrice(float unitPrice) {
-		this.unitPrice = unitPrice;
+	public void setTax(float tax) {
+		this.tax = tax;
 	}
-	public int getPrimaryUnitNum() {
-		return primaryUnitNum;
+	public int getProductId() {
+		return productId;
 	}
-	public void setPrimaryUnitNum(int primaryUnitNum) {
-		this.primaryUnitNum = primaryUnitNum;
+	public void setProductId(int productId) {
+		this.productId = productId;
 	}
-	public int getSecondaryUnitNum() {
-		return secondaryUnitNum;
+	public float getDiscount() {
+		return discount;
 	}
-	public void setSecondaryUnitNum(int secondaryUnitNum) {
-		this.secondaryUnitNum = secondaryUnitNum;
+	public void setDiscount(float discount) {
+		this.discount = discount;
 	}
-	public int getTargetWastePercentage() {
-		return targetWastePercentage;
+	public boolean isGiftCard() {
+		return isGiftCard;
 	}
-	public void setTargetWastePercentage(int targetWastePercentage) {
-		this.targetWastePercentage = targetWastePercentage;
+	public void setGiftCard(boolean isGiftCard) {
+		this.isGiftCard = isGiftCard;
 	}
-	public Date getExpiryDate() {
-		return expiryDate;
+	public int getProductVariant() {
+		return productVariant;
 	}
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
+	public void setProductVariant(int productVariant) {
+		this.productVariant = productVariant;
 	}
-	public Date getLastUpdateDate() {
-		return lastUpdateDate;
-	}
-	public void setLastUpdateDate(Date lastUpdateDate) {
-		this.lastUpdateDate = lastUpdateDate;
-	}
-	public int getUserNum() {
-		return userNum;
-	}
-	public void setUserNum(int userNum) {
-		this.userNum = userNum;
-	}
-
-
-	
-	
-	
+    
+    
 }

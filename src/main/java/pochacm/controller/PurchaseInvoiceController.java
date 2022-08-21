@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import pochacm.dto.PurchaseInvoice;
-import pochacm.dto.Item;
+import pochacm.dto.Items;
 import pochacm.dto.Brand;
 import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
@@ -161,10 +161,10 @@ public class PurchaseInvoiceController {
 			invoiceItem.setInvoiceNum(invoice.getInvoiceNum());
 			
 			//make item list
-			List<Item> itemList = new ArrayList<Item>();
+			List<Items> itemList = new ArrayList<Items>();
 			
 			for(int i=0;i<cateArr.length;i++) {
-				Item tempItem = new Item();
+				Items tempItem = new Items();
 				
 				tempItem.setItemCode(itemCodeArr[i]);
 				tempItem.setItemNum(itemNumArr[i]);
@@ -289,10 +289,10 @@ public class PurchaseInvoiceController {
 			invoiceService.updateInvoiceInfo(invoice);
 			
 			//make item list
-			List<Item> itemList = new ArrayList<Item>();
+			List<Items> itemList = new ArrayList<Items>();
 			
 			for(int i=0;i<itemNumArr.length;i++) {
-				Item tempItem = new Item();
+				Items tempItem = new Items();
 				
 				tempItem.setItemCode(itemCodeArr[i]);
 				tempItem.setItemNum(itemNumArr[i]);
@@ -342,7 +342,7 @@ public class PurchaseInvoiceController {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	@GetMapping(value="/item/view")
-	public String itemView(HttpSession session, Item item, Model model) {
+	public String itemView(HttpSession session, Items item, Model model) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /item/view [GET]", idx++);
@@ -355,7 +355,7 @@ public class PurchaseInvoiceController {
 	}
 	
 	@GetMapping(value="/item/update")
-	public String itemUpdate(HttpSession session, Item item, Model model) {
+	public String itemUpdate(HttpSession session, Items item, Model model) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /item/update [GET]", idx++);
@@ -388,7 +388,7 @@ public class PurchaseInvoiceController {
 	}
 	
 	@RequestMapping(value="/item/update", method=RequestMethod.POST)
-	public String itemUpdateSubmit(HttpSession session, Item item, Model model) {
+	public String itemUpdateSubmit(HttpSession session, Items item, Model model) {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /item/update [POST]", idx++);
@@ -448,29 +448,29 @@ public class PurchaseInvoiceController {
 	
 	@GetMapping("/itemList")
 	@ResponseBody
-	public List<Item> getItemSearchList(String itemName){
+	public List<Items> getItemSearchList(String itemName){
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /itemList [AJAX] [GET]", idx++);
 		logger.info("#{}. itemName : {}", idx++, itemName);
 		
-		Item item = new Item();
+		Items item = new Items();
 		item.setItemName(itemName);
 		
-		List<Item> resultList = invoiceService.getItemListBySearch(item);
+		List<Items> resultList = invoiceService.getItemListBySearch(item);
 		logger.info("#{}. resultList : {}", idx++, resultList);
 		
 		return resultList;
 	}
 	@GetMapping("/itemCodeList")
 	@ResponseBody
-	public List<Item> getItemCodeSearchList(Item item){
+	public List<Items> getItemCodeSearchList(Items item){
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /itemList [AJAX] [GET]", idx++);
 		logger.info("#{}. itemName : {}", idx++, item);
 		
-		List<Item> resultList = invoiceService.getItemCodeListBySearch(item);
+		List<Items> resultList = invoiceService.getItemCodeListBySearch(item);
 		logger.info("#{}. resultList : {}", idx++, resultList);
 		
 		return resultList;
