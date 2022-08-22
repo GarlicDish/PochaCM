@@ -5,29 +5,29 @@ import java.util.Map;
 
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
-import pochacm.dto.Sales;
+import pochacm.dto.SalesInvoice;
 import pochacm.dto.SalesSource;
 
 public interface SalesDao {
 
 	int selectCntAllSales(Paging paging);
 
-	List<Sales> selectAllSales(Paging paging);
+	List<SalesInvoice> selectAllSales(Paging paging);
 
 	List<SalesSource> getSalesSourceList();
 
 	Recipe selectMenuBymenuName(Recipe recipe);
 
-	int insertSales(Sales sales);
+	int insertSales(SalesInvoice sales);
 
-	List<Sales> selectSalesListBySalesDate(String date);
+	List<SalesInvoice> selectSalesListBySalesDate(String date);
 
-	void deleteSalesBySalesNum(Sales sales);
+	void deleteSalesBySalesNum(SalesInvoice sales);
 
-	int cntSalesBySalesDate(Sales sales);
+	int cntSalesBySalesDate(SalesInvoice sales);
 
-	Sales getSalesBySalesNum(Sales sales);
+	SalesInvoice getSalesBySalesNum(SalesInvoice sales);
 
-	List<Map<String, String>> getAllSalesBySalesDate(Sales sales);
+	List<Map<String, String>> getAllSalesBySalesDate(SalesInvoice sales);
 
 }

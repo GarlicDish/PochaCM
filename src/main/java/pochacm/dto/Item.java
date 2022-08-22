@@ -1,6 +1,7 @@
 package pochacm.dto;
 
 public class Item{
+	
     public String refundOn;
     public String refundReason;
     public boolean isRefund;
@@ -14,6 +15,7 @@ public class Item{
     public float discount;
     public boolean isGiftCard;
     public int productVariant;
+    
 	@Override
 	public String toString() {
 		return "Item [refundOn=" + refundOn + ", refundReason=" + refundReason + ", isRefund=" + isRefund

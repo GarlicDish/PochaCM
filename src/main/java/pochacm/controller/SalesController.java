@@ -32,7 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
-import pochacm.dto.Sales;
+import pochacm.dto.SalesInvoice;
 import pochacm.dto.SalesAPI;
 import pochacm.dto.SalesShowAPI;
 import pochacm.service.face.SalesService;
@@ -66,14 +66,14 @@ public class SalesController {
 		logger.info("#{}. paging : {}", idx++, paging);
 		
 		//get API with paging info & date
-		SalesAPI salesAPI = salesService.getAPI(paging, dateParam);
-		paging.setTotalCount(salesAPI.getPagination().getTotal());
+//		SalesAPI salesAPI = salesService.getAPI(paging, dateParam);
+//		paging.setTotalCount(salesAPI.getPagination().getTotal());
 		paging = new Paging(paging.getTotalCount(),paging.getCurPage());
 		logger.info("#{}. paging : {}", idx++, paging);
 		
-		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
+//		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
 		
-		model.addAttribute("salesAPI", salesAPI);
+//		model.addAttribute("salesAPI", salesAPI);
 //		logger.info("#{}. model.getAttribute(\"salesList\") : {}", idx++, model.getAttribute("salesList"));
 		
 		model.addAttribute("paging", paging);
@@ -82,63 +82,6 @@ public class SalesController {
 		return "sales/salesList";
 	}
 	
-	@GetMapping("/sales/add")
-	public String salesAdd(Model model) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /sales/add [GET]", idx++);
-		
-		model.addAttribute("salesSourceList",salesService.getSalesSourceList());
-		
-		return "sales/salesAdd";
-	}
-	
-	@PostMapping("/sales/add")
-	public String salesAddProc(HttpServletRequest req, HttpSession session, String date, Model model ) throws ParseException {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /sales/add [POST]", idx++);
-		date = req.getParameter("salesDate");
-
-		String[] arrayName = req.getParameterValues("menuName");
-		String[] arrayPrice = req.getParameterValues("menuPrice");
-		String[] arrayQty = req.getParameterValues("qty");
-		String[] arraySource = req.getParameterValues("salesSourceDiv");
-		
-		logger.info("#{}. userNum : {}", idx++, session.getAttribute("userNum"));
-		logger.info("#{}. date : {}", idx++, date);
-		logger.info("#{}. arrayName[] : {}", idx++, arrayName);
-		logger.info("#{}. arrayPrice[] : {}", idx++, arrayPrice);
-		logger.info("#{}. arrayQty[] : {}", idx++, arrayQty);
-		logger.info("#{}. arraySource[] : {}", idx++, arraySource);
-		
-		for(int i = 0; i < arrayName.length; i++) {
-			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("recipeName",arrayName[i]);
-			map.put("salesQty", arrayQty[i]);
-			map.put("salesDate",date);
-			map.put("salesSourceNum", arraySource[i]);
-			map.put("recipePrice", arrayPrice[i]);
-			
-			Recipe recipe = new Recipe();
-			recipe.setRecipeName((String) map.get("recipeName"));
-			recipe = salesService.getRecipeByRecipeName(recipe);
-			
-			Sales sales = salesService.getSalesFromMap(map);
-			sales.setRecipeNum(recipe.getRecipeNum());
-			sales.setUserNum( (int) session.getAttribute("userNum"));
-			
-			model.addAttribute("sales", sales);
-			model.addAttribute("recipe", recipe);
-			logger.info("#{}. recipe : {}", idx++, recipe);
-			logger.info("#{}. sales : {}", idx++, sales);
-			logger.info("#{}. map : {}", idx++, map);
-			
-			salesService.insertSales(sales);
-		}
-		
-		return "redirect: /sales";
-	}
 	
 	@GetMapping("/sales/view")
 	public String viewSales(String invoiceNumber, Model model) {
@@ -176,60 +119,112 @@ public class SalesController {
         		return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
         	}
         });
+        
         logger.info("#{}. result.getStatusCode() : {}", idx++, result.getStatusCode());
         logger.info("#{}. result.getBody() : {}", idx++, result.getBody());
         logger.info("#{}. result.getBody(). : {}", idx++, result.getBody());
         
-//		List<Sales> salesList = salesService.getSalesListBySalesDate(date);
-//		logger.info("#{}. salesList : {}", idx++, salesList);
-//		model.addAttribute("salesDate", salesDate);
-//		model.addAttribute("salesList", salesList);
-//		logger.info("#{}. model.addAttribute(\"salesList\", salesList) : {}", idx++, model.addAttribute("salesList", salesList));
+        return "sales/salesView";
+	}
+	
+//	@PostMapping("/sales/delete")
+//	public String deleteSales(SalesInvoice sales, @DateTimeFormat(pattern="yyyy-MM-dd") Date salesDate) {
+//		//logger index
+//		int idx = 0;
+//		logger.info("#{}. /sales/delete [POST]", idx++);
+//		logger.info("#{}. sales : {}", idx++, sales);
+//		logger.info("#{}. salesDate : {}", idx++, salesDate);
+//		sales.setSalesDate(salesDate);
+//		logger.info("#{}. sales : {}", idx++, sales);
+//
+//		salesService.deleteSalesBySalesNum(sales);
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 //		
-		return "sales/salesView";
-	}
+//		String date = sdf.format(salesDate);
+//		logger.info("#{}. date : {}", idx++, date);
+//		
+//		if (salesService.cntSalesBySalesDate(sales) > 0) {
+//			return "redirect: /sales/view?salesDate="+date;
+//		} else {
+//			return "redirect: /sales";
+//		}
+//		
+//	}
 	
-	@PostMapping("/sales/delete")
-	public String deleteSales(Sales sales, @DateTimeFormat(pattern="yyyy-MM-dd") Date salesDate) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /sales/delete [POST]", idx++);
-		logger.info("#{}. sales : {}", idx++, sales);
-		logger.info("#{}. salesDate : {}", idx++, salesDate);
-		sales.setSalesDate(salesDate);
-		logger.info("#{}. sales : {}", idx++, sales);
-
-		salesService.deleteSalesBySalesNum(sales);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		
-		String date = sdf.format(salesDate);
-		logger.info("#{}. date : {}", idx++, date);
-		
-		if (salesService.cntSalesBySalesDate(sales) > 0) {
-			return "redirect: /sales/view?salesDate="+date;
-		} else {
-			return "redirect: /sales";
-		}
-		
-	}
-	
-	@GetMapping("/sales/update")
-	public String updateSales(@DateTimeFormat(pattern="yyyy-MM-dd") Date salesDate, Model model) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /sales/update [GET]", idx++);
-		Sales sales = new Sales();
-		logger.info("#{}. salesDate : {}", idx++, salesDate);
-		sales.setSalesDate(salesDate);
-		logger.info("#{}. sales : {}", idx++, sales);
-		
-		List<Map<String,String>> salesList = salesService.getAllSalesBySalesDate(sales);
-		logger.info("#{}. salesList : {}", idx++, salesList);
-		
-		model.addAttribute("salesSourceList",salesService.getSalesSourceList());
-		model.addAttribute("salesDate", salesDate);
-		model.addAttribute("salesList",salesList);
-		
-		return "sales/salesUpdate";
-	}
+//	@GetMapping("/sales/update")
+//	public String updateSales(@DateTimeFormat(pattern="yyyy-MM-dd") Date salesDate, Model model) {
+//		//logger index
+//		int idx = 0;
+//		logger.info("#{}. /sales/update [GET]", idx++);
+//		SalesInvoice sales = new SalesInvoice();
+//		logger.info("#{}. salesDate : {}", idx++, salesDate);
+//		sales.setSalesDate(salesDate);
+//		logger.info("#{}. sales : {}", idx++, sales);
+//		
+//		List<Map<String,String>> salesList = salesService.getAllSalesBySalesDate(sales);
+//		logger.info("#{}. salesList : {}", idx++, salesList);
+//		
+//		model.addAttribute("salesSourceList",salesService.getSalesSourceList());
+//		model.addAttribute("salesDate", salesDate);
+//		model.addAttribute("salesList",salesList);
+//		
+//		return "sales/salesUpdate";
+//	}
+//	@GetMapping("/sales/add")
+//	public String salesAdd(Model model) {
+//		//logger index
+//		int idx = 0;
+//		logger.info("#{}. /sales/add [GET]", idx++);
+//		
+//		model.addAttribute("salesSourceList",salesService.getSalesSourceList());
+//		
+//		return "sales/salesAdd";
+//	}
+//	
+//	@PostMapping("/sales/add")
+//	public String salesAddProc(HttpServletRequest req, HttpSession session, String date, Model model ) throws ParseException {
+//		//logger index
+//		int idx = 0;
+//		logger.info("#{}. /sales/add [POST]", idx++);
+//		date = req.getParameter("salesDate");
+//
+//		String[] arrayName = req.getParameterValues("menuName");
+//		String[] arrayPrice = req.getParameterValues("menuPrice");
+//		String[] arrayQty = req.getParameterValues("qty");
+//		String[] arraySource = req.getParameterValues("salesSourceDiv");
+//		
+//		logger.info("#{}. userNum : {}", idx++, session.getAttribute("userNum"));
+//		logger.info("#{}. date : {}", idx++, date);
+//		logger.info("#{}. arrayName[] : {}", idx++, arrayName);
+//		logger.info("#{}. arrayPrice[] : {}", idx++, arrayPrice);
+//		logger.info("#{}. arrayQty[] : {}", idx++, arrayQty);
+//		logger.info("#{}. arraySource[] : {}", idx++, arraySource);
+//		
+//		for(int i = 0; i < arrayName.length; i++) {
+//			HashMap<String, Object> map = new HashMap<String, Object>();
+//			map.put("recipeName",arrayName[i]);
+//			map.put("salesQty", arrayQty[i]);
+//			map.put("salesDate",date);
+//			map.put("salesSourceNum", arraySource[i]);
+//			map.put("recipePrice", arrayPrice[i]);
+//			
+//			Recipe recipe = new Recipe();
+//			recipe.setRecipeName((String) map.get("recipeName"));
+//			recipe = salesService.getRecipeByRecipeName(recipe);
+//			
+//			SalesInvoice sales = salesService.getSalesFromMap(map);
+//			sales.setRecipeNum(recipe.getRecipeNum());
+//			sales.setUserNum( (int) session.getAttribute("userNum"));
+//			
+//			model.addAttribute("sales", sales);
+//			model.addAttribute("recipe", recipe);
+//			logger.info("#{}. recipe : {}", idx++, recipe);
+//			logger.info("#{}. sales : {}", idx++, sales);
+//			logger.info("#{}. map : {}", idx++, map);
+//			
+//			salesService.insertSales(sales);
+//		}
+//		
+//		return "redirect: /sales";
+//	}
 }

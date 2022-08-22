@@ -62,16 +62,16 @@ $(document).ready(function() {
 							<c:if test="${i.payments.get(0).paymentMethod ne 'Cash' }">0</c:if>
 						</td>
 						<td>
-							<c:if test="${i.payments.get(0).paymentMethod eq 'Eftpos' }">${i.total}</c:if>
-							<c:if test="${i.payments.get(0).paymentMethod ne 'Eftpos' }">0</c:if>
+							<c:if test="${i.payments.get(0).paymentMethod eq 'Credit Card' }">${i.total}</c:if>
+							<c:if test="${i.payments.get(0).paymentMethod ne 'Credit Card' }">0</c:if>
 						</td>
 						<td>
-							<c:if test="${i.payments.get(0).paymentMethod eq 'Ubereats' }">${i.total}</c:if>
-							<c:if test="${i.payments.get(0).paymentMethod ne 'Ubereats' }">0</c:if>
+							<c:if test="${i.payments.get(0).paymentMethod eq 'UberEats' }">${i.total}</c:if>
+							<c:if test="${i.payments.get(0).paymentMethod ne 'UberEats' }">0</c:if>
 						</td>
 						<td>
-							<c:if test="${i.payments.get(0).paymentMethod eq 'Doordash' }">${i.total}</c:if>
-							<c:if test="${i.payments.get(0).paymentMethod ne 'Doordash' }">0</c:if>
+							<c:if test="${i.payments.get(0).paymentMethod eq 'DoorDash' }">${i.total}</c:if>
+							<c:if test="${i.payments.get(0).paymentMethod ne 'DoorDash' }">0</c:if>
 						</td>
 						<td>
 							<c:if test="${i.payments.get(0).paymentMethod eq 'Deliveroo' }">${i.total}</c:if>

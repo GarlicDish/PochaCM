@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Invoice{
+	
     public ArrayList<Item> items;
     public String updatedAt;
     public String refundReason;
@@ -38,6 +39,7 @@ public class Invoice{
     public ShippingAddress shippingAddress;
     public BillingAddress billingAddress;
     public ArrayList<Payment> payments;
+    
 	@Override
 	public String toString() {
 		return "Invoice [items=" + items + ", updatedAt=" + updatedAt + ", refundReason=" + refundReason

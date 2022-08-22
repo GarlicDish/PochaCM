@@ -10,32 +10,30 @@ import org.springframework.http.ResponseEntity;
 
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
-import pochacm.dto.Sales;
+import pochacm.dto.SalesInvoice;
 import pochacm.dto.SalesAPI;
 
 public interface SalesService {
 	Paging getSalesPaging(Paging paging);
 
-	List<Sales> getSalesList(Paging paging);
+	List<SalesInvoice> getSalesList(Paging paging);
 
 	Object getSalesSourceList();
 
 	Recipe getRecipeByRecipeName(Recipe map);
 
-	int insertSales(Sales sales);
+	int insertSales(SalesInvoice sales);
 	
-	void deleteSalesBySalesNum(Sales sales);
+	void deleteSalesBySalesNum(SalesInvoice sales);
 	
-	List<Sales> getSalesListBySalesDate(String date);
+	List<SalesInvoice> getSalesListBySalesDate(String date);
 
-	Sales getSalesFromMap(HashMap<String, Object> map);
+	SalesInvoice getSalesFromMap(HashMap<String, Object> map);
 
-	int cntSalesBySalesDate(Sales sales);
+	int cntSalesBySalesDate(SalesInvoice sales);
 
-	Sales getSalesBySalesNum(Sales sales);
+	SalesInvoice getSalesBySalesNum(SalesInvoice sales);
 
-	List<Map<String, String>> getAllSalesBySalesDate(Sales sales);
-
-	SalesAPI getAPI(Paging paging, String dateParam);
+	List<Map<String, String>> getAllSalesBySalesDate(SalesInvoice sales);
 
 }

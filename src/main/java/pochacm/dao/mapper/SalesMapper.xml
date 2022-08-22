@@ -11,7 +11,7 @@
 		SELECT count(*) FROM sales s
 	</select>
 	
-	<insert id="insertSales" parameterType="pochacm.dto.Sales" >
+	<insert id="insertSales" parameterType="pochacm.dto.SalesInvoice" >
 		INSERT INTO sales(sales_num, user_num, recipe_num, sales_date, sales_qty, sales_source_num)
 		VALUES (sales_Num_seq.nextval, #{userNum}, #{recipeNum}, #{salesDate}, #{salesQty}, #{salesSourceNum})
 	</insert>
@@ -67,17 +67,17 @@
 		)
 	</select>
 	
-	<delete id="deleteSalesBySalesNum" parameterType="pochacm.dto.Sales">
+	<delete id="deleteSalesBySalesNum" parameterType="pochacm.dto.SalesInvoice">
 		DELETE sales 
 		WHERE sales_num = #{salesNum}
 	</delete>
 	
-	<select id="cntSalesBySalesDate" parameterType="pochacm.dto.Sales" resultType="int">
+	<select id="cntSalesBySalesDate" parameterType="pochacm.dto.SalesInvoice" resultType="int">
 		SELECT count(*) FROM SALES
 		WHERE sales_date = #{salesDate}
 	</select>
 	
-	<select id="getSalesBySalesNum" parameterType="pochacm.dto.Sales" resultType="hashmap">
+	<select id="getSalesBySalesNum" parameterType="pochacm.dto.SalesInvoice" resultType="hashmap">
 		SELECT * FROM sales s, user_info u, recipe r, sales_source ss
 		WHERE sales_num = #{salesNum}
 			AND s.user_num = u.user_num (+)
@@ -85,7 +85,7 @@
 			AND s.sales_source_num = ss.sales_source_num (+)
 	</select>
 	
-	<select id="getAllSalesBySalesDate" parameterType="pochacm.dto.Sales" resultType="hashmap">
+	<select id="getAllSalesBySalesDate" parameterType="pochacm.dto.SalesInvoice" resultType="hashmap">
 		SELECT * FROM(
 			SELECT rownum rnum, sss.*
 			FROM (

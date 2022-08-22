@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="pochacm.dao.face.APIDao" >
+
+	<select id="checkAPIExist" parameterType="pochacm.dto.SalesInvoice" resultType="int">
+		SELECT count(*) cnt FROM sales_invoice
+		WHERE sales_invoice_serial_num = #{salesInvoiceSerialNum}
+			AND menu = #{menu}
+	</select>
+	
+	<select id="checkRefundChange" parameterType="pochacm.dto.SalesInvoice" resultType="int">
+		SELECT count(*) cnt FROM sales_invoice
+		WHERE sales_invoice_serial_num = #{salesInvoiceSerialNum}
+			AND menu = #{menu}
+			AND is_refunded = #{isRefunded}
+	</select>
+	
+	<update id="updateRefundChange" parameterType="pochacm.dto.SalesInvoice">
+		UPDATE sales_invoice
+		SET is_refunded = #{isRefunded}
+		WHERE sales_invoice_serial_num = #{salesInvoiceSerialNum}
+			AND menu = #{menu}
+	</update>
+	
+	<insert id="putAPItoDB" parameterType="pochacm.dto.SalesInvoice">
+		INSERT INTO sales_invoice (sales_invoice_num, sales_invoice_serial_num, menu, sales_date,
+			price, tax, sales_qty, sales_source, is_refunded )
+		VALUES ( sales_invoice_num_seq.nextval, #{salesInvoiceSerialNum}, #{menu}, #{salesDate},
+			#{price}, #{tax}, #{qty}, #{salesSource}, #{isRefunded} )
+	</insert>
+
+</mapper>
