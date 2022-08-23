@@ -23,10 +23,10 @@
 			padding:10px;
 			background-color: #B9E2FA;
 			margin: 0px;
-			height:15vh;
+			height:120px;
 		}
 		.footer{
-			height:20vh;
+			height:160px;
 			position : absolute;
 			bottom:0;
 			left:0;
@@ -55,13 +55,13 @@
 
 <body>
 <div class="head">
-	<div class="logo" style="width: 13%; margin-left:10px;">
-		<a href="<%= request.getContextPath() %>/main"><img src="../../resources/images/Pocha-logo.png" class="img-fluid" style="height:100px"/></a>
+	<div class="logo" style="width:200px; margin-left:10px;">
+		<a href="<%= request.getContextPath() %>/main"><img src="../../resources/images/Pocha-logo.png" class="img-fluid" style="height:100px;" /></a>
 	</div>
 </div>
 <div class="d-flex" id="wrapper" style="position: relative;">
 	<!-- Sidebar-->
-	<div class="border-end bg-dark" id="sidebar-wrapper" style="min-height:85vh;">
+	<div class="border-end bg-dark" id="sidebar-wrapper" style="min-height:90vh;">
 		<div class="sidebar-heading border-bottom bg-dark" style="color: #fff;">Menu</div>
 		<div class="list-group list-group-flush">
 			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/summary">Summary</a>

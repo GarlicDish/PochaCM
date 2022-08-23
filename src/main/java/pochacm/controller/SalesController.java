@@ -65,19 +65,19 @@ public class SalesController {
 		paging.setListCount(15);
 		logger.info("#{}. paging : {}", idx++, paging);
 		
-		//get API with paging info & date
-//		SalesAPI salesAPI = salesService.getAPI(paging, dateParam);
-//		paging.setTotalCount(salesAPI.getPagination().getTotal());
+//		get API with paging info & date
+		SalesAPI salesAPI = salesService.getAPI(paging, dateParam);
+		paging.setTotalCount(salesAPI.getPagination().getTotal());
 		paging = new Paging(paging.getTotalCount(),paging.getCurPage());
 		logger.info("#{}. paging : {}", idx++, paging);
 		
-//		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
+		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
 		
-//		model.addAttribute("salesAPI", salesAPI);
-//		logger.info("#{}. model.getAttribute(\"salesList\") : {}", idx++, model.getAttribute("salesList"));
+		model.addAttribute("salesAPI", salesAPI);
+		logger.info("#{}. model.getAttribute(\"salesList\") : {}", idx++, model.getAttribute("salesList"));
 		
 		model.addAttribute("paging", paging);
-//		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
+		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
 		
 		return "sales/salesList";
 	}

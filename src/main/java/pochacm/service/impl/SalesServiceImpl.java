@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import pochacm.dao.face.SalesDao;
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
+import pochacm.dto.SalesAPI;
 import pochacm.dto.SalesInvoice;
 import pochacm.dto.SalesSource;
 import pochacm.service.face.SalesService;
@@ -114,6 +115,12 @@ public class SalesServiceImpl implements SalesService {
 	@Override
 	public List<Map<String, String>> getAllSalesBySalesDate(SalesInvoice sales) {
 		return salesDao.getAllSalesBySalesDate(sales);
+	}
+	@Override
+	public SalesAPI getAPI(Paging paging, String dateParam) {
+		
+		
+		return null;
 	}
 	
 }

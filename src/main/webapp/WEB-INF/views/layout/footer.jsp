@@ -5,8 +5,8 @@
 	</div> <!-- Page content wrapper End-->
     
 	<div class="footer">
-		 <div class="logo" style="width:10%; margin:10px auto;">
-		 	<img src="../../resources/images/Pocha-logo.png" class="img-fluid"/>
+		 <div class="logo" style="width:150px; margin:10px auto;">
+		 	<img src="../../resources/images/Pocha-logo.png" class="img-fluid" style="height:80px"/>
 		 </div>
 		 <div class="copyRight" style="">
 		     <p>
