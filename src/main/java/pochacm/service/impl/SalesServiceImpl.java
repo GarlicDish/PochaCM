@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.TimeZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -33,6 +35,7 @@ import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.SalesAPI;
 import pochacm.dto.SalesInvoice;
+import pochacm.dto.SalesShowAPI;
 import pochacm.dto.SalesSource;
 import pochacm.service.face.SalesService;
 
@@ -146,20 +149,29 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public SalesAPI getAPI(Paging paging, Date dateParam) {
+	public SalesAPI getAPI(Paging paging, @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateParam) {
 
 		int idx = 0;
 		logger.info("#{}. getAPI ", idx++);
-
-		if (dateParam == null) {
-			dateParam = new Date(System.currentTimeMillis());
-		}
 		logger.info("#{}. dateParam : {}", idx++, dateParam);
 
+		//date setting
 		String resultDate = "";
+		
 		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
 		formatter.setTimeZone(TimeZone.getTimeZone("CET"));
-		resultDate = formatter.format(dateParam);
+		
+		if (dateParam == null) {
+			dateParam = new Date(System.currentTimeMillis());
+			resultDate = formatter.format(dateParam);
+		} else {
+			Calendar cal = Calendar.getInstance();
+			
+			cal.setTime(dateParam);
+			cal.add(Calendar.DATE, 1);
+			resultDate = formatter.format(cal.getTime());
+		}
+		logger.info("#{}. dateParam : {}", idx++, dateParam);
 		
 		int limit = paging.getPageCount();
 		int page = paging.getCurPage();
@@ -209,7 +221,52 @@ public class SalesServiceImpl implements SalesService {
         	
         	i.setCreatedAt(changedDate);
 		}
+		SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = null;
+		try {
+			date = formatter.parse(resultDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		result.getBody().getPagination().setDateParam(date);
 		return result.getBody();
 
+	}
+
+	@Override
+	public SalesShowAPI getSalesViewByInvoiceNumber(String invoiceNumber) {
+		
+		int idx = 0;
+		logger.info("#{}. getSalesViewByInvoiceNumber ", idx++);
+		
+		// uri addresss
+        URI uri = UriComponentsBuilder
+                .fromUriString(apiURL)
+                .path("/"+invoiceNumber)
+                .encode()
+                .build()
+                .toUri();
+
+        logger.info("#{}. uri : {}", idx++, uri);
+        
+        HttpHeaders headers  = new HttpHeaders();
+        headers.add("Authorization", apiKEY);
+        logger.info("#{}. headers : {}", idx++, headers);
+        
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        
+        HttpEntity<Object> entity = new HttpEntity<>(headers);
+        ResponseEntity<SalesShowAPI> result = restTemplate.exchange(uri, HttpMethod.GET, entity, SalesShowAPI.class);
+        
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+        	public boolean hasError(ClientHttpResponse response) throws IOException {
+        		HttpStatus statusCode = response.getStatusCode();
+        		return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+        	}
+        });
+        
+		return result.getBody();
 	}
 }

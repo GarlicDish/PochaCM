@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.SalesInvoice;
+import pochacm.dto.SalesShowAPI;
 import pochacm.dto.SalesAPI;
 
 public interface SalesService {
@@ -37,5 +38,7 @@ public interface SalesService {
 	List<Map<String, String>> getAllSalesBySalesDate(SalesInvoice sales);
 
 	SalesAPI getAPI(Paging paging, Date dateParam);
+
+	SalesShowAPI getSalesViewByInvoiceNumber(String invoiceNumber);
 
 }

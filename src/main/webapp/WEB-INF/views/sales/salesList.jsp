@@ -16,22 +16,24 @@ $(document).ready(function() {
 	$("#addBtn").click(function(){
 		location.href='/sales/add'
 	})
-	
+	$("#salesFindByDateBtn").click(function() {
+		$("#salesDateForm").submit();
+	});
 	
 })
 </script>
 <h1 class="mt-4">Sales</h1>
 <div class="row" >
 <div class="col-4">
-	<form action="" method="get" id="salesDateForm">
+	<form action="/sales" method="get" id="salesDateForm">
 		<div class="input-group mb-2" style="margin:0 auto;">
 			<label class="input-group-text" id="basic-addon1">Date</label>
-			<input type="Date" id="salesDate" name="salesDate" class="form-control">
+			<input type="Date" id="dateParam" name="dateParam" class="form-control" value="${salesAPI.pagination.dateParam }">
 		</div>
 	</form>
 </div>
 <div class="col-4">
-	<button class="btn btn-primary col-3" type="button" style="float:left;">Search</button>
+	<button id="salesFindByDateBtn"class="btn btn-primary col-3" type="button" style="float:left;">Search</button>
 </div>
 	<div>
 		<table id="salesListTab" class="table table-light table-striped table-hover" style="text-align:center;">
@@ -46,9 +48,9 @@ $(document).ready(function() {
 				<tr class="table-dark">
 					<th>Cash</th>
 					<th>EFTPOS</th>
-					<th>UBEREATS</th>
-					<th>DOORDASH</th>
-					<th>DELIVEROO</th>
+					<th>UberEats</th>
+					<th>DoorDash</th>
+					<th>Deliveroo</th>
 					<th>EASI</th>
 				</tr>
 			</thead>
@@ -91,22 +93,5 @@ $(document).ready(function() {
 	</div>
 </div>
 
-<div style="text-align:left;">
-	<button type="button" id="addBtn" name="addBtn" class="btn btn-primary">Add</button>
-</div>
-
-<%-- 
-<div class="text-center" id="searchPanel" style="padding:10px;">
-	<form id="searchForm" name="searchForm" action="/sales?curPage=1&category='${category }'&keyword='${keyword }" method="get" >
-		<select id="category" name="category">
-			<option value="" selected>Category</option>
-			<option value="Date">Date</option>
-			<option value="Writer">Writer</option>
-		</select>
-		<input type="text" id="keyword" name="keyword" style="min-width:20px;width:20%;">
-		<button type="button" id="searchBtn" class="btn btn-primary btn-primary:hover" >Search</button>
-	</form>
-</div>
---%>
- <%@ include file="../layout/salesPaging.jsp" %>
+<%@ include file="../layout/salesPaging.jsp" %>
 <%@ include file="../layout/footer.jsp" %>

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -45,11 +46,14 @@ public class SalesController {
 	@Autowired SalesService salesService;
 	
 	@GetMapping("/sales")
-	public String salesList(HttpSession session, Date dateParam, String curPage, Model model) {
+	public String salesList(HttpSession session,@DateTimeFormat(pattern = "yyyy-MM-dd") Date dateParam, String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /sales [GET]", idx++);
+		
+		logger.info("#{}. curPage : {}", idx++, curPage);
+		logger.info("#{}. dateParam : {}", idx++, dateParam);
 		
 		//adjust curPage
 		if(curPage == null || curPage.equals("")) {
@@ -76,7 +80,7 @@ public class SalesController {
 		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
 		
 		model.addAttribute("salesAPI", salesAPI);
-		logger.info("#{}. model.getAttribute(\"salesList\") : {}", idx++, model.getAttribute("salesList"));
+		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
 		
 		model.addAttribute("paging", paging);
 		logger.info("#{}. model.getAttribute(\"paging\") : {}", idx++, model.getAttribute("paging"));
@@ -92,39 +96,10 @@ public class SalesController {
 		logger.info("#{}. /sales/view [GET]", idx++);
 		logger.info("#{}. invoiceNumber : {}", idx++, invoiceNumber);
 
-	    String apiURL = "https://api.abacus.co/invoices";
-	    String apiKEY = "ApiKey 9746d308-027a-4774-aedd-66ac56bc3b95";
-	    
-		// uri addresss
-        URI uri = UriComponentsBuilder
-                .fromUriString(apiURL)
-                .path("/"+invoiceNumber)
-                .encode()
-                .build()
-                .toUri();
-
-        logger.info("#{}. uri : {}", idx++, uri);
+		SalesShowAPI salesAPIShow = salesService.getSalesViewByInvoiceNumber(invoiceNumber);
         
-        HttpHeaders headers  = new HttpHeaders(); // 담아줄 header
-        headers.add("Authorization", apiKEY);
-        logger.info("#{}. headers : {}", idx++, headers);
-        
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-        
-        HttpEntity<Object> entity = new HttpEntity<>(headers);
-        ResponseEntity<SalesShowAPI> result = restTemplate.exchange(uri, HttpMethod.GET, entity, SalesShowAPI.class);
-        
-        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
-        	public boolean hasError(ClientHttpResponse response) throws IOException {
-        		HttpStatus statusCode = response.getStatusCode();
-        		return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
-        	}
-        });
-        
-        logger.info("#{}. result.getStatusCode() : {}", idx++, result.getStatusCode());
-        logger.info("#{}. result.getBody() : {}", idx++, result.getBody());
-        logger.info("#{}. result.getBody(). : {}", idx++, result.getBody());
+		model.addAttribute("salesAPIShow",salesAPIShow);
+        logger.info("#{}. salesAPIShow : {}", idx++, salesAPIShow);
         
         return "sales/salesView";
 	}

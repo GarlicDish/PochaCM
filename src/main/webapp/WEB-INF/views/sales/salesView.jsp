@@ -72,14 +72,7 @@ function alertMsg(x){
 		</tbody>
 	</table>
 	<div style="text-align:left;">
-			<form action="/sales/deleteAll" method="post" id="deleteAllForm">
-				<input type="hidden" name="salesDate" value='${salesDate}'>
-			</form>
 		<button type="button" class="btn btn-secondary" id="goBack">To List</button>
-		<c:if test="${positionNum < 2 }">
-			<button type="button" class="btn btn-success" id="updateBtn">Update</button>
-			<button type="button" id="delAllBtn" name="delAllBtn" class="btn btn-danger">Delete All</button>
-		</c:if>
 	</div>
 </div>
 <%@ include file="..//layout/footer.jsp" %>
