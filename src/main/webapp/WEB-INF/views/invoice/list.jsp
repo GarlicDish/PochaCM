@@ -52,7 +52,7 @@ $(document).ready(function() {
 					<td>${i.RNUM }</td>
 					<td>${i.INVOICE_SERIAL }</td>
 					<td>${i.TP }</td>
-					<td>${i.INVOICE_DATE }</td>
+					<td><fmt:formatDate value="${i.INVOICE_DATE }" pattern="dd-MM-yyyy"/></td>
 					<td>${i.USER_NAME }</td>
 					<td>
 						<form action="/invoice/delete" id="delForm<fmt:formatNumber value="${i.RNUM%15-1 }" minFractionDigits="0" maxFractionDigits="0"/>" method="post">
