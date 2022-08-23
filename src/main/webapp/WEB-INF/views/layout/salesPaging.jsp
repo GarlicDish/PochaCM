@@ -9,7 +9,7 @@
 				<c:if test="${paging.curPage ne 0}">
 				
 					<li class="page-item">
-						<a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }curPage=1">
+						<a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=1">
 							FIRST PAGE
 						</a>
 					</li>
@@ -22,13 +22,13 @@
 					<li class="page-item" class="disabled"><a class="page-link">&laquo;</a></li>
 				</c:when>
 				<c:when test="${paging.startPage ne 1 }">
-					<li class="page-item"><a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${paging.startPage - paging.pageCount}">&laquo;</a></li>
+					<li class="page-item"><a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${paging.startPage - paging.pageCount}">&laquo;</a></li>
 				</c:when>
 			</c:choose>		
 			<%-- Previous Page --%>
 			<c:if test="${paging.curPage > 1 }">
 				<li class="page-item">
-					<a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${paging.curPage - 1}" > &lt; </a>
+					<a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${paging.curPage - 1}" > &lt; </a>
 				</li>
 			</c:if>
 		
@@ -37,14 +37,14 @@
 				<c:choose>
 					<c:when test="${paging.curPage eq i}">
 						<li class="page-item" class="active">
-							<a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${i }" >
+							<a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${i }" >
 								${i }
 							</a>
 						</li>
 					</c:when>
 					<c:otherwise>
 						<li class="page-item">
-							<a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${i }">
+							<a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${i }">
 								${i }
 							</a>
 						</li>
@@ -55,7 +55,7 @@
 			<%-- NExt Page --%>
 			<c:if test="${paging.curPage < paging.totalPage }">
 				<li class="page-item">
-					<a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${paging.curPage + 1 }">
+					<a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${paging.curPage + 1 }">
 						&gt; 
 					</a>
 				</li>
@@ -67,14 +67,14 @@
 					<li class="page-item" class="disabled"><a class="page-link">&raquo;</a></li>
 				</c:when>
 				<c:when test="${paging.endPage ne paging.totalPage }">
-					<li class="page-item"><a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${paging.startPage + paging.pageCount}">&raquo;</a></li>
+					<li class="page-item"><a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${paging.startPage + paging.pageCount}">&raquo;</a></li>
 				</c:when>
 			</c:choose>
 			
 			<%-- to Last Page --%>
 			<c:if test="${paging.curPage ne paging.totalPage }">
 				<li class="page-item">
-				<a class="page-link" href="<%=request.getContextPath() %>/sales?category=${category }&keyword=${keyword }&curPage=${ paging.totalPage }">
+				<a class="page-link" href="<%=request.getContextPath() %>/sales?curPage=${ paging.totalPage }">
 					LAST PAGE
 				</a>
 				</li>	

@@ -45,7 +45,7 @@ public class SalesController {
 	@Autowired SalesService salesService;
 	
 	@GetMapping("/sales")
-	public String salesList(HttpSession session, String dateParam, String curPage, Model model) {
+	public String salesList(HttpSession session, Date dateParam, String curPage, Model model) {
 		
 		//logger index
 		int idx = 0;
@@ -62,12 +62,14 @@ public class SalesController {
 		
 		logger.info("#{}. paging : {}", idx++, paging);
 		paging.setCurPage(Integer.parseInt(curPage));
-		paging.setListCount(15);
+		paging.setPageCount(15);
 		logger.info("#{}. paging : {}", idx++, paging);
 		
 //		get API with paging info & date
 		SalesAPI salesAPI = salesService.getAPI(paging, dateParam);
+		
 		paging.setTotalCount(salesAPI.getPagination().getTotal());
+		
 		paging = new Paging(paging.getTotalCount(),paging.getCurPage());
 		logger.info("#{}. paging : {}", idx++, paging);
 		
