@@ -2,7 +2,7 @@ package pochacm.dto;
 
 public class Payment{
     public String paymentMethod;
-    public float amount;
+    public double amount;
     public String transactionNumber;
     public String transactionReference;
     public String merchantCopy;
@@ -18,10 +18,10 @@ public class Payment{
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	public float getAmount() {
+	public double getAmount() {
 		return amount;
 	}
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 	public String getTransactionNumber() {

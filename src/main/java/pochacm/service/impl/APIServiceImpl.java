@@ -50,15 +50,11 @@ public class APIServiceImpl implements APIService {
 		int idx = 0;
 		logger.info("#{}. insertSalesAPI()", idx++);
 		
-		int limit = 5;
+		int limit = 100;
 		logger.info("#{}. limit : {}", idx++, limit);
 		
 		// put today's date
-		String resultDate = "";
-		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
-		formatter.setTimeZone(TimeZone.getTimeZone("CET"));
-		resultDate = formatter.format(date);
+		String resultDate = "2020-10-31T00:00:00.00Z";
 			
 		logger.info("#{}. resultDate : {}", idx++, resultDate);
 		
@@ -105,7 +101,7 @@ public class APIServiceImpl implements APIService {
 	        
 	        //change date format from ISO 8601 to Australian Time Format
 	        for(Invoice i : result.getBody().getInvoices()) {
-	        	
+	        	logger.info("#{}. GET NEXT PAGE", idx++);
 	        	//query parameter
 	        	String invoiceNumber = i.getInvoiceNumber();
 	        	
@@ -142,6 +138,13 @@ public class APIServiceImpl implements APIService {
 	        	String changedDate = i.getCreatedAt().substring(8,10)+ "-"+i.getCreatedAt().substring(5,7)+ "-"+i.getCreatedAt().substring(0,4)+" " +i.getCreatedAt().substring(11,19);
 	        	
 	        	i.setCreatedAt(changedDate);
+	        	try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	        	
+	        	logger.info("#{}. GET NEXT PAGE END", idx++);
 	        } //for - END
 	        
 	//        logger.info("#{}. result.getBody() - AFTER CHANGE : {}", idx++, result.getBody());
@@ -151,6 +154,7 @@ public class APIServiceImpl implements APIService {
 	        
 	        for(int i = 0; i < result.getBody().getInvoices().size(); i++) {
 	        	for(int j = 0; j< result.getBody().getInvoices().get(i).getItems().size();j++) {
+	        		logger.info("#{}. ADD INVOICE LIST START", idx++);
 	        		
 	        		SalesInvoice temp = new SalesInvoice();
 	        		ArrayList<Invoice> rbi = result.getBody().getInvoices();
@@ -167,12 +171,14 @@ public class APIServiceImpl implements APIService {
 	        		logger.info("#{}. temp : {}", idx++, temp);
 	        		
 	        		salesInvoiceList.add(temp);
+	        		logger.info("#{}. ADD INVOICE LIST END", idx++);
 	        	}
 	        }
 	        
 	        logger.info("#{}. salesInvoiceList : {}", idx++, salesInvoiceList);
 	        // update or insert information
 	        for(SalesInvoice i : salesInvoiceList ) {
+	        	logger.info("#{}. START TO PUT DATA IN DB", idx++);
 	        	
 	        	if ( apiDao.checkAPIExist(i) > 0 ) {
 	        		if ( apiDao.checkRefundChange(i) == 0 ) {
@@ -181,6 +187,7 @@ public class APIServiceImpl implements APIService {
 	        	} else {
 	        		apiDao.putAPItoDB(i);
 	        	}
+	        	logger.info("#{}. END TO PUT DATA IN DB", idx++);
 	        }
 	        }
 		    catch (final HttpClientErrorException e) {
@@ -191,18 +198,14 @@ public class APIServiceImpl implements APIService {
 	}// insertSalesAPI() END
 
 	@Override
-	public int getTotalPage(Date searchDate, int limit, int page) {
+	public int getTotalPage() {
 		
 		//logger index
 		int idx = 0;
 		logger.info("#{}. getTotalPage()", idx++);
 		
 		// put today's date
-		String resultDate = "";
-		
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
-		formatter.setTimeZone(TimeZone.getTimeZone("CET"));
-		resultDate = formatter.format(searchDate);
+		String resultDate = "2020-10-31T00:00:00.00Z";
 			
 		logger.info("#{}. resultDate : {}", idx++, resultDate);
 		
@@ -211,8 +214,8 @@ public class APIServiceImpl implements APIService {
 		// uri addresss with query parameter
         URI uri = UriComponentsBuilder
                 .fromUriString(apiURL)
-                .queryParam("limit", limit)
-                .queryParam("page", page)
+                .queryParam("limit", 100)
+                .queryParam("page", 1)
                 .queryParam("lastUpdated", resultDate)
                 .encode()
                 .build()

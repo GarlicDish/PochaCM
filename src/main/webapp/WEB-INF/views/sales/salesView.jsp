@@ -23,7 +23,14 @@ $(document).ready(function(){
 			return false;
 		}
 	})
+	
 })
+window.onload = function(){
+	var subTotal = ${salesAPIShow.invoice.total } - ${salesAPIShow.invoice.surcharge };
+	var trimmedTotal = parseFloat(subTotal).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotal").html(trimmedTotal);
+}
 function alertMsg(x){
 	if( confirm("Are you sure to delete this Sales record?") == true){
 		$("#"+'delForm'+x).submit();
@@ -32,46 +39,67 @@ function alertMsg(x){
 	}
 }
 </script>
-<div id="salesViewTable">
-	<table class="table table-hover" style="text-align:center;box-sizing:border-box;">
-		<thead>
-			<tr class="table-dark">
-				<th>#</th>
-				<th>Sales Date</th>
-				<th>Menu Name</th>
-				<th style="width:150px;">Sales Source</th>
-				<th style="width:75px;white-space:pre-wrap;">Unit Price</th>
-				<th style="width:75px;white-space:pre-wrap;">Qty</th>
-				<th style="width:75px;white-space:pre-wrap;">Total Price</th>
-				<th>Writer</th>
-				<th>Remark</th>
-			</tr>			
-		</thead>
-		<tbody>
-		<c:forEach items="${salesList }" var="i">
-		<tr>
-			<td>${i.RNUM }</td>
-			<td><fmt:formatDate value="${i.SALES_DATE }" pattern="yyyy-MM-dd"/></td>
-			<td>${i.RECIPE_NAME }</td>
-			<td>${i.SALES_SOURCE_NAME }</td>
-			<td>${i.RECIPE_PRICE }</td>
-			<td>${i.SALES_QTY }</td>
-			<td>${i.TP }</td>
-			<td>${i.USER_NAME }</td>
-			<td>
-				<c:if test="${positionNum < 2 }">
-					<form action="/sales/delete" method="post" id="delForm${i.RNUM }">
-						<input type="hidden" name="salesNum" value="${i.SALES_NUM }">
-						<input type="hidden" name="salesDate" value="${i.SALES_DATE }">
-						<button type="button" id="delBtn" class="btn btn-danger btn-sm" onclick="alertMsg(${i.RNUM})">Delete</button>
-					</form>
-				</c:if>
-			</td>
-		</tr>
-		</c:forEach>
-		</tbody>
-	</table>
-	<div style="text-align:left;">
+<div id="salesViewDiv">
+	<div id="salesInfoTable">
+		<table id="normal-info" class="table table-bordered" style="text-align:center;">
+			<tr>
+				<td style="width:15%;" class="table-dark">Invoice Number</td>
+				<td style="width:35%;">${salesAPIShow.invoice.invoiceNumber }</td>
+				<td style="width:15%;" class="table-dark">Date and Time</td>
+				<td style="width:35%;">${salesAPIShow.invoice.createdAt }</td>
+			</tr>
+			<tr>
+				<td style="width:15%;" class="table-dark">Payment Method</td>
+				<td style="width:35%;">${salesAPIShow.invoice.payments.get(0).paymentMethod }</td>
+				<td style="width:15%;" class="table-dark">Transaction Reference</td>
+				<td style="width:35%;">${salesAPIShow.invoice.payments.get(0).transactionReference }</td>
+			</tr>
+		</table>
+	</div>
+	<div id="salesDetailTable">
+		<table class="table table-hover" style="text-align:center;box-sizing:border-box;">
+			<thead>
+				<tr class="table-dark">
+					<th>Menu Name</th>
+					<th style="width:75px;white-space:pre-wrap;">Tax</th>
+					<th style="width:100px;white-space:pre-wrap;">Unit Price (Exc.GST)</th>
+					<th style="width:75px;white-space:pre-wrap;">Qty</th>
+					<th style="width:75px;white-space:pre-wrap;">Total Price</th>
+					<th>Description</th>
+				</tr>
+			</thead>
+			<tbody>
+				<c:forEach items="${salesAPIShow.invoice.items }" var="i">
+					<tr>
+						<td>${i.itemName }</td>
+						<td>${i.tax }</td>
+						<td>${i.price }</td>
+						<td>${i.quantity }</td>
+						<td>${i.price * i.quantity }</td>
+						<td style="white-space:pre-wrap;">${i.description }</td>
+					</tr>
+				</c:forEach>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="4" class="table-dark">Sub total</td>
+					<td id="subTotal"></td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="table-dark">Sur charge</td>
+					<td>${salesAPIShow.invoice.surcharge }</td>
+					<td>-</td>
+				</tr>
+				<tr>
+					<td colspan="4" class="table-dark">Grand Total</td>
+					<td>${salesAPIShow.invoice.total }</td>
+					<td>-</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<div class="mb-3" style="text-align:left;">
 		<button type="button" class="btn btn-secondary" id="goBack">To List</button>
 	</div>
 </div>

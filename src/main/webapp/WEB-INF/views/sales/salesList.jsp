@@ -21,6 +21,63 @@ $(document).ready(function() {
 	});
 	
 })
+// Cash Sub total
+window.onload = function(){
+	var subTotalCash = 0;
+	var subTotalCreditCard = 0;
+	var subTotalUberEats = 0;
+	var subTotalDoorDash = 0;
+	var subTotalDeliveroo = 0;
+	var subTotalEasi = 0;
+	<c:forEach items="${salesAPI.invoices }" var="i">
+		<c:if test="${i.payments.get(0).paymentMethod == 'Cash'}">
+			subTotalCash += ${i.total};
+		</c:if>
+		<c:if test="${i.payments.get(0).paymentMethod == 'Credit Card'}">
+		subTotalCreditCard += ${i.total};
+		</c:if>
+		<c:if test="${i.payments.get(0).paymentMethod == 'UberEats'}">
+		subTotalUberEats += ${i.total};
+		</c:if>
+		<c:if test="${i.payments.get(0).paymentMethod == 'DoorDash'}">
+		subTotalDoorDash += ${i.total};
+		</c:if>
+		<c:if test="${i.payments.get(0).paymentMethod == 'Deliveroo'}">
+		subTotalDeliveroo += ${i.total};
+		</c:if>
+		<c:if test="${i.payments.get(0).paymentMethod == 'Easi'}">
+		subTotalEasi += ${i.total};
+		</c:if>
+	</c:forEach>
+	var trimmedTotal = parseFloat(subTotalCash).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotalCash").html(trimmedTotal);
+
+	// CreditCard Sub total
+	trimmedTotal = parseFloat(subTotalCreditCard).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotalCreditCard").html(trimmedTotal);
+
+	// UberEats Sub total
+	trimmedTotal = parseFloat(subTotalUberEats).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotalUberEats").html(trimmedTotal);
+
+	// DoorDash Sub total
+	trimmedTotal = parseFloat(subTotalDoorDash).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotalDoorDash").html(trimmedTotal);
+
+	// Deliveroo Sub total
+	trimmedTotal = parseFloat(subTotalDeliveroo).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotalDeliveroo").html(trimmedTotal);
+
+	// Easi Sub total
+	trimmedTotal = parseFloat(subTotalEasi).toFixed(2);
+	console.log(trimmedTotal);
+	$("#subTotalEasi").html(trimmedTotal);
+}
 </script>
 <h1 class="mt-4">Sales</h1>
 <div class="row" >
@@ -42,16 +99,15 @@ $(document).ready(function() {
 					<th rowspan="2">Date</th>
 					<th rowspan="2">Invoice No.</th>
 					<th colspan="6">Source</th>
-					<th rowspan="2">Total</th>
 					<th rowspan="2">Remark</th>
 				</tr>
 				<tr class="table-dark">
-					<th>Cash</th>
-					<th>EFTPOS</th>
-					<th>UberEats</th>
-					<th>DoorDash</th>
-					<th>Deliveroo</th>
-					<th>EASI</th>
+					<th style="width:150px;">Cash</th>
+					<th style="width:150px;">EFTPOS</th>
+					<th style="width:150px;">UberEats</th>
+					<th style="width:150px;">DoorDash</th>
+					<th style="width:150px;">Deliveroo</th>
+					<th style="width:150px;">EASI</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -84,11 +140,22 @@ $(document).ready(function() {
 							<c:if test="${i.payments.get(0).paymentMethod ne 'Easi' }">0</c:if>
 						</td>
 						
-						<td>${i.total }</td>
 						<td><a href="<%=request.getContextPath()%>/sales/view?invoiceNumber=${i.invoiceNumber }"><button type="button" id="detailBtn" class="btn btn-success btn-sm">Detail</button></a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="2" class="table-dark">Sub-total</td>
+					<td id="subTotalCash"></td>
+					<td id="subTotalCreditCard"></td>
+					<td id="subTotalUberEats"></td>
+					<td id="subTotalDoorDash"></td>
+					<td id="subTotalDeliveroo"></td>
+					<td id="subTotalEasi"></td>
+					<td></td>
+				<tr>
+			</tfoot>
 		</table>
 	</div>
 </div>

@@ -18,17 +18,17 @@ public class Invoice{
     public String table;
     public int guest;
     public String createdAt;
-    public float surcharge;
-    public float tips;
+    public double surcharge;
+    public double tips;
     public int rounding;
-    public float totalExcludeTax;
-    public float total;
-    public float discountExcludeTax;
-    public float discountTax;
-    public float shippingCost;
+    public double totalExcludeTax;
+    public double total;
+    public double discountExcludeTax;
+    public double discountTax;
+    public double shippingCost;
     public String shippingDate;
-    public float tax;
-    public float taxRate;
+    public double tax;
+    public double taxRate;
     public boolean isPaid;
     public boolean isLiability;
     public String memberCode;
@@ -126,16 +126,16 @@ public class Invoice{
 	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
-	public float getSurcharge() {
+	public double getSurcharge() {
 		return surcharge;
 	}
-	public void setSurcharge(float surcharge) {
+	public void setSurcharge(double surcharge) {
 		this.surcharge = surcharge;
 	}
-	public float getTips() {
+	public double getTips() {
 		return tips;
 	}
-	public void setTips(float tips) {
+	public void setTips(double tips) {
 		this.tips = tips;
 	}
 	public int getRounding() {
@@ -144,34 +144,34 @@ public class Invoice{
 	public void setRounding(int rounding) {
 		this.rounding = rounding;
 	}
-	public float getTotalExcludeTax() {
+	public double getTotalExcludeTax() {
 		return totalExcludeTax;
 	}
-	public void setTotalExcludeTax(float totalExcludeTax) {
+	public void setTotalExcludeTax(double totalExcludeTax) {
 		this.totalExcludeTax = totalExcludeTax;
 	}
-	public float getTotal() {
+	public double getTotal() {
 		return total;
 	}
-	public void setTotal(float total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
-	public float getDiscountExcludeTax() {
+	public double getDiscountExcludeTax() {
 		return discountExcludeTax;
 	}
-	public void setDiscountExcludeTax(float discountExcludeTax) {
+	public void setDiscountExcludeTax(double discountExcludeTax) {
 		this.discountExcludeTax = discountExcludeTax;
 	}
-	public float getDiscountTax() {
+	public double getDiscountTax() {
 		return discountTax;
 	}
-	public void setDiscountTax(float discountTax) {
+	public void setDiscountTax(double discountTax) {
 		this.discountTax = discountTax;
 	}
-	public float getShippingCost() {
+	public double getShippingCost() {
 		return shippingCost;
 	}
-	public void setShippingCost(float shippingCost) {
+	public void setShippingCost(double shippingCost) {
 		this.shippingCost = shippingCost;
 	}
 	public String getShippingDate() {
@@ -180,16 +180,16 @@ public class Invoice{
 	public void setShippingDate(String shippingDate) {
 		this.shippingDate = shippingDate;
 	}
-	public float getTax() {
+	public double getTax() {
 		return tax;
 	}
-	public void setTax(float tax) {
+	public void setTax(double tax) {
 		this.tax = tax;
 	}
-	public float getTaxRate() {
+	public double getTaxRate() {
 		return taxRate;
 	}
-	public void setTaxRate(float taxRate) {
+	public void setTaxRate(double taxRate) {
 		this.taxRate = taxRate;
 	}
 	public boolean isPaid() {

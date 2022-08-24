@@ -37,7 +37,7 @@ public interface SalesService {
 
 	List<Map<String, String>> getAllSalesBySalesDate(SalesInvoice sales);
 
-	SalesAPI getAPI(Paging paging, Date dateParam);
+	SalesAPI getAPI(Paging paging);
 
 	SalesShowAPI getSalesViewByInvoiceNumber(String invoiceNumber);
 

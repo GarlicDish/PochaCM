@@ -19,17 +19,12 @@ private static final Logger logger = LoggerFactory.getLogger(APIController.class
 @Autowired APIService apiService;
 	
 	@RequestMapping(value = {"/api"}, method = RequestMethod.GET)
-	public String api(Date searchDate) {
+	public String api() {
 
 		int idx = 0;
 		logger.info("#{}. /api [GET]", idx++);
 		
-		if (searchDate == null) {
-			searchDate = new Date(System.currentTimeMillis());
-		}
-		logger.info("#{}. searchDate : {}", idx++, searchDate);
-		
-		int totalNumber = apiService.getTotalPage(searchDate, 1, 1);
+		int totalNumber = apiService.getTotalPage();
 		logger.info("#{}. totalNumber : {}", idx++, totalNumber);
 		
 		apiService.insertSalesAPI(totalNumber);

@@ -6,6 +6,6 @@ public interface APIService {
 
 	void insertSalesAPI(int totalNumber);
 
-	int getTotalPage(Date searchDate, int i, int j);
+	int getTotalPage();
 
 }

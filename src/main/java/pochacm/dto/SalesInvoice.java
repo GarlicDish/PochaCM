@@ -5,8 +5,8 @@ public class SalesInvoice {
 	private String menu;
 	private String salesInvoiceSerialNum;
 	private String salesDate;
-	private float tax;
-	private float price;
+	private double tax;
+	private double price;
 	private int qty;
 	private String salesSource;
 	private Boolean isRefunded;
@@ -40,16 +40,16 @@ public class SalesInvoice {
 	public void setSalesDate(String salesDate) {
 		this.salesDate = salesDate;
 	}
-	public float getTax() {
+	public double getTax() {
 		return tax;
 	}
-	public void setTax(float tax) {
+	public void setTax(double tax) {
 		this.tax = tax;
 	}
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 	public int getQty() {

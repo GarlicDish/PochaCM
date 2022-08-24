@@ -20,6 +20,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -149,29 +150,13 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public SalesAPI getAPI(Paging paging, @DateTimeFormat(pattern = "yyyy-MM-dd") Date dateParam) {
+	public SalesAPI getAPI(Paging paging) {
 
 		int idx = 0;
 		logger.info("#{}. getAPI ", idx++);
-		logger.info("#{}. dateParam : {}", idx++, dateParam);
 
 		//date setting
-		String resultDate = "";
-		
-		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
-		formatter.setTimeZone(TimeZone.getTimeZone("CET"));
-		
-		if (dateParam == null) {
-			dateParam = new Date(System.currentTimeMillis());
-			resultDate = formatter.format(dateParam);
-		} else {
-			Calendar cal = Calendar.getInstance();
-			
-			cal.setTime(dateParam);
-			cal.add(Calendar.DATE, 1);
-			resultDate = formatter.format(cal.getTime());
-		}
-		logger.info("#{}. dateParam : {}", idx++, dateParam);
+		String resultDate = "2020-10-31T00:00:00.00Z";
 		
 		int limit = paging.getPageCount();
 		int page = paging.getCurPage();
@@ -217,19 +202,46 @@ public class SalesServiceImpl implements SalesService {
 		}
 		
 		for(Invoice i : result.getBody().getInvoices()) {
+			//query parameter
+        	String invoiceNumber = i.getInvoiceNumber();
+        	
+        	// uri addresss
+        	URI uri2 = UriComponentsBuilder
+        			.fromUriString(apiURL)
+        			.path("/"+invoiceNumber)
+        			.encode()
+        			.build()
+        			.toUri();
+        	logger.info("#{}. uri : {}", idx++, uri2);
+        	
+        	//header parameter
+        	HttpHeaders header2  = new HttpHeaders(); 
+        	header2.add("Authorization", apiKEY);
+        	
+        	RestTemplate restTemplate2 = new RestTemplate();
+        	restTemplate2.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        	
+        	HttpEntity<Object> entity2 = new HttpEntity<>(header2);
+        	ResponseEntity<SalesShowAPI> result2 = restTemplate2.exchange(uri2, HttpMethod.GET, entity2, SalesShowAPI.class);
+        	
+        	restTemplate2.setErrorHandler(new DefaultResponseErrorHandler() {
+        		public boolean hasError(ClientHttpResponse response) throws IOException {
+        			HttpStatus statusCode = response.getStatusCode();
+        			response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        			return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+        		}
+        	});
+        	
+        	i.setPayments(result2.getBody().getInvoice().getPayments());
+        	i.setItems(result2.getBody().getInvoice().getItems());
+        	
 			String changedDate = i.getCreatedAt().substring(8,10)+ "-"+i.getCreatedAt().substring(5,7)+ "-"+i.getCreatedAt().substring(0,4)+" " +i.getCreatedAt().substring(11,19);
         	
         	i.setCreatedAt(changedDate);
 		}
-		SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd");
-		Date date = null;
-		try {
-			date = formatter.parse(resultDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		result.getBody().getPagination().setDateParam(date);
+		
+		
+		
 		return result.getBody();
 
 	}
@@ -267,6 +279,18 @@ public class SalesServiceImpl implements SalesService {
         	}
         });
         
+       
+		String changedDate = result.getBody().getInvoice().getCreatedAt().substring(8,10)
+								+ "-"+result.getBody().getInvoice().getCreatedAt().substring(5,7)
+								+ "-"+result.getBody().getInvoice().getCreatedAt().substring(0,4)
+								+" " +result.getBody().getInvoice().getCreatedAt().substring(11,19);
+        	
+		result.getBody().getInvoice().setCreatedAt(changedDate);
+        
+		//trim total & surcharge because of character of float type
+		result.getBody().getInvoice().setTotal((float) (Math.round(result.getBody().getInvoice().getTotal()*100)/100.0));
+		result.getBody().getInvoice().setSurcharge((float) (Math.round(result.getBody().getInvoice().getSurcharge()*100)/100.0));
+		
 		return result.getBody();
 	}
 }

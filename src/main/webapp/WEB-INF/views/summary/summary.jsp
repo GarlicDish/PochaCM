@@ -7,10 +7,7 @@
 
 
 <h1 class="mt-4">Summary</h1>
-			
-			
-			
-			
-			
+
+
 
 <%@ include file="../layout/footer.jsp" %>
