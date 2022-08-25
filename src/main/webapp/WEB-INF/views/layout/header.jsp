@@ -17,7 +17,11 @@
     <link rel="icon" type="image/x-icon" href="../../resources/assets/favicon.ico" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../../../resources/css/styles.css" rel="stylesheet" />
-        
+    
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.11/c3.min.css"/>
+
+
 	<style type="text/css">
 		.head {
 			padding:10px;
