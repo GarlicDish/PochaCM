@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.HttpClientErrorException;
@@ -45,18 +46,38 @@ public class SummaryController {
 	@Autowired SummaryService summaryService;
 	
 	@GetMapping("/summary")
-	public String viewSummary(HttpServletResponse response, HttpSession session, @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+	public String viewSummary(@DateTimeFormat(pattern = "yyyy-MM-dd") Date date, Model model) {
 		//logger index
 		int idx = 0;
-		logger.info("#{}. Entering summary page [GET]", idx++);
-		logger.info("#{}. date : {}", idx++, date);
+		logger.info("#{}. /summary [GET]", idx++);
+		logger.info("#{}. /summary [GET] date : {}", idx++, date);
 		
-		//GET this week's monday date
-		Date mondayDate = summaryService.getMonday(date);
-		logger.info("#{}. mondayDate : {}", idx++, mondayDate);
+		//GET dates of a week
+		String[][] weekDates = summaryService.getMonday(date);
+		logger.info("#{}. /summary [GET] mondayDate : {}", idx++, weekDates);
 		
-		//Get totalSalesMoney for each day in this week.
-		ChartCart chartCart = summaryService.getThisWeekTotalSales(mondayDate);
+		//Get SalesAPI List of 1 week based on selected date
+		List<SalesAPI> salesAPI = summaryService.getAWeekSalesAPI(weekDates);
+		
+		//Get Each day's total
+		double[][] totalArray = new double[5][7];
+		
+		totalArray = summaryService.getFiveWeeksTotal(weekDates, salesAPI);
+		
+		//get Goal Sales total (based on mean of former 4 weeks)
+		double[] goalArray = new double[7];
+		
+		goalArray = summaryService.getGoalBasedOnFourWeekMean(totalArray);
+		
+		model.addAttribute("weekDates", weekDates);
+		model.addAttribute("totalArray", totalArray);
+		model.addAttribute("goalArray", goalArray);
+		
+		logger.info("#{}. /summary [GET] weekDates : {}", idx++, weekDates);
+		logger.info("#{}. /summary [GET] totalArray : {}", idx++, totalArray);
+		logger.info("#{}. /summary [GET] goalArray : {}", idx++, goalArray);
+		
+//		chartCart = summaryService.getFourWeeksAverage(salesAPI);
 		
 //		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
 //		try {

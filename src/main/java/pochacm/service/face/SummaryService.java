@@ -16,8 +16,14 @@ public interface SummaryService {
 
 	ChartCart getChartCartFromSalesAPIList(List<SalesAPI> salesAPIList);
 
-	Date getMonday(Date date);
+	String[][] getMonday(Date date);
 
-	ChartCart getThisWeekTotalSales(Date mondayDate);
+	List<SalesAPI> getAWeekSalesAPI(String[][] weekDates);
+
+	ChartCart getFourWeeksAverage(ChartCart chartCart);
+
+	double[][] getFiveWeeksTotal(String[][] weekDates, List<SalesAPI> salesAPI);
+
+	double[] getGoalBasedOnFourWeekMean(double[][] totalArray);
 
 }

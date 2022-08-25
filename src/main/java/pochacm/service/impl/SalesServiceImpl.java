@@ -240,8 +240,6 @@ public class SalesServiceImpl implements SalesService {
         	i.setCreatedAt(changedDate);
 		}
 		
-		
-		
 		return result.getBody();
 
 	}

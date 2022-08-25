@@ -1,7 +1,5 @@
 package pochacm.service.impl;
 
-import java.awt.Color;
-import java.awt.Font;
 import java.io.IOException;
 import java.net.URI;
 import java.text.ParseException;
@@ -12,19 +10,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.StandardChartTheme;
-import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -34,12 +26,9 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import oracle.net.aso.i;
-import pochacm.dao.face.SummaryDao;
 import pochacm.dto.ChartCart;
 import pochacm.dto.Invoice;
 import pochacm.dto.SalesAPI;
-import pochacm.dto.SalesShowAPI;
 import pochacm.service.face.SummaryService;
 
 @Service
@@ -51,52 +40,219 @@ public class SummaryServiceImpl implements SummaryService {
 	private static final Logger logger = LoggerFactory.getLogger(SummaryServiceImpl.class);
 
 	@Override
-	public Date getMonday(Date date) {
+	public String[][] getMonday(Date date) {
 		
 		//logger index
 		int idx = 0;
-		logger.info("#{}. getThisWeeksMonday()", idx++);
+		logger.info("#{}. getMonday()", idx++);
 		
-		Calendar c = null;
-		c = Calendar.getInstance();
+		Date[][] weekDate = new Date[5][7];
 		
-		if (date != null ) {
-			c.setTime(date);
+		Date temp = null;
+//		logger.info("#{}. c : {}", idx++, c);
+		for(int i = 0; i < 5; i++) {
+			for (int j = 0; j < 7; j++)	{
+				
+				temp = date;
+				
+				Calendar c = null;
+				c = Calendar.getInstance();
+				
+				if (date != null ) {
+					c.setTime(temp);
+				}
+				
+				c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
+				c.set(Calendar.MILLISECOND, 0);
+				c.set(Calendar.SECOND, 0);
+				c.set(Calendar.MINUTE, 0);
+				c.set(Calendar.HOUR, 0);
+		        c.add(Calendar.DATE, j);
+		        c.add(Calendar.DATE, -(i*7));
+		        temp = c.getTime();
+				
+				weekDate[i][j] = temp;
+			}
 		}
-		logger.info("#{}. c : {}", idx++, c);
+		logger.info("#{}. getMonday() weekDate : {}", idx++, weekDate);
 		
-		c.set(Calendar.DAY_OF_WEEK,Calendar.MONDAY);
-		date = c.getTime();
+		String[][] dateToString = new String[5][7];
 		
-		return date;
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+		for(int i = 0; i < 5; i++) {
+			for (int j = 0; j < 7; j++)	{
+				dateToString[i][j] = formatter.format(weekDate[i][j]);
+			}
+		}
+		logger.info("#{}. getFiveWeeksTotal() dateToString : {}", idx++, dateToString);
+		
+		return dateToString;
 	}
 
 	@Override
-	public ChartCart getThisWeekTotalSales(Date mondayDate) {
+	public List<SalesAPI> getAWeekSalesAPI(String[][] weekDate) {
 		
 		//logger index
 		int idx = 0;
 		logger.info("#{}. getThisWeekTotalSales()", idx++);
+		logger.info("#{}. getThisWeekTotalSales() weekDate : {}", idx++, weekDate);
 		
-		logger.info("#{}. mondayDate : {}", idx++, mondayDate);
-		
-		List<Date> weekdayDate = new ArrayList<Date>();
+		List<SalesAPI> salesAPI = new ArrayList<SalesAPI>();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//Trim monday date (remove the time information)
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(mondayDate);
-		cal.add(Calendar.DATE,1);
-		mondayDate = cal.getTime();
+		try {
+			cal.setTime(sdf.parse(weekDate[4][0]));
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		cal.set(Calendar.MILLISECOND, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.HOUR, 0);
+		Date mondayDate = cal.getTime();
+
+		//Query Parameter
+		int total = 0;
+		int limit = 100;
+		logger.info("#{}. getThisWeekTotalSales() limit : {}", idx++, limit);
+		
+		//date setting as String Type
+		String resultDate = "";
+		int page = 1;
+		
+		SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
+		formatter.setTimeZone(TimeZone.getTimeZone("CET"));
+		resultDate = formatter.format(mondayDate);
+		logger.info("#{}. getThisWeekTotalSales() resultDate : {}", idx++, resultDate);
+		
+		// header
+		HttpHeaders header = new HttpHeaders();
+		header.add("Authorization", apiKEY);
+		
+		// restTemplate
+		RestTemplate restTemplate = new RestTemplate();
+		restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+		
+			// uri addresss with query parameters
+			URI uri = UriComponentsBuilder
+						.fromUriString(apiURL)
+						.queryParam("limit", limit)
+						.queryParam("page", page)
+						.queryParam("lastUpdated", resultDate)
+						.encode()
+						.build()
+						.toUri();
+			logger.info("#{}. getThisWeekTotalSales() uri : {}", idx++, uri);
+	
+	
+			HttpEntity<Object> entity = new HttpEntity<>(header);
+			ResponseEntity<SalesAPI> result = restTemplate.exchange(uri, HttpMethod.GET, entity, SalesAPI.class);
+	
+			try {
+	
+				restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+					public boolean hasError(ClientHttpResponse response) throws IOException {
+						
+						HttpStatus statusCode = response.getStatusCode();
+						
+						return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+					}
+				});
+	
+			} catch (final HttpClientErrorException e) {
+				System.out.println(e.getStatusCode());
+				System.out.println(e.getResponseBodyAsString());
+			}
+			
+			total = result.getBody().getPagination().getTotal();
+		
+		logger.info("#{}. getThisWeekTotalSales() total : {}", idx++, total);
+		
+		//get Date and Each Sum
+		for(int j = 1;j<total/limit + 2;j++) {
+			
+			page = j;
+
+			// uri addresss with query parameters
+			URI uri2 = UriComponentsBuilder
+						.fromUriString(apiURL)
+						.queryParam("limit", limit)
+						.queryParam("page", page)
+						.queryParam("lastUpdated", resultDate)
+						.encode()
+						.build()
+						.toUri();
+			logger.info("#{}. getThisWeekTotalSales() uri : {}", idx++, uri2);
+	
+			HttpEntity<Object> entity2 = new HttpEntity<>(header);
+			ResponseEntity<SalesAPI> result2 = restTemplate.exchange(uri2, HttpMethod.GET, entity2, SalesAPI.class);
+	
+			try {
+	
+				restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+					public boolean hasError(ClientHttpResponse response) throws IOException {
+						
+						HttpStatus statusCode = response.getStatusCode();
+						
+						return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
+					}
+				});
+	
+			} catch (final HttpClientErrorException e) {
+				System.out.println(e.getStatusCode());
+				System.out.println(e.getResponseBodyAsString());
+			}
+			
+			salesAPI.add(result2.getBody());
+			
+		} // for(int j = 0;j<total[i]/limit + 2;j++) END
+//		logger.info("#{}. getThisWeekTotalSales() salesAPI : {}", idx++, salesAPI);
+		
+		logger.info("#{}. getThisWeekTotalSales() END", idx++);
+		
+		return salesAPI;
+	}
+	
+	@Override
+	public ChartCart getFourWeeksAverage(ChartCart chartCart) {
+		
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getFourWeeksAverage()", idx++);
+		
+		logger.info("#{}. chartCart : {}", idx++, chartCart);
+		
+		Date[] weekdayDate = new Date[7];
+		
+		//get date 4 weeks before
+		for(int i = 1; i < 5; i++) {
+			
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(chartCart.getDate()[i]);
+			cal.add(Calendar.DATE,-28);
+			cal.set(Calendar.MILLISECOND, 0);
+	        cal.set(Calendar.SECOND, 0);
+	        cal.set(Calendar.MINUTE, 0);
+	        cal.set(Calendar.HOUR, 0);
+			chartCart.getDate()[i] = cal.getTime();
+		}
+		logger.info("#{}. chartCart : {}", idx++, chartCart);
+
 //		cal.setTime(mondayDate);
 //		cal.add(Calendar.DATE, 1);
 //		mondayDate = cal.getTime();
+
+		
 		for (int i = 0; i<7;i++) {
-			weekdayDate.add(new Date(mondayDate.getTime()+(1000*60*60*24)*i));
+			weekdayDate[i] = new Date(chartCart.getDate()[i].getTime()+(1000*60*60*24)*i);
 		}
 		logger.info("#{}. weekdayDate : {}", idx++, weekdayDate);
 		
 		double[] eachSum = {0,0,0,0,0,0,0};
 		logger.info("#{}. eachSum : {}", idx++, eachSum);
 		
-		int[] total = {0,0,0,0,0,0,0};
+		int[] total = new int[7];
 		
 		int limit = 100;
 		
@@ -109,7 +265,7 @@ public class SummaryServiceImpl implements SummaryService {
 			int page = 1;
 			SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
 			formatter.setTimeZone(TimeZone.getTimeZone("CET"));
-			resultDate = formatter.format(weekdayDate.get(i));
+			resultDate = formatter.format(weekdayDate[i]);
 			logger.info("#{}. resultDate : {}", idx++, resultDate);
 			
 			// uri addresss with query parameters
@@ -164,7 +320,7 @@ public class SummaryServiceImpl implements SummaryService {
 				
 				SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd'T00:00:00.00Z'");
 				formatter.setTimeZone(TimeZone.getTimeZone("CET"));
-				resultDate = formatter.format(weekdayDate.get(i));
+				resultDate = formatter.format(weekdayDate[i]);
 				logger.info("#{}. resultDate : {}", idx++, resultDate);
 				
 				// uri addresss with query parameters
@@ -217,7 +373,8 @@ public class SummaryServiceImpl implements SummaryService {
 			
 		} //for(int i = 0;i<7;i++) END
 		
-		return null;
+		
+		return chartCart;
 	}
 
 	@Override
@@ -378,9 +535,38 @@ public class SummaryServiceImpl implements SummaryService {
 	}
 	
 	@Override
-	public JFreeChart createChart() {
+	public double[][] getFiveWeeksTotal(String[][] weekDates, List<SalesAPI> salesAPI) {
+
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getFiveWeeksTotal()", idx++);
+		logger.info("#{}. getFiveWeeksTotal() weekDates : {}", idx++, weekDates);
 		
-        
+		double[][] tempSumArray = new double[5][7];
+		double tempSum;
+		
+		for(int k = 0; k < 5; k++) {
+			for (int l = 0; l < 7; l++)	{
+				tempSum = 0;
+				for (SalesAPI i : salesAPI) {
+					for(Invoice j : i.getInvoices()) {
+						if(j.getCreatedAt().contains(weekDates[k][l])) {
+//							logger.info("#{}. getFiveWeeksTotal() j : {}", idx++, j);
+//							logger.info("#{}. getFiveWeeksTotal() j.getTotal() : {}", idx++, j.getTotal() );
+							tempSum += j.getTotal();
+						}
+					}
+				}
+				tempSumArray[k][l] = Math.round(tempSum*100)/100.0;
+			}
+		}
+		logger.info("#{}. getFiveWeeksTotal() tempSumArray : {}", idx++, tempSumArray);
+		
+		return tempSumArray;
+	}
+	
+	@Override
+	public JFreeChart createChart() {
         
 //        //파이 차트가 아닌경우
 //        //파이 차트일때와는 클래스가 틀리다.
@@ -487,10 +673,36 @@ public class SummaryServiceImpl implements SummaryService {
 		}
 		double totalSale = sum;
 		
-		logger.info("#{}. totalSale : {}", idx++,totalSale);
+		logger.info("#{}. getChartCartFromSalesAPIList() totalSale : {}", idx++,totalSale);
 		
 		return tempCart;
 	}
+
+	@Override
+	public double[] getGoalBasedOnFourWeekMean(double[][] totalArray) {
+		
+		//logger index
+		int idx = 0;
+		logger.info("#{}. getGoalBasedOnFourWeekMean()", idx++);
+		logger.info("#{}. getGoalBasedOnFourWeekMean() totalArray : {}", idx++,totalArray);
+
+		double[] tempGoal = new double[7];
+		
+		
+		for( int j=0;j<7;j++) {
+			double temp = 0;
+			for(int i=1;i<5;i++) {
+				temp += totalArray[i][j];
+			}
+			tempGoal[j] = Math.round(temp/4.0*100)/100.0;
+		}
+		
+		return tempGoal;
+	}
+
+	
+
+
 
 
 

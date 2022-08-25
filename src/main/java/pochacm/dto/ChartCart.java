@@ -1,23 +1,23 @@
 package pochacm.dto;
 
 import java.util.Arrays;
+import java.util.Date;
 
 public class ChartCart {
 
-	private String[] Date;
-	private double[] totalSale;
-	private double[] goalSale;
-	
+	private Date[] date = new Date[7];
+	private double[] totalSale = new double[7];
+	private double[] goalSale = new double[7];
 	@Override
 	public String toString() {
-		return "ChartCart [Date=" + Arrays.toString(Date) + ", totalSale=" + Arrays.toString(totalSale) + ", goalSale="
+		return "ChartCart [date=" + Arrays.toString(date) + ", totalSale=" + Arrays.toString(totalSale) + ", goalSale="
 				+ Arrays.toString(goalSale) + "]";
 	}
-	public String[] getDate() {
-		return Date;
+	public Date[] getDate() {
+		return date;
 	}
-	public void setDate(String[] date) {
-		Date = date;
+	public void setDate(Date[] date) {
+		this.date = date;
 	}
 	public double[] getTotalSale() {
 		return totalSale;
@@ -31,7 +31,5 @@ public class ChartCart {
 	public void setGoalSale(double[] goalSale) {
 		this.goalSale = goalSale;
 	}
-	
-	
 	
 }
