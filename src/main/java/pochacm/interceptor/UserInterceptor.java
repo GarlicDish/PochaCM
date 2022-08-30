@@ -1,5 +1,7 @@
 package pochacm.interceptor;
 
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -8,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
-import pochacm.controller.UserController;
 
 public class UserInterceptor implements HandlerInterceptor {
 
@@ -23,7 +23,12 @@ public class UserInterceptor implements HandlerInterceptor {
 				
 		HttpSession session = request.getSession();
 		if( session.getAttribute("login") == null || session.getAttribute("login") == "False" ) { //Check Login status
-			response.sendRedirect("/login");
+			
+			response.setContentType("text/html; charset=utf-8");
+			PrintWriter printwriter = response.getWriter();
+			printwriter.print("<script>alert('login needed.'); location.href='/login';</script>");
+			printwriter.flush();
+			printwriter.close();
 			
 			return false;
 		}

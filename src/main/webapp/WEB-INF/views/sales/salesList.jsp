@@ -96,7 +96,7 @@ window.onload = function(){
 		<table id="salesListTab" class="table table-light table-striped table-hover" style="text-align:center;">
 			<thead>
 				<tr class="table-dark">
-					<th rowspan="2">Date</th>
+					<th rowspan="2">Date Time</th>
 					<th rowspan="2">Invoice No.</th>
 					<th colspan="6">Source</th>
 					<th rowspan="2">Remark</th>

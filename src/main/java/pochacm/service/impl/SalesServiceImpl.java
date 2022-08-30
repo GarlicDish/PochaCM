@@ -276,7 +276,6 @@ public class SalesServiceImpl implements SalesService {
         		return statusCode.series() == HttpStatus.Series.SERVER_ERROR;
         	}
         });
-        
        
 		String changedDate = result.getBody().getInvoice().getCreatedAt().substring(8,10)
 								+ "-"+result.getBody().getInvoice().getCreatedAt().substring(5,7)

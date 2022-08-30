@@ -74,41 +74,30 @@ public class UserController {
 			
 			if( !isValid ) {
 				//Alert with Error Message
-				msg = "Non valid E-mail and/or Password";
+				msg = "Not validated. Your manager or supervisor should validate your ID.";
 				req.setAttribute("msg", msg);
+				req.setAttribute("url", "/login");
 				logger.info("#{}. msg = {}", idx++, req.getAttribute("msg"));
 				
 				session.invalidate();
-				return "redirect:/login";
+			} else {
+				
+				session.setAttribute("login", loginResult);
+				session.setAttribute("userNum", userService.getUserNoByEmail(user));
+				session.setAttribute("userEmail", user.getUserEmail());
+				session.setAttribute("positionNum", userService.getUserPositionByEmail(user));
+				session.setAttribute("invalidation", isValid);
+				
+				msg = "Welcome!";
+				req.setAttribute("msg", msg);
+				req.setAttribute("url", "/main");
+				// referer check
+				logger.info("#{}. session referer: " + session.getAttribute("redirectURL"));
+				
 			}
 			
-			session.setAttribute("login", loginResult);
-			session.setAttribute("userNum", userService.getUserNoByEmail(user));
-			session.setAttribute("userEmail", user.getUserEmail());
-			session.setAttribute("positionNum", userService.getUserPositionByEmail(user));
-			session.setAttribute("invalidation", isValid);
-
-			msg = "Welcome!";
-			req.setAttribute("msg", msg);
 			
-			logger.info("#{}. msg = {}", idx++, req);
-			logger.info("#{}. session login = {}", idx++, session.getAttribute("login"));
-			logger.info("#{}. session userNum = {}", idx++, session.getAttribute("userNum"));
-			logger.info("#{}. session userEmail = {}", idx++, session.getAttribute("userEmail"));
-			logger.info("#{}. session positionNum = {}", idx++, session.getAttribute("positionNum"));
-
-			// referer check
-			logger.info("#{}. session referer: " + session.getAttribute("redirectURL"));
-			
-//			String ss = (String) session.getAttribute("redirectURL");
-
-			// checking the previous page was login page or not.
-//			if (ss != null) {
-//				if (!ss.contains("/login")) {
-//					return "redirect:" + session.getAttribute("redirectURL");
-//				}
-//			}
-			return "redirect:/summary";
+			return "redirect";
 
 		} else {
 			// login fail

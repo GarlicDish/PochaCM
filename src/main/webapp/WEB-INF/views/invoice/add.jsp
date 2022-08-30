@@ -203,7 +203,7 @@ function getTotalPrice(x){
 
 </script>
 
-<h1 class="mt-4">Invoice Add</h1>
+<h1 class="mt-4">Purchase Invoice Add</h1>
 
 <form action="/invoice/add" method="post" id="invoiceForm">
 <div class="row" style="position:relative;">

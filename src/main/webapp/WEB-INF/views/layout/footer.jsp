@@ -8,7 +8,7 @@
 		 <div class="logo" style="width:150px; margin:10px auto;">
 		 	<img src="../../resources/images/Pocha-logo.png" class="img-fluid" style="height:80px"/>
 		 </div>
-		 <div class="copyRight" style="">
+		 <div class="copyRight">
 		     <p>
 			     <span>Copyright 2022 All Rights Reserved Pocha Pocha </span> <br>
 			     <span>&lt;&lt; DONCASTER DINING 619 DONCASTER ROAD DONCASTER VIC 3108 &gt;&gt;</span>

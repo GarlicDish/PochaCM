@@ -29,14 +29,17 @@
 		<interceptor>
 		
 			<!-- URL to adopt interceptro -->
-			<mapping path="/user/**"/>
-			<mapping path="/summary/**"/>
-			<mapping path="/sales/**"/>
-			<mapping path="/staff/**"/>
-			<mapping path="/invoice/**"/>
+			<mapping path="/summary"/>
+			<mapping path="/sales"/>
+			<mapping path="/invoice"/>
+			<mapping path="/staff"/>
+			<mapping path="/user"/>
+			<mapping path="/myProfile"/>
 		<!--<exclude-mapping path="/board/list"/>  -->			
 			<!-- exception URL -->
-			<exclude-mapping path="/interceptor/admin/fail"/>
+			<exclude-mapping path="/main"/>
+			<exclude-mapping path="/login"/>
+			<exclude-mapping path="/join"/>
 			
 			<!-- interceptor class -->
 			<beans:bean class="pochacm.interceptor.UserInterceptor"/>

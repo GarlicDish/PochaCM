@@ -88,12 +88,12 @@ function alertMsg(x){
 				</tr>
 				<tr>
 					<td colspan="4" class="table-dark">Sur charge</td>
-					<td>${salesAPIShow.invoice.surcharge }</td>
+					<td><fmt:formatNumber type="number"  pattern="0.00" value="${salesAPIShow.invoice.surcharge }"/></td>
 					<td>-</td>
 				</tr>
 				<tr>
 					<td colspan="4" class="table-dark">Grand Total</td>
-					<td>${salesAPIShow.invoice.total }</td>
+					<td><fmt:formatNumber type="number"  pattern="0.00" value="${salesAPIShow.invoice.total }"/></td>
 					<td>-</td>
 				</tr>
 			</tfoot>

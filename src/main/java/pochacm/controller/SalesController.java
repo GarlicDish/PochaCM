@@ -65,7 +65,7 @@ public class SalesController {
 		
 		logger.info("#{}. paging : {}", idx++, paging);
 		paging.setCurPage(Integer.parseInt(curPage));
-		paging.setPageCount(15);
+		paging.setPageCount(20);
 		logger.info("#{}. paging : {}", idx++, paging);
 		
 //		get API with paging info & date

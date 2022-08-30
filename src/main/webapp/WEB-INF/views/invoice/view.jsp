@@ -30,7 +30,7 @@ $(document).ready(function(){
 	});
 })
 </script>
-<h1 class="mt-4">Invoice Detail</h1>
+<h1 class="mt-4">Purchase Invoice Detail</h1>
 	
 
 <table id="normal-info" class="table table-bordered" style="text-align:center;width:80%;">

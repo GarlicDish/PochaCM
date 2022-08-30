@@ -688,6 +688,8 @@ $(document).ready(function() {
 			if($("#taxFileNum").val() == null || $("#taxFileNum").val() == ""){
 				$("#taxFileNum").attr("value", 0);
 			}
+			
+			alert("Sign Up Complete!");
 			$("#joinForm").submit();
 		}	 
 	})

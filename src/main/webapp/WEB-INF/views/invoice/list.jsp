@@ -33,7 +33,7 @@ $(document).ready(function() {
 	 
 })
 </script>
-<h1 class="mt-4">Invoice</h1>
+<h1 class="mt-4">Purchase Invoice</h1>
 <div class="" id="tableWrap" style="padding:10px;">
 	<table id="invoiceListTab" class="table table-light table-striped table-hover " style="text-align:center;">
 		<thead>

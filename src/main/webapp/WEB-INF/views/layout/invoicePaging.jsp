@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<div class="col-12" id="invoicePaging">
+<nav aria-label="Page navigation" id="invoicePaging">
 		<ul class="pagination justify-content-center">
 		
 			<%-- To First Page --%>
@@ -77,4 +77,4 @@
 				</li>	
 			</c:if>	
 		</ul>
-</div>
+</nav>
