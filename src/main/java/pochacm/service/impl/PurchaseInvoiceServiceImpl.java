@@ -16,9 +16,7 @@ import pochacm.dto.Brand;
 import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
-import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
-import pochacm.dto.SecondaryUnit;
 import pochacm.dto.Supplier;
 import pochacm.service.face.PurchaseInvoiceService;
 
@@ -77,30 +75,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 		return invoiceDao.selectItemsByInvoiceSerial(invoice);
 	}	
 
-	@Override
-	public Object getItemInfoByItem(Items item) {
-		return invoiceDao.selectItemInfoByItemNum(item);
-	}
 	
-	@Override
-	public List<OrderUnit> getOrderUnitList() {
-		return invoiceDao.getOrderUnitList();
-	}
-
-	@Override
-	public List<PrimaryUnit> getPrimaryUnitList() {
-		return invoiceDao.getPrimaryUnitList();
-	}
-
-	@Override
-	public List<SecondaryUnit> getSecondaryUnitList() {
-		return invoiceDao.getSecondaryUnitList();
-	}
-
-	@Override
-	public List<Category> getItemCategoryList() {
-		return invoiceDao.getItemCategoryList();
-	}
 
 	@Override
 	public Recipe getRecipeDtoWithRecipeName(String menuName) {
@@ -121,11 +96,7 @@ public class PurchaseInvoiceServiceImpl implements PurchaseInvoiceService {
 		return invoiceDao.selectMenuSearchList(recipe);
 	}
 
-	@Override
-	public void updateItemInformation(Items item) {
-		invoiceDao.updateItemInformation(item);
-	}
-
+	
 	@Override
 	public void deleteInvoice(PurchaseInvoice invoice) {
 		invoiceDao.deleteInvoice(invoice);

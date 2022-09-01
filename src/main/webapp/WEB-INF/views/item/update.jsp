@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -10,12 +9,6 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	
-	Date.prototype.toDateInputValue = (function() {
-	    var local = new Date(this);
-	    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
-	    return local.toJSON().slice(0,10);
-	});
-	
 	$("#backBtn").click(function(){
 		history.go(-1);
 	})
@@ -23,6 +16,12 @@ $(document).ready(function(){
 	$("#updateBtn").click(function(){
 		$("#itemUpdateForm").submit();
 	})
+	
+	Date.prototype.toDateInputValue = (function() {
+	    var local = new Date(this);
+	    local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+	    return local.toJSON().slice(0,10);
+	});
 	
 	//get the item expiry date which originally saved
 	window.onload = function(){
@@ -32,6 +31,37 @@ $(document).ready(function(){
 	}
 	
 })
+
+
+//when change the brandName, brandNum will be also changed.
+function getBrandNum(target) {
+	
+	var brandName = target.value;
+	console.log(brandName);
+	
+	$.ajax({
+		url : "/brand/get?brandName="+brandName,
+	   	type : "GET",
+	   	dataType : "json",
+	   	contentType : "application/json; charset=UTF-8",
+	   	success : 
+	   		function(data) {
+		   
+	   		console.log(data.brandNum);
+				if (data.brandNum != 0) {
+					
+					console.log(data);
+					$("#brandNum").val(data.brandNum);
+					
+				} else {
+					
+					console.log(data);
+					$("#brandNum").val(null);
+					
+				}
+			}		
+		})
+}
 </script>
 <div id="itemUpdateTable">
 	<form id="itemUpdateForm" class="form-inline" action="/item/update" method="post">
@@ -41,8 +71,18 @@ $(document).ready(function(){
 				<th class="table-dark">
 					<label for="itemCode" class="col-sm-8 control-label">Item Code</label>
 				</th>
-				<td colspan="3">
+				<td>
 					<input type="text" class="form-control input-sm" id="itemCode"	name="itemCode"  value="${itemInfo.ITEM_CODE }">
+				</td>
+				<th class="table-dark">
+					<label for="cateNum" class="col-sm-8 control-label">Category</label>
+				</th>
+				<td>
+					<select class="form-select" id="cateNum" name="cateNum">
+						<c:forEach items="${cateList }" var="i">
+							<option value="${i.CATE_NUM }" <c:if test="${itemInfo.CATE_NUM eq i.CATE_NUM }"> selected </c:if>>${i.CATE_NAME }</option>
+						</c:forEach>
+					</select>
 				</td>
 			</tr>
 			<tr>
@@ -51,7 +91,7 @@ $(document).ready(function(){
 					<input type="hidden" id="brandNum" name="brandNum" value="${itemInfo.BRAND_NUM }">
 				</th>
 				<td>
-					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }">
+					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }" onblur="getBrandNum(this);">
 				</td>
 				<th style="min-width:150px;" class="table-dark">
 					<label for="itemName" class="col-sm-8 control-label">Item Name</label>

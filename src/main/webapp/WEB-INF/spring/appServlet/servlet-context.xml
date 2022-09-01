@@ -35,6 +35,7 @@
 			<mapping path="/staff"/>
 			<mapping path="/user"/>
 			<mapping path="/myProfile"/>
+			<mapping path="/item"/>
 		<!--<exclude-mapping path="/board/list"/>  -->			
 			<!-- exception URL -->
 			<exclude-mapping path="/main"/>

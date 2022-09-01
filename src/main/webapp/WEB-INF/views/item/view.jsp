@@ -28,8 +28,11 @@ button {
 	<table class="table table-bordered" style="text-align:center;max-width:1000px;box-sizing:border-box;">
 		<tr>
 			<th class="table-dark" >Item Code</th>
-			<td colspan="3">${itemInfo.ITEM_CODE }</td>
+			<td>${itemInfo.ITEM_CODE }</td>
+			<th class="table-dark" >Category</th>
+			<td>${itemInfo.CATE_NAME }</td>
 		</tr>
+		
 		<tr>
 			<th class="table-dark">Brand Name</th>
 			<td>${itemInfo.BRAND_NAME }</td>

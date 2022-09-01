@@ -12,21 +12,20 @@ public class Items {
 	private String itemCode;
 	private int orderUnitNum;
 	private double unitPrice;
-	private int primaryUnitNum;
-	private int secondaryUnitNum;
 	private int targetWastePercentage;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date expiryDate;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date lastUpdateDate;
 	private int userNum;
+	
 	@Override
 	public String toString() {
-		return "Item [itemNum=" + itemNum + ", brandNum=" + brandNum + ", cateNum=" + cateNum + ", itemName=" + itemName
-				+ ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum + ", unitPrice=" + unitPrice
-				+ ", primaryUnitNum=" + primaryUnitNum + ", secondaryUnitNum=" + secondaryUnitNum
+		return "Items [itemNum=" + itemNum + ", brandNum=" + brandNum + ", cateNum=" + cateNum + ", itemName="
+				+ itemName + ", itemCode=" + itemCode + ", orderUnitNum=" + orderUnitNum + ", unitPrice=" + unitPrice
 				+ ", targetWastePercentage=" + targetWastePercentage + ", expiryDate=" + expiryDate
-				+ ", lastUpdateDate=" + lastUpdateDate + ", userNum=" + userNum + "]";
+				+ ", lastUpdateDate=" + lastUpdateDate + ", userNum=" + userNum + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
 	}
 	public int getItemNum() {
 		return itemNum;
@@ -70,18 +69,6 @@ public class Items {
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	public int getPrimaryUnitNum() {
-		return primaryUnitNum;
-	}
-	public void setPrimaryUnitNum(int primaryUnitNum) {
-		this.primaryUnitNum = primaryUnitNum;
-	}
-	public int getSecondaryUnitNum() {
-		return secondaryUnitNum;
-	}
-	public void setSecondaryUnitNum(int secondaryUnitNum) {
-		this.secondaryUnitNum = secondaryUnitNum;
-	}
 	public int getTargetWastePercentage() {
 		return targetWastePercentage;
 	}
@@ -106,9 +93,5 @@ public class Items {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-
-
-	
-	
 	
 }

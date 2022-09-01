@@ -29,24 +29,30 @@ window.onload = function(){
 	var subTotalDoorDash = 0;
 	var subTotalDeliveroo = 0;
 	var subTotalEasi = 0;
+	
 	<c:forEach items="${salesAPI.invoices }" var="i">
-		<c:if test="${i.payments.get(0).paymentMethod == 'Cash'}">
-			subTotalCash += ${i.total};
+		<c:if test="${i.payments == null or i.payments==''}">
+			console.log("no payments");
 		</c:if>
-		<c:if test="${i.payments.get(0).paymentMethod == 'Credit Card'}">
-		subTotalCreditCard += ${i.total};
-		</c:if>
-		<c:if test="${i.payments.get(0).paymentMethod == 'UberEats'}">
-		subTotalUberEats += ${i.total};
-		</c:if>
-		<c:if test="${i.payments.get(0).paymentMethod == 'DoorDash'}">
-		subTotalDoorDash += ${i.total};
-		</c:if>
-		<c:if test="${i.payments.get(0).paymentMethod == 'Deliveroo'}">
-		subTotalDeliveroo += ${i.total};
-		</c:if>
-		<c:if test="${i.payments.get(0).paymentMethod == 'Easi'}">
-		subTotalEasi += ${i.total};
+		<c:if test="${i.payments != null}">
+			<c:if test="${i.payments.get(0).paymentMethod == 'Cash'}">
+				subTotalCash += ${i.total};
+			</c:if>
+			<c:if test="${i.payments.get(0).paymentMethod == 'Credit Card'}">
+			subTotalCreditCard += ${i.total};
+			</c:if>
+			<c:if test="${i.payments.get(0).paymentMethod == 'UberEats'}">
+			subTotalUberEats += ${i.total};
+			</c:if>
+			<c:if test="${i.payments.get(0).paymentMethod == 'DoorDash'}">
+			subTotalDoorDash += ${i.total};
+			</c:if>
+			<c:if test="${i.payments.get(0).paymentMethod == 'Deliveroo'}">
+			subTotalDeliveroo += ${i.total};
+			</c:if>
+			<c:if test="${i.payments.get(0).paymentMethod == 'Easi'}">
+			subTotalEasi += ${i.total};
+			</c:if>
 		</c:if>
 	</c:forEach>
 	var trimmedTotal = parseFloat(subTotalCash).toFixed(2);

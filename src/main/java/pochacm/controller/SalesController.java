@@ -76,8 +76,6 @@ public class SalesController {
 		paging = new Paging(paging.getTotalCount(),paging.getCurPage());
 		logger.info("#{}. paging : {}", idx++, paging);
 		
-		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
-		
 		model.addAttribute("salesAPI", salesAPI);
 		logger.info("#{}. salesAPI : {}", idx++, salesAPI);
 		

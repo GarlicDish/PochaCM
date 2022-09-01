@@ -10,9 +10,7 @@ import pochacm.dto.Brand;
 import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
-import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
-import pochacm.dto.SecondaryUnit;
 import pochacm.dto.Supplier;
 
 public interface PurchaseInvoiceService {
@@ -35,21 +33,9 @@ public interface PurchaseInvoiceService {
 	
 	List<Map<String, String>> selectItemsByInvoiceSerial(PurchaseInvoice invoice);
 
-	Object getItemInfoByItem(Items item);
-
-	List<OrderUnit> getOrderUnitList();
-
-	List<PrimaryUnit> getPrimaryUnitList();
-
-	List<SecondaryUnit> getSecondaryUnitList();
-
-	List<Category> getItemCategoryList();
-
 	Recipe getRecipeDtoWithRecipeName(String menuName);
 
 	List<Recipe> getMenuSearchList(Recipe recipe);
-
-	void updateItemInformation(Items item);
 
 	void deleteInvoice(PurchaseInvoice invoice);
 

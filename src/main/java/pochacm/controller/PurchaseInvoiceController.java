@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -26,11 +24,10 @@ import pochacm.dto.Brand;
 import pochacm.dto.Category;
 import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
-import pochacm.dto.PrimaryUnit;
 import pochacm.dto.Recipe;
-import pochacm.dto.SecondaryUnit;
 import pochacm.dto.Supplier;
 import pochacm.dto.InvoiceItem;
+import pochacm.service.face.ItemService;
 import pochacm.service.face.PurchaseInvoiceService;
 import pochacm.service.face.SalesService;
 
@@ -41,7 +38,7 @@ public class PurchaseInvoiceController {
 	
 	@Autowired PurchaseInvoiceService invoiceService;
 	@Autowired SalesService salesService;
-	
+	@Autowired ItemService itemService;
 	
 	@GetMapping("/invoice")
 	public String invoiceList(
@@ -50,12 +47,6 @@ public class PurchaseInvoiceController {
 		//logger index
 		int idx = 0;
 		logger.info("#{}. /invoice [GET]", idx++);
-		
-		//if he/she does not login, back to login page
-		if(session.getAttribute("userNum") == null) {
-			logger.info("#{}. Not Logined", idx++);
-			return "redirect:/login";
-		}
 		logger.info("#{}. invoiceList : {}", idx++, paging);
 	    
 		//create Paging dto with curPage & search
@@ -199,7 +190,7 @@ public class PurchaseInvoiceController {
 	public String deleteInvoice(PurchaseInvoice invoice, Paging paging) {
 		//logger index
 		int idx = 0;
-		logger.info("#{}. /item/delete [POST]", idx++);
+		logger.info("#{}. /invoice/delete [POST]", idx++);
 		logger.info("#{}. invoice : {}", idx++, invoice);
 		logger.info("#{}. paging : {}", idx++, paging);
 		
@@ -213,7 +204,7 @@ public class PurchaseInvoiceController {
 		
 		//logger index
 		int idx = 0;
-		logger.info("#{}. /item/invoiceItemDelete [POST]", idx++);
+		logger.info("#{}. /invoice/invoiceItemDelete [POST]", idx++);
 		logger.info("#{}. invoiceItem : {}", idx++, invoiceItem);
 		
 		invoiceService.deleteInvoiceItemByNum(invoiceItem);
@@ -230,7 +221,7 @@ public class PurchaseInvoiceController {
 	public String updateInvoice(PurchaseInvoice invoice, Model model) {
 		//logger index
 		int idx = 0;
-		logger.info("#{}. /item/update [POST]", idx++);
+		logger.info("#{}. /invoice/update [POST]", idx++);
 		logger.info("#{}. invoice : {}", idx++, invoice);
 		
 		List<Brand> brandList = invoiceService.selectAllBrand();
@@ -316,7 +307,7 @@ public class PurchaseInvoiceController {
 					invoiceService.insertItemInfo(itemList.get(i));
 				} else {
 					//IF exist, update the content
-					invoiceService.updateItemInformation(itemList.get(i));
+					itemService.updateItemInformation(itemList.get(i));
 				}
 
 				InvoiceItem iin = new InvoiceItem();
@@ -336,75 +327,6 @@ public class PurchaseInvoiceController {
 		
 		return "redirect:/invoice/view?invoiceSerial="+invoice.getInvoiceSerial();
 	}
-	
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-	//++++++++++++++++++++++++++ ITEM +++++++++++++++++++++++++++
-	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-	@GetMapping(value="/item/view")
-	public String itemView(HttpSession session, Items item, Model model) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /item/view [GET]", idx++);
-		logger.info("#{}. item : {}", idx++, item);
-		
-		model.addAttribute("itemInfo", invoiceService.getItemInfoByItem(item));
-		logger.info("#{}. model.getAttribute(\"itemInfo\") : {}", idx++, model.getAttribute("itemInfo"));
-		
-		return "item/view";
-	}
-	
-	@GetMapping(value="/item/update")
-	public String itemUpdate(HttpSession session, Items item, Model model) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /item/update [GET]", idx++);
-		
-		logger.info("#{}. item : {}", idx++, item);
-		
-		//Get Order Unit, Primary Unit, Secondary Unit Lists
-		
-		List<Category> icList = invoiceService.getItemCategoryList();
-		List<OrderUnit> ouList = invoiceService.getOrderUnitList();
-		List<PrimaryUnit> puList = invoiceService.getPrimaryUnitList();
-		List<SecondaryUnit> suList = invoiceService.getSecondaryUnitList();
-		
-		model.addAttribute("itemInfo", invoiceService.getItemInfoByItem(item));
-		logger.info("#{}. model.getAttribute(\"itemInfo\") : {}", idx++, model.getAttribute("itemInfo"));
-		
-		model.addAttribute("icList", icList);
-		//logger.info("#{}. icList : {}", idx++, icList);
-		
-		model.addAttribute("ouList", ouList);
-		//logger.info("#{}. ouList : {}", idx++, ouList);
-		
-		model.addAttribute("puList", puList);
-		//logger.info("#{}. puList : {}", idx++, puList);
-		
-		model.addAttribute("suList", suList);
-		//logger.info("#{}. suList : {}", idx++, suList);
-		
-		return "item/update";
-	}
-	
-	@RequestMapping(value="/item/update", method=RequestMethod.POST)
-	public String itemUpdateSubmit(HttpSession session, Items item, Model model) {
-		//logger index
-		int idx = 0;
-		logger.info("#{}. /item/update [POST]", idx++);
-		logger.info("#{}. item : {}", idx++, item);
-		
-		if (session.getAttribute("positionNum") == "2") {
-			return "redirect:/item/view?itemNum=" + item.getItemNum();
-		}
-		
-		invoiceService.updateItemInformation(item);
-		
-		return "redirect:/item/view?itemNum=" + item.getItemNum();
-	}
-	
-	
-	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//------------------------AJAX ------------------------------

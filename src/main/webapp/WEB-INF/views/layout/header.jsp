@@ -65,20 +65,21 @@
 
 	<!-- Sidebar-->
 	<div class="border-end bg-dark" id="sidebar-wrapper" style="min-height:90vh;">
-		<div class="sidebar-heading border-bottom bg-dark" style="color: #fff;">Menu</div>
+		<div class="sidebar-heading border-bottom bg-dark" style="color: #fff;text-align:center;">Menu</div>
 		<div class="list-group list-group-flush">
-			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/summary">Summary</a>
-			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/invoice?curPage=1">Purchase Invoice</a>
-			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/sales">Sales Invoice</a>
-			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/user/myProfile">My Profile</a>
+			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-top: #fff solid 1px;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/summary">Summary</a>
+			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/invoice?curPage=1">Purchase Invoice</a>
+			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/sales">Sales Invoice</a>
+			<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/user/myProfile">My Profile</a>
 			<c:if test="${positionNum < 2 && positionNum ne null }">
-				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/staff">Staff Management</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/item">List Management</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/staff">Branch & Staff Management</a>
 			</c:if>
 			<c:if test="${ empty userNum ||  empty userEmail}">
-				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/login">LogIn</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/login">LogIn</a>
 			</c:if>
 			<c:if test="${userNum ne null && userEmail ne null}">
-				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;" href="<%= request.getContextPath() %>/logout">LogOut</a>
+				<a class="list-group-item list-group-item-action list-group-item-light p-3 bg-dark" style="color: #fff;border-bottom: #fff solid 1px;" href="<%= request.getContextPath() %>/logout">LogOut</a>
 			</c:if>
     	</div>
 	</div> <!-- Sidebar End-->
