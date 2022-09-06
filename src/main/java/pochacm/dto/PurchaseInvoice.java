@@ -6,29 +6,30 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 public class PurchaseInvoice {
 
-	private int invoiceNum;
-	private String invoiceSerial;
+	private int purchaseInvoiceNum;
+	private String purchaseInvoiceSerial;
 	private int userNum;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
-	private Date invoiceDate;
+	private Date purchaseInvoiceDate;
 	private int supplierNum;
 	
 	@Override
 	public String toString() {
-		return "Invoice [invoiceNum=" + invoiceNum + ", invoiceSerial=" + invoiceSerial + ", userNum=" + userNum
-				+ ", invoiceDate=" + invoiceDate + ", supplierNum=" + supplierNum + "]";
+		return "PurchaseInvoice [purchaseInvoiceNum=" + purchaseInvoiceNum + ", purchaseInvoiceSerial="
+				+ purchaseInvoiceSerial + ", userNum=" + userNum + ", purchaseInvoiceDate=" + purchaseInvoiceDate
+				+ ", supplierNum=" + supplierNum + "]";
 	}
-	public int getInvoiceNum() {
-		return invoiceNum;
+	public int getPurchaseInvoiceNum() {
+		return purchaseInvoiceNum;
 	}
-	public void setInvoiceNum(int invoiceNum) {
-		this.invoiceNum = invoiceNum;
+	public void setPurchaseInvoiceNum(int purchaseInvoiceNum) {
+		this.purchaseInvoiceNum = purchaseInvoiceNum;
 	}
-	public String getInvoiceSerial() {
-		return invoiceSerial;
+	public String getPurchaseInvoiceSerial() {
+		return purchaseInvoiceSerial;
 	}
-	public void setInvoiceSerial(String invoiceSerial) {
-		this.invoiceSerial = invoiceSerial;
+	public void setPurchaseInvoiceSerial(String purchaseInvoiceSerial) {
+		this.purchaseInvoiceSerial = purchaseInvoiceSerial;
 	}
 	public int getUserNum() {
 		return userNum;
@@ -36,11 +37,11 @@ public class PurchaseInvoice {
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
 	}
-	public Date getInvoiceDate() {
-		return invoiceDate;
+	public Date getPurchaseInvoiceDate() {
+		return purchaseInvoiceDate;
 	}
-	public void setInvoiceDate(Date invoiceDate) {
-		this.invoiceDate = invoiceDate;
+	public void setPurchaseInvoiceDate(Date purchaseInvoiceDate) {
+		this.purchaseInvoiceDate = purchaseInvoiceDate;
 	}
 	public int getSupplierNum() {
 		return supplierNum;
@@ -48,6 +49,7 @@ public class PurchaseInvoice {
 	public void setSupplierNum(int supplierNum) {
 		this.supplierNum = supplierNum;
 	}
+	
 	
 	
 	

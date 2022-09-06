@@ -11,7 +11,7 @@ import pochacm.dto.Paging;
 import pochacm.dto.PrimaryUnit;
 import pochacm.dto.SecondaryUnit;
 
-public interface ItemDao {
+public interface ManagementDao {
 
 	int selectCntAllItems();
 
@@ -30,6 +30,32 @@ public interface ItemDao {
 	void updateItemInformation(Items item);
 
 	Brand selectBrandNumByBrandName(Brand brand);
+
+	int selectCntAllMenus();
+
+	List<Map<String, String>> selectAllMenus(Paging paging);
+
+	int selectCntAllBrands();
+
+	List<Map<String, String>> selectAllBrands(Paging paging);
+
+	List<Map<String, String>> selectAllCategorys(Paging paging);
+
+	List<Map<String, String>> selectAllOrderUnits(Paging paging);
+
+	List<Map<String, String>> selectAllPrimaryUnits(Paging paging);
+
+	List<Map<String, String>> selectAllSecondaryUnits(Paging paging);
+
+	int selectCntAllCategorys();
+
+	int selectCntAllOrderUnits();
+
+	int selectCntAllPrimaryUnits();
+
+	int selectCntAllSecondaryUnits();
+
+	List<Brand> getBrandList();
 	
 	
 

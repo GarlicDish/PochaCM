@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import pochacm.dto.PurchaseInvoice;
-import pochacm.dto.InvoiceItem;
+import pochacm.dto.PurchaseInvoiceItem;
 import pochacm.dto.Items;
 import pochacm.dto.Brand;
 import pochacm.dto.Category;
@@ -53,9 +53,9 @@ public interface PurchaseInvoiceDao {
 
 	Map<String, String> selectInvoiceInfoByInvoiceSerial(PurchaseInvoice invoice);
 
-	void deleteInvoiceItemByNum(InvoiceItem invoiceItem);
+	void deleteInvoiceItemByNum(PurchaseInvoiceItem invoiceItem);
 
-	int selectInvoiceItemByInvoiceNum(InvoiceItem invoiceItem);
+	int selectInvoiceItemByInvoiceNum(PurchaseInvoiceItem invoiceItem);
 
 	List<Items> selectItemCodeSearchList(Items item);
 
@@ -63,7 +63,7 @@ public interface PurchaseInvoiceDao {
 
 	void insertInvoiceInfo(PurchaseInvoice invoice);
 
-	void insertInvoiceAndItemInfo(InvoiceItem invoiceItem);
+	void insertInvoiceAndItemInfo(PurchaseInvoiceItem invoiceItem);
 
 	String selectSupplierNameBySupplierNum(PurchaseInvoice invoice);
 
@@ -71,10 +71,10 @@ public interface PurchaseInvoiceDao {
 
 	void updateInvoiceInfo(PurchaseInvoice invoice);
 
-	void insertInvoiceItemInfo(InvoiceItem invoiceItem);
+	void insertInvoiceItemInfo(PurchaseInvoiceItem invoiceItem);
 
-	void updateInvoiceItemInfo(InvoiceItem invoiceItem);
+	void updateInvoiceItemInfo(PurchaseInvoiceItem invoiceItem);
 
-	int selectInvoiceItem(InvoiceItem iin);
+	int selectInvoiceItem(PurchaseInvoiceItem iin);
 
 }

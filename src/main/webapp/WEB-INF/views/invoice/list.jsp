@@ -50,16 +50,16 @@ $(document).ready(function() {
 			<c:forEach items="${invoiceList }"  var="i" >
 				<tr>
 					<td>${i.RNUM }</td>
-					<td>${i.INVOICE_SERIAL }</td>
-					<td>${i.TP }</td>
-					<td><fmt:formatDate value="${i.INVOICE_DATE }" pattern="dd-MM-yyyy"/></td>
+					<td>${i.PURCHASE_INVOICE_SERIAL }</td>
+					<td><fmt:formatNumber value="${i.TP }" type="currency" currencySymbol="$"/></td>
+					<td><fmt:formatDate value="${i.PURCHASE_INVOICE_DATE }" pattern="dd-MM-yyyy"/></td>
 					<td>${i.USER_NAME }</td>
 					<td>
 						<form action="/invoice/delete" id="delForm<fmt:formatNumber value="${i.RNUM%15-1 }" minFractionDigits="0" maxFractionDigits="0"/>" method="post">
-							<input type="hidden" id="invoiceNum" name="invoiceNum" value="${i.INVOICE_NUM }">
+							<input type="hidden" id="purchaseInvoiceNum" name="purchaseInvoiceNum" value="${i.PURCHASE_INVOICE_NUM }">
 							<input type="hidden" id="curPage" name="curPage" value="${paging.curPage }">
 						</form>
-						<a href="/invoice/view?invoiceSerial=${i.INVOICE_SERIAL }"><button class="btn btn-success btn-sm" type="button" id="detailBtn" name="detailBtn">Detail</button></a>
+						<a href="/invoice/view?purchaseInvoiceSerial=${i.PURCHASE_INVOICE_SERIAL }"><button class="btn btn-success btn-sm" type="button" id="detailBtn" name="detailBtn">Detail</button></a>
 						<c:if test="${sessionScope.positionNum < 2 }">
 							<button type="button" class="btn btn-danger btn-sm delBtn" id="delBtn" name="delBtn">DEL</button>
 						</c:if>

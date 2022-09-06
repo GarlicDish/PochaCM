@@ -6,6 +6,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <%@ include file="../layout/header.jsp" %>
+<%@ include file="../layout/listMenu.jsp" %>
 
 <h1 class="mt-4">Item Detail</h1>
 <script type="text/javascript">

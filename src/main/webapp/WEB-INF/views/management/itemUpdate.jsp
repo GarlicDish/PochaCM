@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%@ include file="../layout/header.jsp" %>
-
+<%@ include file="../layout/listMenu.jsp" %>
 <h1 class="mt-4">Item Update</h1>
 <!-- <script type="text/javascript" src="<%=request.getContextPath() %>/data/js/httpRequest.js"> </script>-->
 <script type="text/javascript">
@@ -88,10 +88,13 @@ function getBrandNum(target) {
 			<tr>
 				<th class="table-dark">
 					<label for="brandName" class="col-sm-8 control-label">Brand Name</label>
-					<input type="hidden" id="brandNum" name="brandNum" value="${itemInfo.BRAND_NUM }">
 				</th>
 				<td>
-					<input type="text" class="form-control input-sm" id="brandName"	name="brandName"  value="${itemInfo.BRAND_NAME }" onblur="getBrandNum(this);">
+					<select class="form-select" id="cateNum" name="cateNum">
+						<c:forEach items="${brandList }" var="i">
+							<option value="${i.BRAND_NUM }" <c:if test="${itemInfo.BRAND_NUM eq i.BRAND_NUM }"> selected </c:if>>${i.BRAND_NAME }</option>
+						</c:forEach>
+					</select>
 				</td>
 				<th style="min-width:150px;" class="table-dark">
 					<label for="itemName" class="col-sm-8 control-label">Item Name</label>

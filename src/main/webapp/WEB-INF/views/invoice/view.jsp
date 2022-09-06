@@ -12,7 +12,7 @@ $(document).ready(function(){
 		location.href = '/invoice';
 	});
 	$("#updateBtn").click(function(){
-		location.href = '/invoice/update?invoiceSerial=${invInfo.INVOICE_SERIAL }';
+		location.href = '/invoice/update?purchaseInvoiceSerial=${invInfo.PURCHASE_INVOICE_SERIAL }';
 	});
 	
 	$(".delBtn").click(function() {
@@ -36,7 +36,7 @@ $(document).ready(function(){
 <table id="normal-info" class="table table-bordered" style="text-align:center;width:80%;">
 	<tr>
 		<td style="width:15%;" class="table-dark">Serial No.</td>
-		<td style="width:85%;">${invInfo.INVOICE_SERIAL }</td>
+		<td style="width:85%;">${invInfo.PURCHASE_INVOICE_SERIAL }</td>
 	</tr>
 	<tr>
 		<td style="width:15%;" class="table-dark">Supplier</td>
@@ -44,7 +44,7 @@ $(document).ready(function(){
 	</tr>
 	<tr>
 		<td style="width:15%;" class="table-dark">Date</td>
-		<td style="width:35%;"><fmt:formatDate value="${invInfo.INVOICE_DATE }" pattern="dd-MM-yyyy"/></td>
+		<td style="width:35%;"><fmt:formatDate value="${invInfo.PURCHASE_INVOICE_DATE }" pattern="dd-MM-yyyy"/></td>
 	</tr>
 	<tr>
 		<td style="width:15%;" class="table-dark">Writer</td>
@@ -54,30 +54,30 @@ $(document).ready(function(){
 
 <table id="menu-info" class="table table-bordered" style="text-align:center;width:80%;">
 	<tr class="table-dark">
-		<td style="width:5%;">Item Code</td>
-		<td style="width:25%;">Category</td>
-		<td style="width:15%;" class="table-dark">Brand</td>
-		<td style="width:35%;">Item</td>
-		<td style="width:10%;">Order Unit</td>
-		<td style="width:10%;">Unit Price</td>
-		<td style="width:5%;">Qty</td>
-		<td style="width:10%;">Total Price</td>
-		<td>Remark</td>
+		<td style="width:120px;">Item Code</td>
+		<td style="width:120px;">Category</td>
+		<td style="width:120px;" class="table-dark">Brand</td>
+		<td style="width:">Item</td>
+		<td style="width:120px">Order Unit</td>
+		<td style="width:120px">Unit Price</td>
+		<td style="width:50px;">Qty</td>
+		<td style="width:120px;">Total Price</td>
+		<td style="width:100px;">Remark</td>
 	</tr>
 	<c:forEach var="i" items="${itemList }">
 		<tr>
 			<td>${i.ITEM_CODE }</td>
 			<td>${i.CATE_NAME }</td>
-			<td style="width:35%;">${i.BRAND_NAME }</td>
+			<td>${i.BRAND_NAME }</td>
 			<td><a href="<%= request.getContextPath() %>/item/view?itemNum=${i.ITEM_NUM }">${i.ITEM_NAME }</a></td>
 			<td>${i.ORDER_UNIT }</td>
-			<td>${i.UNIT_PRICE }</td>
+			<td><fmt:formatNumber value="${i.UNIT_PRICE }" type="currency" currencySymbol="$"/></td>
 			<td>${i.QTY }</td>
-			<td>${i.UNIT_PRICE * i.QTY }</td>
+			<td><fmt:formatNumber value="${i.UNIT_PRICE * i.QTY }" type="currency" currencySymbol="$"/></td>
 			<td>
 				<form action="/invoice/invoiceItemDelete" method="post" id="iidelForm${i.RNUM }">
-					<input type="hidden" id="invoiceItemNum" name="invoiceItemNum" value="${i.INVOICE_ITEM_NUM }">
-					<input type="hidden" id="invoiceNum" name="invoiceNum" value="${i.INVOICE_NUM }">
+					<input type="hidden" id="purchaseInvoiceItemNum" name="purchaseInvoiceItemNum" value="${i.PURCHASE_INVOICE_ITEM_NUM }">
+					<input type="hidden" id="purchaseInvoiceNum" name="purchaseInvoiceNum" value="${i.PURCHASE_INVOICE_NUM }">
 				</form>
 				<c:if test="${sessionScope.positionNum < 2 }">
 					<button type="button" class="btn btn-danger btn-sm delBtn" id="delBtn" name="delBtn">DEL</button>

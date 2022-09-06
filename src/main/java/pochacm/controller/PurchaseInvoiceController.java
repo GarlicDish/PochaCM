@@ -26,8 +26,8 @@ import pochacm.dto.OrderUnit;
 import pochacm.dto.Paging;
 import pochacm.dto.Recipe;
 import pochacm.dto.Supplier;
-import pochacm.dto.InvoiceItem;
-import pochacm.service.face.ItemService;
+import pochacm.dto.PurchaseInvoiceItem;
+import pochacm.service.face.ManagementService;
 import pochacm.service.face.PurchaseInvoiceService;
 import pochacm.service.face.SalesService;
 
@@ -38,7 +38,7 @@ public class PurchaseInvoiceController {
 	
 	@Autowired PurchaseInvoiceService invoiceService;
 	@Autowired SalesService salesService;
-	@Autowired ItemService itemService;
+	@Autowired ManagementService itemService;
 	
 	@GetMapping("/invoice")
 	public String invoiceList(
@@ -110,7 +110,7 @@ public class PurchaseInvoiceController {
 	}
 	
 	@PostMapping("/invoice/add")
-	public String invoiceItemAdd(PurchaseInvoice invoice, InvoiceItem invoiceItem, HttpSession session
+	public String invoiceItemAdd(PurchaseInvoice invoice, PurchaseInvoiceItem invoiceItem, HttpSession session
 			, @RequestParam(value="category") int[] cateArr
 			, @RequestParam(value="brandNum") int[] brandArr
 			, @RequestParam(value="itemName") String[] itemNameArr
@@ -135,21 +135,21 @@ public class PurchaseInvoiceController {
 			int userNum = (int) session.getAttribute("userNum");
 			
 			//make temporary Serial Number ( 3words from supplier name + ddMMyyyy)
-			if (invoice.getInvoiceSerial() == "" || invoice.getInvoiceSerial().equals("")) {
+			if (invoice.getPurchaseInvoiceSerial() == "" || invoice.getPurchaseInvoiceSerial().equals("")) {
 				
 				//change date format Date type to String type with proper format
 				SimpleDateFormat sdf = new SimpleDateFormat("ddMMyyyy");
-				String invDate = sdf.format(invoice.getInvoiceDate());
+				String invDate = sdf.format(invoice.getPurchaseInvoiceDate());
 				logger.info("#{}. invDate : {}", idx++, invDate);
 				
 				String supName = invoiceService.getSupplierName(invoice);
 				String newSerial = supName.substring(0, 3) + invDate;
-				invoice.setInvoiceSerial(newSerial);
+				invoice.setPurchaseInvoiceSerial(newSerial);
 			}
 			invoice.setUserNum((int)session.getAttribute("userNum"));
 			invoiceService.insertInvoiceInfo(invoice);
 			
-			invoiceItem.setInvoiceNum(invoice.getInvoiceNum());
+			invoiceItem.setPurchaseInvoiceNum(invoice.getPurchaseInvoiceNum());
 			
 			//make item list
 			List<Items> itemList = new ArrayList<Items>();
@@ -183,7 +183,7 @@ public class PurchaseInvoiceController {
 			
 		}
 		
-		return "redirect:/invoice/view?invoiceSerial="+invoice.getInvoiceSerial();
+		return "redirect:/invoice/view?invoiceSerial="+invoice.getPurchaseInvoiceSerial();
 	}
 	
 	@PostMapping("/invoice/delete")
@@ -200,7 +200,7 @@ public class PurchaseInvoiceController {
 	}
 	
 	@PostMapping("/invoice/invoiceItemDelete")
-	public String deleteInvoiceItem(InvoiceItem invoiceItem) {
+	public String deleteInvoiceItem(PurchaseInvoiceItem invoiceItem) {
 		
 		//logger index
 		int idx = 0;
@@ -210,7 +210,7 @@ public class PurchaseInvoiceController {
 		invoiceService.deleteInvoiceItemByNum(invoiceItem);
 		
 		if (invoiceService.countInvoiceItemByInvoiceNum(invoiceItem)>0) {
-			return "redirect:/invoice/view?invoiceNum="+invoiceItem.getInvoiceNum();
+			return "redirect:/invoice/view?invoiceNum="+invoiceItem.getPurchaseInvoiceNum();
 		} else {
 			return "redirect:/invoice";
 		}
@@ -310,8 +310,8 @@ public class PurchaseInvoiceController {
 					itemService.updateItemInformation(itemList.get(i));
 				}
 
-				InvoiceItem iin = new InvoiceItem();
-				iin.setInvoiceNum(invoice.getInvoiceNum());
+				PurchaseInvoiceItem iin = new PurchaseInvoiceItem();
+				iin.setPurchaseInvoiceNum(invoice.getPurchaseInvoiceNum());
 				iin.setItemNum(itemList.get(i).getItemNum());
 				iin.setQty(qtyArr[i]);
 				
@@ -325,7 +325,7 @@ public class PurchaseInvoiceController {
 				
 			}
 		
-		return "redirect:/invoice/view?invoiceSerial="+invoice.getInvoiceSerial();
+		return "redirect:/invoice/view?invoiceSerial="+invoice.getPurchaseInvoiceSerial();
 	}
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

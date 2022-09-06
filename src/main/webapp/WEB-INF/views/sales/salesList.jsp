@@ -10,18 +10,20 @@
 $(document).ready(function() {
 	
 	$("#searchBtn").click(function() {
-		$("#searchForm").submit();
+		$("#searchForm").submit()
 	});
 	
 	$("#addBtn").click(function(){
 		location.href='/sales/add'
-	})
+	});
+	
 	$("#salesFindByDateBtn").click(function() {
 		$("#salesDateForm").submit();
 	});
 	
 })
-// Cash Sub total
+
+// payments Sub total
 window.onload = function(){
 	var subTotalCash = 0;
 	var subTotalCreditCard = 0;
@@ -30,11 +32,11 @@ window.onload = function(){
 	var subTotalDeliveroo = 0;
 	var subTotalEasi = 0;
 	
-	<c:forEach items="${salesAPI.invoices }" var="i">
-		<c:if test="${i.payments == null or i.payments==''}">
+	<c:forEach item="${salesAPI.invoices }" var="i">
+		<c:if test="${i.payments == null and i.payments.size() != 0}">
 			console.log("no payments");
 		</c:if>
-		<c:if test="${i.payments != null}">
+		<c:if test="${i.payments ne null and i.payments.size() != 0}">
 			<c:if test="${i.payments.get(0).paymentMethod == 'Cash'}">
 				subTotalCash += ${i.total};
 			</c:if>
@@ -118,6 +120,7 @@ window.onload = function(){
 			</thead>
 			<tbody>
 				<c:forEach items="${salesAPI.invoices }"  var="i" >
+					<c:if test="${i.payments ne null and i.payments.size() != 0}">
 					<tr>
 						<td>${i.createdAt }</td>
 						<td>${i.invoiceNumber }</td>
@@ -148,6 +151,7 @@ window.onload = function(){
 						
 						<td><a href="<%=request.getContextPath()%>/sales/view?invoiceNumber=${i.invoiceNumber }"><button type="button" id="detailBtn" class="btn btn-success btn-sm">Detail</button></a></td>
 					</tr>
+					</c:if>
 				</c:forEach>
 			</tbody>
 			<tfoot>

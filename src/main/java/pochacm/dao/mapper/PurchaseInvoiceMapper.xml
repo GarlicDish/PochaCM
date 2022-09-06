@@ -64,7 +64,7 @@
 		        SELECT it.*,ii.purchase_invoice_num,ii.qty,ii.purchase_invoice_item_num,ou.order_unit, b.brand_name, c.cate_name, inv.purchase_invoice_serial
 		        FROM items it, purchase_invoice_item ii, order_unit ou, brand b, category c, purchase_invoice inv
 		        WHERE ii.purchase_invoice_num = inv.purchase_invoice_num (+)
-		        	AND inv.purchase_invoice_serial = #{invoiceSerial}
+		        	AND inv.purchase_invoice_serial = #{purchaseInvoiceSerial}
 		            AND ii.item_num =  it.item_num (+)
 		            AND it.order_unit_num = ou.order_unit_num (+)
 		            AND it.brand_num = b.brand_num (+)
@@ -83,7 +83,7 @@
 	
 	<delete id="deleteInvoice" parameterType="pochacm.dto.PurchaseInvoice">
 		DELETE purchase_invoice
-		WHERE purchase_invoice_num = #{invoiceNum}
+		WHERE purchase_invoice_num = #{purchaseInvoiceNum}
 	</delete>
 	
 	<select id="selectAllBrand" resultType="pochacm.dto.Brand">
@@ -121,19 +121,19 @@
 	<select id="selectInvoiceInfoByInvoiceSerial" resultType="hashmap">
 		SELECT inv.*, ui.user_name ,sup.supplier_name
 		FROM purchase_invoice inv, user_info ui, supplier sup
-		WHERE inv.purchase_invoice_serial= #{invoiceSerial}
+		WHERE inv.purchase_invoice_serial= #{purchaseInvoiceSerial}
 			AND inv.user_num = ui.user_num (+)
 			AND inv.supplier_num = sup.supplier_num (+)
 	</select>
 	
-	<delete id="deleteInvoiceItemByNum" parameterType="pochacm.dto.InvoiceItem">
+	<delete id="deleteInvoiceItemByNum" parameterType="pochacm.dto.PurchaseInvoiceItem">
 		DELETE purchase_invoice_item
 		WHERE purchase_invoice_item_num = #{invoiceItemNum}
 	</delete>
 	
-	<select id="selectInvoiceItemByInvoiceNum" parameterType="pochacm.dto.InvoiceItem" resultType="int">
+	<select id="selectInvoiceItemByInvoiceNum" parameterType="pochacm.dto.PurchaseInvoiceItem" resultType="int">
 		SELECT count(*) cnt FROM purchase_invoice_item
-		where purchase_invoice_num = #{invoiceNum}
+		where purchase_invoice_num = #{purchaseInvoiceNum}
 	</select>
 	
 	<insert id="insertItemInfo" parameterType="pochacm.dto.Items" useGeneratedKeys="true" keyProperty="itemNum" keyColumn="ITEM_NUM">
@@ -143,12 +143,12 @@
 	
 	<insert id="insertInvoiceInfo" parameterType="pochacm.dto.PurchaseInvoice" useGeneratedKeys="true" keyProperty="invoiceNum" keyColumn="purchase_invoice_num">
 		INSERT INTO purchase_invoice ( purchase_invoice_NUM, purchase_invoice_SERIAL, USER_NUM, purchase_invoice_DATE, SUPPLIER_NUM)
-		VALUES ( purchase_invoice_NUM_SEQ.nextval, #{invoiceSerial},#{userNum},#{invoiceDate},#{supplierNum} )
+		VALUES ( purchase_invoice_NUM_SEQ.nextval, #{purchaseInvoiceSerial},#{userNum},#{purchaseInvoiceDate},#{supplierNum} )
 	</insert>
 	
-	<insert id="insertInvoiceAndItemInfo" parameterType="pochacm.dto.InvoiceItem">
+	<insert id="insertInvoiceAndItemInfo" parameterType="pochacm.dto.PurchaseInvoiceItem">
 		INSERT INTO purchase_invoice_item ( purchase_invoice_item_num, purchase_invoice_NUM, ITEM_NUM, QTY)
-		VALUES ( INVOICE_ITEM_NUM_SEQ.nextval, #{invoiceNum}, #{itemNum},#{qty} )
+		VALUES ( PURCHASE_INVOICE_ITEM_NUM_SEQ.nextval, #{purchaseInvoiceNum}, #{itemNum},#{qty} )
 	</insert>
 	
 	<select id="selectSupplierNameBySupplierNum" parameterType="pochacm.dto.PurchaseInvoice" resultType="String">
@@ -165,7 +165,7 @@
 				FROM items i, purchase_invoice_item ii, purchase_invoice inv
 				WHERE ii.purchase_invoice_NUM = inv.purchase_invoice_NUM (+)
 					AND ii.ITEM_NUM = i.ITEM_NUM (+)
-					AND inv.purchase_invoice_SERIAL = #{invoiceSerial}
+					AND inv.purchase_invoice_SERIAL = #{purchaseInvoiceSerial}
 				ORDER BY i.ITEM_NUM asc
 			) iiii
 			ORDER BY rnum
@@ -173,28 +173,28 @@
 	</select>
 	<update id="updateInvoiceInfo" parameterType="pochacm.dto.PurchaseInvoice">
 		UPDATE purchase_invoice
-		SET purchase_invoice_SERIAL=#{invoiceSerial}, 
+		SET purchase_invoice_SERIAL=#{purchaseInvoiceSerial}, 
 			USER_NUM=#{userNum}, 
-			purchase_invoice_DATE=#{invoiceDate}, 
+			purchase_invoice_DATE=#{purchaseInvoiceDate}, 
 			SUPPLIER_NUM=#{supplierNum}
-		where purchase_invoice_num = #{invoiceNum}
+		where purchase_invoice_num = #{purchaseInvoiceNum}
 	</update>
 	
-	<insert id="insertInvoiceItemInfo" parameterType="pochacm.dto.InvoiceItem" useGeneratedKeys="true" keyProperty="invoiceItemNum" keyColumn="purchase_invoice_item_num">
+	<insert id="insertInvoiceItemInfo" parameterType="pochacm.dto.PurchaseInvoiceItem" useGeneratedKeys="true" keyProperty="purchaseInvoiceItemNum" keyColumn="purchase_invoice_item_num">
 		INSERT INTO purchase_invoice_item (purchase_invoice_ITEM_NUM, purchase_invoice_num, ITEM_NUM, QTY)
-		VALUES (invoice_item_num_seq.nextval,#{invoiceNum},#{itemNum},#{qty})
+		VALUES (PURCHASE_invoice_item_num_seq.nextval,#{purchaseInvoiceNum},#{itemNum},#{qty})
 	</insert>
 	
-	<update id="updateInvoiceItemInfo" parameterType="pochacm.dto.InvoiceItem">
+	<update id="updateInvoiceItemInfo" parameterType="pochacm.dto.PurchaseInvoiceItem">
 		UPDATE purchase_invoice_item
 		SET QTY = #{qty}
-		where purchase_invoice_NUM = #{invoiceNum}
+		where purchase_invoice_NUM = #{purchaseInvoiceNum}
 			AND ITEM_NUM = #{itemNum}
 	</update>
 	
-	<select id="selectInvoiceItem" parameterType="pochacm.dto.InvoiceItem" resultType="int">
+	<select id="selectInvoiceItem" parameterType="pochacm.dto.PurchaseInvoiceItem" resultType="int">
 		SELECT count(*) cnt FROM purchase_invoice_item
-		WHERE purchase_invoice_NUM = #{invoiceNum}
+		WHERE purchase_invoice_NUM = #{purchaseInvoiceNum}
 			AND ITEM_NUM = #{itemNum}
 	</select>
 </mapper>

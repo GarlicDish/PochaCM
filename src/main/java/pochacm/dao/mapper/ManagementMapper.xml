@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="pochacm.dao.face.ManagementDao" >
+
+	<select id="selectCntAllItems" resultType="int">
+		SELECT count(*) cnt FROM items
+	</select>
+	
+	<select id="selectCntAllMenus" resultType="int">
+		SELECT count(*) cnt FROM menu
+	</select>
+	
+	<select id="selectCntAllBrands" resultType="int">
+		SELECT count(*) cnt FROM brand
+	</select>
+	<select id="selectCntAllCategorys" resultType="int">
+		SELECT count(*) cnt FROM category
+	</select>
+	<select id="selectCntAllOrderUnits" resultType="int">
+		SELECT count(*) cnt FROM order_unit
+	</select>
+	<select id="selectCntAllPrimaryUnits" resultType="int">
+		SELECT count(*) cnt FROM primary_unit
+	</select>
+	<select id="selectCntAllSecondaryUnits" resultType="int">
+		SELECT count(*) cnt FROM secondary_unit
+	</select>
+	
+	<select id="selectAllItems" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, sst.*
+			FROM (SELECT it.*, br.brand_name, ct.cate_name, ui.user_name, ou.order_unit
+				FROM items it, brand br,CATEGORY ct, user_info ui, order_unit ou
+				WHERE it.brand_num = br.brand_num (+)
+				    AND it.cate_num = ct.cate_num (+)
+				    AND it.user_num = ui.user_num (+)
+				    AND it.order_unit_num = ou.order_unit_num (+)
+				) sst
+			ORDER BY sst.item_name
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+
+	<select id="selectAllMenus" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, mm.*
+			FROM (
+				SELECT m.*, mc.menu_cate_name, ms.menu_subcate_name
+				FROM menu m, menu_Category mc, menu_subcategory ms
+				WHERE m.menu_subcate_num = ms.menu_subcate_num (+)
+					AND ms.menu_cate_num = mc.menu_cate_num (+)
+				) mm
+			ORDER BY mm.menu_name
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+	
+	<select id="selectAllBrands" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, m.*
+			FROM (
+				SELECT * FROM brand
+				) m
+			ORDER BY m.brand_name
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+	
+	<select id="selectAllCategorys" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, m.*
+			FROM (
+				SELECT * FROM category
+				) m
+			ORDER BY m.cate_name
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+	
+	<select id="selectAllOrderUnits" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, m.*
+			FROM (
+				SELECT * FROM order_unit
+				) m
+			ORDER BY m.order_unit
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+	
+	<select id="selectAllPrimaryUnits" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, m.*
+			FROM (
+				SELECT p.*, i.item_name FROM primary_unit p, items i
+				where p.item_num = i.item_num (+)
+				) m
+			ORDER BY m.item_name
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+	
+	<select id="selectAllSecondaryUnits" parameterType="pochacm.dto.Paging" resultType="hashmap">
+		SELECT * FROM (
+			SELECT ROWNUM rnum, m.*
+			FROM (
+				SELECT s.*,i.item_name FROM secondary_unit s, items i
+				where s.item_num = i.item_num (+)
+				) m
+			ORDER BY m.item_name
+			)
+		WHERE rnum BETWEEN #{startNo } AND #{endNo }
+		ORDER BY rnum
+	</select>
+	
+	<select id="selectItemInfoByItemNum" parameterType="pochacm.dto.Items" resultType="hashmap">
+		SELECT it.*, b.*, ou.*, ic.*, ui.user_name
+		FROM items it, order_unit ou, brand b, user_info ui, category ic
+		WHERE it.item_num = #{itemNum }
+			AND it.order_unit_num = ou.order_unit_num (+)
+			AND it.brand_num = b.brand_num (+)
+			AND it.user_num = ui.user_num (+)
+			AND it.cate_num = ic.cate_num (+)
+	</select>
+	
+	<select id="getOrderUnitList" resultType="hashmap">
+		SELECT * FROM order_unit
+		ORDER BY order_unit_num	
+	</select>
+	
+	<select id="getPrimaryUnitList" resultType="hashmap">
+		SELECT * FROM primary_unit
+		ORDER BY primary_unit_num	
+	</select>
+	
+	<select id="getSecondaryUnitList" resultType="hashmap">
+		SELECT * FROM secondary_unit
+		ORDER BY secondary_unit_num	
+	</select>
+	
+	<select id="getItemCategoryList" resultType="hashmap">
+		SELECT * FROM category
+		ORDER BY cate_num
+	</select>
+	
+	<update id="updateItemInformation" parameterType="pochacm.dto.Items">
+		UPDATE items
+		SET BRAND_NUM = #{brandNum},
+			CATE_NUM = #{cateNum},
+			ITEM_NAME = #{itemName},
+			ITEM_CODE = #{itemCode},
+			<choose>
+				<when test="#{targetWastePercentage} != null and #{expiryDate} != null">
+					TW_PERCENTAGE = #{targetWastePercentage},
+					EXPIRY_DATE = #{expiryDate},
+				</when>
+			</choose>
+			ORDER_UNIT_NUM = #{orderUnitNum},
+			unit_price = #{unitPrice},
+			LAST_UPDATE_DATE = SYSDATE,
+			USER_NUM = #{userNum}
+		WHERE ITEM_NUM = #{itemNum}
+	</update>
+	
+	<select id="selectBrandNumByBrandName" parameterType="pochacm.dto.Brand" resultType="pochacm.dto.Brand">
+		SELECT brand_num FROM brand
+		WHERE brand_name = #{brandName}
+	</select>
+
+	<select id="getBrandList" resultType="hashmap">
+		SELECT * FROM brand
+		ORDER BY brand_num
+	</select>
+</mapper>

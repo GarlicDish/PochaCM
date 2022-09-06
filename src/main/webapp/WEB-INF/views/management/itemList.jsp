@@ -5,8 +5,6 @@
 <%@ include file="../layout/header.jsp" %>
 <%@ include file="../layout/listMenu.jsp" %>
 
-
-
 <h1 class="mt-4">Item List</h1>
 
 <div class="" id="tableWrap" style="padding:10px;">
